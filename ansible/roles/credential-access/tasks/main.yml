@@ -1,0 +1,4 @@
+---
+- name: Placeholder credential access technique list
+  ansible.builtin.debug:
+    msg: "Add credential access techniques (e.g., LSASS dump emulation) with strict dry-run checks."

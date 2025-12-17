@@ -1,0 +1,17 @@
+---
+- name: Run Linux technique bundle (dry-run by default)
+  hosts: linux
+  gather_facts: true
+  vars_files:
+    - ../group_vars/linux.yml
+  tasks:
+    - name: Execute shell commands (T1059.004)
+      vars:
+        technique_id: T1059_004
+        technique_path: "{{ playbook_dir }}/../../scripts/linux/T1059_004.sh"
+      ansible.builtin.include_role:
+        name: execution
+
+    - name: Apply persistence techniques
+      ansible.builtin.include_role:
+        name: persistence

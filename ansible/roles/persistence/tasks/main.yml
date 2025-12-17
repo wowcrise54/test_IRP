@@ -1,0 +1,16 @@
+---
+- name: Run cron persistence (T1053.003)
+  vars:
+    technique_id: T1053_003
+    technique_path: "{{ playbook_dir }}/../../scripts/linux/T1053_003.sh"
+  ansible.builtin.include_role:
+    name: execution
+  when: ansible_system | lower == 'linux'
+
+- name: Run RunKey persistence (T1547.001)
+  vars:
+    technique_id: T1547_001
+    technique_path: "{{ playbook_dir }}/../../scripts/windows/T1547_001.ps1"
+  ansible.builtin.include_role:
+    name: execution
+  when: ansible_system | lower == 'windows'

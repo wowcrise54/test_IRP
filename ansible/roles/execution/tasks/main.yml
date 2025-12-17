@@ -1,0 +1,23 @@
+---
+- name: Ensure artifact directories exist
+  ansible.builtin.file:
+    path: "{{ artifact_root }}/logs/{{ technique_id | default('unknown') }}"
+    state: directory
+    mode: '0755'
+
+- name: Execute technique script (Linux)
+  ansible.builtin.shell: |
+    set -euo pipefail
+    DRY_RUN={{ dry_run | bool | ternary('true','false') }} SCRIPT_LOG="{{ artifact_root }}/logs/{{ technique_id }}/$(date +%s).log" \
+    {{ technique_path }} 2>&1 | tee "$SCRIPT_LOG"
+  args:
+    executable: /bin/bash
+  when: ansible_system | lower == 'linux'
+
+- name: Execute technique script (Windows)
+  ansible.windows.powershell:
+    script: |
+      $env:DRY_RUN = '{{ dry_run | bool | ternary('"true"','"false"') }}'
+      $env:SCRIPT_LOG = "{{ artifact_root }}/logs/{{ technique_id }}/$(Get-Date -UFormat %s).log"
+      & {{ technique_path }} | Tee-Object -FilePath $env:SCRIPT_LOG
+  when: ansible_system | lower == 'windows'

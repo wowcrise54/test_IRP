@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install Ansible
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+      - name: Lint Bash
+        run: bash -n scripts/linux/*.sh
+      - name: Syntax check Ansible playbooks
+        run: |
+          ansible-playbook ansible/playbooks/linux-ttp.yml --syntax-check
+          ansible-playbook ansible/playbooks/windows-ttp.yml --syntax-check
+      - name: Lint PowerShell (syntax only)
+        run: |
+          pwsh -NoLogo -NoProfile -Command "Get-ChildItem scripts/windows/*.ps1 | ForEach-Object { powershell -NoLogo -NoProfile -Command \"Set-StrictMode -Version Latest; . $_\" }"

@@ -1,0 +1,24 @@
+---
+- name: Run Windows technique bundle (dry-run by default)
+  hosts: windows
+  gather_facts: false
+  vars_files:
+    - ../group_vars/windows.yml
+  tasks:
+    - name: Execute PowerShell commands (T1059.001)
+      vars:
+        technique_id: T1059_001
+        technique_path: "{{ playbook_dir }}/../../scripts/windows/T1059_001.ps1"
+      ansible.builtin.include_role:
+        name: execution
+
+    - name: Simulate ingress tool transfer (T1105)
+      vars:
+        technique_id: T1105
+        technique_path: "{{ playbook_dir }}/../../scripts/windows/T1105.ps1"
+      ansible.builtin.include_role:
+        name: execution
+
+    - name: Apply persistence techniques
+      ansible.builtin.include_role:
+        name: persistence

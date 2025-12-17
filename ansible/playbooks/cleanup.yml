@@ -1,0 +1,22 @@
+---
+- name: Cleanup artifacts and rollback techniques
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - ../group_vars/linux.yml
+  tasks:
+    - name: Remove artifact directories
+      ansible.builtin.file:
+        path: "{{ artifact_root }}"
+        state: absent
+      when: ansible_system | lower == 'linux'
+
+    - name: Remove artifact directories (Windows)
+      ansible.windows.win_file:
+        path: "{{ artifact_root }}"
+        state: absent
+      when: ansible_system | lower == 'windows'
+
+    - name: Reminder for manual rollback
+      ansible.builtin.debug:
+        msg: "Ensure technique-specific rollback scripts are executed (cron removal, registry cleanup, etc.)."

@@ -1,0 +1,7 @@
+# Global safety settings for lab-only execution.
+lab_only: true
+require_dry_run: true
+max_runtime_minutes: 10
+allowed_targets:
+  - 127.0.0.1
+  - localhost

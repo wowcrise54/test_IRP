@@ -1,0 +1,3 @@
+logs_root: artifacts/logs
+transcripts_root: artifacts/transcripts
+tmp_root: artifacts/tmp
