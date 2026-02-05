@@ -22,7 +22,6 @@
 #################
 FROM python:3.9 AS compile-image
 
-RUN echo "deb https://nexus.utmn.ru/repository/apt_proxy_debian/ trixie contrib main non-free non-free-firmware" > /etc/apt/sources.list
 RUN apt-get update
 
 RUN python -m venv /opt/venv
@@ -32,7 +31,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY source/dependencies /dependencies
 COPY source/requirements.txt /
 
-RUN pip3 install -r requirements.txt -i https://nexus.utmn.ru/repository/pypi-proxy/simple
+RUN pip3 install -r requirements.txt
 
 ###############
 # BUILD IMAGE #
@@ -40,7 +39,6 @@ RUN pip3 install -r requirements.txt -i https://nexus.utmn.ru/repository/pypi-pr
 FROM python:3.9 as iriswebapp
 ENV PYTHONUNBUFFERED=1 DOCKERIZED=1
 
-COPY --from=compile-image /etc/apt/sources.list /etc/apt/sources.list
 COPY --from=compile-image /opt/venv /opt/venv
 
 # Make sure we use the virtualenv:

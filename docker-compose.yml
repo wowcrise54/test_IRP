@@ -44,7 +44,7 @@ services:
     build:
       context: .
       dockerfile: docker/webApp/Dockerfile
-    image: ghcr.io/dfir-iris/iriswebapp_app:latest
+    image: iriswebapp_app:latest
 
 
   nginx:

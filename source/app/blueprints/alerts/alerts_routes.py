@@ -17,11 +17,12 @@
 #  Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import json
 import marshmallow
+import re
 from datetime import datetime
 from flask import Blueprint, request, render_template, redirect, url_for
 from flask_login import current_user
 from flask_wtf import FlaskForm
-from typing import Union, List
+from typing import Union, List, Dict, Any, Optional, Tuple
 from werkzeug import Response
 
 import app
@@ -34,6 +35,7 @@ from app.datamgmt.alerts.alerts_db import get_related_alerts, get_related_alerts
 from app.datamgmt.alerts.alerts_db import get_alert_comments, delete_alert_comment, get_alert_comment
 from app.datamgmt.alerts.alerts_db import delete_similar_alert_cache, delete_alerts
 from app.datamgmt.alerts.alerts_db import create_case_from_alerts
+from app.datamgmt.case.case_iocs_db import get_ioc_types_list
 from app.datamgmt.case.case_db import get_case
 from app.datamgmt.manage.manage_access_control_db import check_ua_case_client, user_has_client_access
 from app.iris_engine.access_control.utils import ac_set_new_case_access
@@ -51,6 +53,250 @@ alerts_blueprint = Blueprint(
     __name__,
     template_folder='templates'
 )
+
+IOC_RAW_FIELDS = [
+    "assigned_dst_host",
+    "assigned_dst_ip",
+    "dst.fqdn",
+    "dst.host",
+    "dst.hostname",
+    "dst.ip",
+    "external_dst.fqdn",
+    "external_dst.host",
+    "external_dst.hostname",
+    "external_dst.ip",
+    "subject.process.hash",
+    "subject.process.hash.imphash",
+    "subject.process.hash.md5",
+    "subject.process.hash.sha1",
+    "subject.process.hash.sha256",
+    "subject.process.name",
+    "subject.process.parent.hash",
+    "subject.process.parent.hash.imphash",
+    "subject.process.parent.hash.md5",
+    "subject.process.parent.hash.sha1",
+    "subject.process.parent.hash.sha256",
+    "subject.process.parent.name",
+    "object.domain",
+    "object.hash",
+    "object.hash.imphash",
+    "object.hash.md5",
+    "object.hash.sha1",
+    "object.hash.sha256",
+    "object.name",
+    "object.process.hash",
+    "object.process.hash.imphash",
+    "object.process.hash.md5",
+    "object.process.hash.sha1",
+    "object.process.hash.sha256",
+    "object.process.name",
+    "object.process.parent.hash",
+    "object.process.parent.hash.imphash",
+    "object.process.parent.hash.sha1",
+    "object.process.parent.hash.md5",
+    "object.process.parent.hash.sha256",
+    "object.process.parent.name",
+    "nas_fqdn",
+    "nas_ip",
+]
+
+IOC_TYPE_CANDIDATES = {
+    "ip": ["ip-any", "ip", "ipv4", "ipv6"],
+    "domain": ["domain", "fqdn", "hostname", "host"],
+    "md5": ["md5"],
+    "sha1": ["sha1"],
+    "sha256": ["sha256"],
+    "imphash": ["imphash"],
+    "hash": ["hash"],
+}
+
+
+def _parse_raw_event(raw_event: Any) -> Optional[Any]:
+    if raw_event is None:
+        return None
+    if isinstance(raw_event, dict):
+        return raw_event
+    if isinstance(raw_event, list):
+        return raw_event
+    if isinstance(raw_event, str):
+        raw_event = raw_event.strip()
+        if not raw_event:
+            return None
+        try:
+            parsed = json.loads(raw_event)
+        except json.JSONDecodeError:
+            return None
+        if isinstance(parsed, (dict, list)):
+            return parsed
+    return None
+
+
+def _flatten_values(value: Any, key_hint: Optional[str] = None) -> List[Tuple[Any, Optional[str]]]:
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple, set)):
+        flattened: List[Tuple[Any, Optional[str]]] = []
+        for item in value:
+            flattened.extend(_flatten_values(item, key_hint))
+        return flattened
+    if isinstance(value, dict):
+        flattened: List[Tuple[Any, Optional[str]]] = []
+        for key, item in value.items():
+            flattened.extend(_flatten_values(item, str(key)))
+        return flattened
+    return [(value, key_hint)]
+
+
+def _get_values_at_path(payload: Dict[str, Any], path: str) -> List[Any]:
+    parts = path.split(".")
+    nodes: List[Any] = [payload]
+    for part in parts:
+        next_nodes: List[Any] = []
+        for node in nodes:
+            if isinstance(node, dict) and part in node:
+                next_nodes.append(node[part])
+            elif isinstance(node, list):
+                for item in node:
+                    if isinstance(item, dict) and part in item:
+                        next_nodes.append(item[part])
+        nodes = next_nodes
+        if not nodes:
+            break
+    return nodes
+
+
+def _infer_hash_type(value: str) -> Optional[str]:
+    value = value.strip().lower()
+    if ":" in value:
+        prefix, rest = value.split(":", 1)
+        if prefix in ("md5", "sha1", "sha256", "imphash"):
+            return prefix
+        value = rest
+    if re.fullmatch(r"[0-9a-f]{32}", value):
+        return "md5"
+    if re.fullmatch(r"[0-9a-f]{40}", value):
+        return "sha1"
+    if re.fullmatch(r"[0-9a-f]{64}", value):
+        return "sha256"
+    return None
+
+
+def _type_hint_from_path(path: str, key_hint: Optional[str]) -> Optional[str]:
+    if key_hint:
+        key_hint = key_hint.lower()
+        if key_hint in ("md5", "sha1", "sha256", "imphash"):
+            return key_hint
+
+    if path.endswith(".md5"):
+        return "md5"
+    if path.endswith(".sha1"):
+        return "sha1"
+    if path.endswith(".sha256"):
+        return "sha256"
+    if path.endswith(".imphash"):
+        return "imphash"
+    if path.endswith(".ip") or path in ("assigned_dst_ip", "nas_ip"):
+        return "ip"
+    if path.endswith(".fqdn") or path.endswith(".hostname") or path.endswith(".host"):
+        return "domain"
+    if path in ("assigned_dst_host", "object.domain", "nas_fqdn"):
+        return "domain"
+    if path.endswith(".hash"):
+        return "hash"
+    return None
+
+
+def _resolve_type_id(type_hint: Optional[str], type_index: Dict[str, int], value: str) -> Optional[int]:
+    if not type_hint:
+        return None
+    if type_hint == "hash":
+        inferred = _infer_hash_type(value)
+        if inferred:
+            type_hint = inferred
+    candidates = IOC_TYPE_CANDIDATES.get(type_hint, [type_hint])
+    for name in candidates:
+        type_id = type_index.get(name.lower())
+        if type_id is not None:
+            return type_id
+    return None
+
+
+def _extract_iocs_from_raw(raw_event: Any, type_index: Dict[str, int]) -> List[Dict[str, Any]]:
+    payload = _parse_raw_event(raw_event)
+    if not payload:
+        return []
+
+    if isinstance(payload, list):
+        payloads = [item for item in payload if isinstance(item, dict)]
+    else:
+        payloads = [payload]
+
+    extracted: List[Dict[str, Any]] = []
+    seen = set()
+
+    for payload in payloads:
+        for path in IOC_RAW_FIELDS:
+            values = _get_values_at_path(payload, path)
+            for value in values:
+                for raw_value, key_hint in _flatten_values(value):
+                    if raw_value is None:
+                        continue
+                    if isinstance(raw_value, (int, float)):
+                        value_str = str(raw_value)
+                    elif isinstance(raw_value, str):
+                        value_str = raw_value.strip()
+                    else:
+                        continue
+
+                    if not value_str or value_str.lower() in ("null", "none", "unknown", "-"):
+                        continue
+
+                    type_hint = _type_hint_from_path(path, key_hint)
+                    type_id = _resolve_type_id(type_hint, type_index, value_str)
+                    key = (value_str.lower(), type_id)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    extracted.append({
+                        "ioc_value": value_str,
+                        "ioc_type_id": type_id,
+                    })
+
+    return extracted
+
+
+def _merge_iocs(existing: List[Dict[str, Any]], incoming: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    merged: List[Dict[str, Any]] = []
+    by_value: Dict[str, List[Dict[str, Any]]] = {}
+
+    for ioc in existing or []:
+        if "ioc_type_id" not in ioc:
+            ioc["ioc_type_id"] = None
+        value = (ioc.get("ioc_value") or "").strip()
+        if not value:
+            continue
+        value_key = value.lower()
+        merged.append(ioc)
+        by_value.setdefault(value_key, []).append(ioc)
+
+    for ioc in incoming or []:
+        if "ioc_type_id" not in ioc:
+            ioc["ioc_type_id"] = None
+        value = (ioc.get("ioc_value") or "").strip()
+        if not value:
+            continue
+        value_key = value.lower()
+        if value_key in by_value:
+            incoming_type = ioc.get("ioc_type_id")
+            if incoming_type is not None:
+                for existing_ioc in by_value[value_key]:
+                    if existing_ioc.get("ioc_type_id") is None:
+                        existing_ioc["ioc_type_id"] = incoming_type
+            continue
+        merged.append(ioc)
+        by_value.setdefault(value_key, []).append(ioc)
+
+    return merged
 
 
 @alerts_blueprint.route('/alerts/filter', methods=['GET'])
@@ -182,6 +428,23 @@ def alerts_add_route() -> Response:
 
         iocs_list = data.pop('alert_iocs', [])
         assets_list = data.pop('alert_assets', [])
+
+        type_index = {row['type_name'].lower(): row['type_id'] for row in get_ioc_types_list()}
+        raw_event = data.get('alert_source_content')
+        extracted_iocs = _extract_iocs_from_raw(raw_event, type_index)
+        if _parse_raw_event(raw_event) is not None:
+            allowed_values = {
+                (ioc.get("ioc_value") or "").strip().lower()
+                for ioc in extracted_iocs
+                if (ioc.get("ioc_value") or "").strip()
+            }
+            filtered_iocs = [
+                ioc for ioc in iocs_list
+                if (ioc.get("ioc_value") or "").strip().lower() in allowed_values
+            ]
+            iocs_list = _merge_iocs(filtered_iocs, extracted_iocs)
+        else:
+            iocs_list = _merge_iocs(iocs_list, extracted_iocs)
 
         iocs = ioc_schema.load(iocs_list, many=True)
         assets = asset_schema.load(assets_list, many=True)

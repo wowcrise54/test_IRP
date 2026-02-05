@@ -1349,7 +1349,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                       alert.iocs && alert.iocs.length > 0
                           ? `<div class="separator-solid"></div><h3 class="title mb-3"><strong>IOCs</strong></h3>
                                        <div class="table-responsive">
-                                         <table class="table table-sm table-striped">
+                                         <table class="table table-sm table-striped alert-ioc-table">
                                            <thead>
                                              <tr>
                                                <th>Value</th>
@@ -1385,7 +1385,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                                       OpenCTI
                                                     </button>` : ''}
                                                     ${ioc.ioc_enrichment ? `
-                                                    <button type="button" class="btn btn-primary btn-sm btn-outline-dark mt-2" data-toggle="modal" data-target="#enrichmentModal" onclick="showEnrichment(${JSON.stringify(ioc.ioc_enrichment).replace(/"/g, '&quot;')})">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-outline-dark btn-view-enrichment mt-2" data-toggle="modal" data-target="#enrichmentModal" onclick="showEnrichment(${JSON.stringify(ioc.ioc_enrichment).replace(/"/g, '&quot;')})">
                                                       View Enrichment
                                                     </button>` : ''}
                                                     ${!ioc.ioc_enrichment && !openctiIocOption ? '-' : ''}
@@ -1445,7 +1445,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                        <td>${asset.asset_domain ? filterXSS(asset.asset_domain) : '-'}</td>
                                        <td>${asset.asset_ip ? filterXSS(asset.asset_ip) : '-'}</td>
                                        <td>${asset.asset_tags ? asset.asset_tags.split(',').map((tag) => get_tag_from_data(tag, 'badge badge-pill badge-light ml-1')).join('') : ''}</td>
-                                       <td>${asset.asset_enrichment ? `<button type="button" class="btn btn-sm btn-outline-dark" data-toggle="modal" data-target="#enrichmentModal" onclick="showEnrichment(${JSON.stringify(asset.asset_enrichment).replace(/"/g, '&quot;')})">
+                                       <td>${asset.asset_enrichment ? `<button type="button" class="btn btn-sm btn-outline-dark btn-view-enrichment" data-toggle="modal" data-target="#enrichmentModal" onclick="showEnrichment(${JSON.stringify(asset.asset_enrichment).replace(/"/g, '&quot;')})">
                                           View Enrichment
                                         </button>` : ''}
                                         </td>
@@ -1936,15 +1936,15 @@ function renderEnrichmentInline(enrichment) {
     const relationsCount = Number((opencti && opencti.relations && opencti.relations.count) || 0);
 
     return `
-        <div class="d-flex flex-wrap align-items-center" style="row-gap: 4px;">
-            <span class="badge ${found ? 'badge-danger' : 'badge-success'} mr-1">
+        <div class="ioc-enrichment-inline">
+            <span class="badge ${found ? 'badge-danger' : 'badge-success'}">
                 ${found ? 'Found' : 'Not found'}
             </span>
-            <span class="badge badge-light ">${scoreLabel}</span>
-            <span class="badge ${severityClass} ">${severity}</span>
-            <span class="badge badge-secondary ">Indicators ${indicatorsCount}</span>
-            <span class="badge badge-secondary ">Observables ${observablesCount}</span>
-            ${relationsCount > 0 ? `<span class="badge badge-secondary ">Relations ${relationsCount}</span>` : ''}
+            <span class="badge badge-light">${scoreLabel}</span>
+            <span class="badge ${severityClass}">${severity}</span>
+            <span class="badge badge-secondary">Indicators ${indicatorsCount}</span>
+            <span class="badge badge-secondary">Observables ${observablesCount}</span>
+            ${relationsCount > 0 ? `<span class="badge badge-secondary">Relations ${relationsCount}</span>` : ''}
         </div>
     `;
 }

@@ -111,6 +111,73 @@
   margin-bottom: 8px;
 }
 
+.ioc-enrichment-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.ioc-enrichment-inline .badge {
+  margin-left: 0;
+  white-space: nowrap;
+}
+
+.alert-ioc-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.alert-ioc-table th,
+.alert-ioc-table td {
+  vertical-align: top;
+}
+
+.alert-ioc-table th:nth-child(1),
+.alert-ioc-table td:nth-child(1) {
+  width: 18%;
+  overflow-wrap: anywhere;
+}
+
+.alert-ioc-table th:nth-child(2),
+.alert-ioc-table td:nth-child(2) {
+  width: 26%;
+  overflow-wrap: anywhere;
+}
+
+.alert-ioc-table th:nth-child(3),
+.alert-ioc-table td:nth-child(3) {
+  width: 9%;
+}
+
+.alert-ioc-table th:nth-child(4),
+.alert-ioc-table td:nth-child(4) {
+  width: 7%;
+  white-space: nowrap;
+}
+
+.alert-ioc-table th:nth-child(5),
+.alert-ioc-table td:nth-child(5) {
+  width: 14%;
+  overflow-wrap: anywhere;
+}
+
+.alert-ioc-table th:nth-child(6),
+.alert-ioc-table td:nth-child(6) {
+  width: 20%;
+}
+
+.alert-ioc-table th:nth-child(7),
+.alert-ioc-table td:nth-child(7) {
+  width: 6%;
+}
+
+.btn-view-enrichment {
+  padding: 0.2rem 0.45rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
 
 .alert-m-title{
   cursor: pointer;
