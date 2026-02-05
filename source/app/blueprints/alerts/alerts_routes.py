@@ -103,6 +103,7 @@ IOC_RAW_FIELDS = [
 IOC_TYPE_CANDIDATES = {
     "ip": ["ip-any", "ip", "ipv4", "ipv6"],
     "domain": ["domain", "fqdn", "hostname", "host"],
+    "filename": ["filename"],
     "md5": ["md5"],
     "sha1": ["sha1"],
     "sha256": ["sha256"],
@@ -147,7 +148,15 @@ def _flatten_values(value: Any, key_hint: Optional[str] = None) -> List[Tuple[An
     return [(value, key_hint)]
 
 
-def _get_values_at_path(payload: Dict[str, Any], path: str) -> List[Any]:
+def _get_values_at_path(payload: Any, path: str) -> List[Any]:
+    collected: List[Any] = []
+    if isinstance(payload, dict) and path in payload:
+        collected.append(payload[path])
+    if isinstance(payload, list):
+        for item in payload:
+            if isinstance(item, dict) and path in item:
+                collected.append(item[path])
+
     parts = path.split(".")
     nodes: List[Any] = [payload]
     for part in parts:
@@ -162,7 +171,8 @@ def _get_values_at_path(payload: Dict[str, Any], path: str) -> List[Any]:
         nodes = next_nodes
         if not nodes:
             break
-    return nodes
+    collected.extend(nodes)
+    return collected
 
 
 def _infer_hash_type(value: str) -> Optional[str]:
@@ -179,6 +189,15 @@ def _infer_hash_type(value: str) -> Optional[str]:
     if re.fullmatch(r"[0-9a-f]{64}", value):
         return "sha256"
     return None
+
+
+def _extract_labeled_hashes(value: str) -> List[Tuple[str, str]]:
+    results: List[Tuple[str, str]] = []
+    for match in re.finditer(r"(?i)(imphash|md5|sha1|sha256)[:= ]+([0-9a-f]{32,64})", value):
+        label = match.group(1).lower()
+        hash_value = match.group(2).lower()
+        results.append((label, hash_value))
+    return results
 
 
 def _type_hint_from_path(path: str, key_hint: Optional[str]) -> Optional[str]:
@@ -201,12 +220,21 @@ def _type_hint_from_path(path: str, key_hint: Optional[str]) -> Optional[str]:
         return "domain"
     if path in ("assigned_dst_host", "object.domain", "nas_fqdn"):
         return "domain"
+    if path in ("subject.process.name", "subject.process.parent.name",
+                "object.process.name", "object.process.parent.name",
+                "object.name"):
+        return "filename"
     if path.endswith(".hash"):
         return "hash"
     return None
 
 
-def _resolve_type_id(type_hint: Optional[str], type_index: Dict[str, int], value: str) -> Optional[int]:
+def _resolve_type_id(
+    type_hint: Optional[str],
+    type_index: Dict[str, int],
+    value: str,
+    type_validation_by_id: Optional[Dict[int, Optional[str]]] = None
+) -> Optional[int]:
     if not type_hint:
         return None
     if type_hint == "hash":
@@ -217,11 +245,84 @@ def _resolve_type_id(type_hint: Optional[str], type_index: Dict[str, int], value
     for name in candidates:
         type_id = type_index.get(name.lower())
         if type_id is not None:
+            if type_validation_by_id:
+                regex = type_validation_by_id.get(type_id)
+                if regex and not re.fullmatch(regex, value, re.IGNORECASE):
+                    continue
             return type_id
     return None
 
 
-def _extract_iocs_from_raw(raw_event: Any, type_index: Dict[str, int]) -> List[Dict[str, Any]]:
+def _build_type_maps() -> Tuple[Dict[str, int], Dict[int, Optional[str]]]:
+    type_rows = get_ioc_types_list()
+    type_index = {
+        row['type_name'].lower(): row['type_id']
+        for row in type_rows
+        if row.get('type_name') and row.get('type_id') is not None
+    }
+    type_validation_by_id = {
+        row['type_id']: row.get('type_validation_regex')
+        for row in type_rows
+        if row.get('type_id') is not None
+    }
+    return type_index, type_validation_by_id
+
+
+def _sanitize_iocs(
+    iocs_list: Optional[List[Dict[str, Any]]],
+    type_validation_by_id: Dict[int, Optional[str]]
+) -> List[Dict[str, Any]]:
+    if not iocs_list:
+        return []
+
+    sanitized: List[Dict[str, Any]] = []
+    for ioc in iocs_list:
+        if not isinstance(ioc, dict):
+            continue
+        raw_value = ioc.get("ioc_value")
+        if raw_value is None:
+            continue
+        if isinstance(raw_value, (int, float)):
+            value = str(raw_value)
+        elif isinstance(raw_value, str):
+            value = raw_value
+        else:
+            continue
+        value = value.strip()
+        if not value:
+            continue
+
+        type_id = ioc.get("ioc_type_id")
+        valid_type_id: Optional[int] = None
+        if type_id is not None:
+            try:
+                type_id_int = int(type_id)
+            except (TypeError, ValueError):
+                type_id_int = None
+            if type_id_int is not None and type_id_int in type_validation_by_id:
+                regex = type_validation_by_id.get(type_id_int)
+                if regex:
+                    if re.fullmatch(regex, value, re.IGNORECASE):
+                        valid_type_id = type_id_int
+                else:
+                    valid_type_id = type_id_int
+
+        sanitized_ioc = dict(ioc)
+        sanitized_ioc["ioc_value"] = value
+        if valid_type_id is not None:
+            sanitized_ioc["ioc_type_id"] = valid_type_id
+        else:
+            sanitized_ioc.pop("ioc_type_id", None)
+        sanitized.append(sanitized_ioc)
+
+    return sanitized
+
+
+def _extract_iocs_from_raw(
+    raw_event: Any,
+    type_index: Dict[str, int],
+    type_validation_by_id: Optional[Dict[int, Optional[str]]] = None
+) -> List[Dict[str, Any]]:
     payload = _parse_raw_event(raw_event)
     if not payload:
         return []
@@ -230,6 +331,9 @@ def _extract_iocs_from_raw(raw_event: Any, type_index: Dict[str, int]) -> List[D
         payloads = [item for item in payload if isinstance(item, dict)]
     else:
         payloads = [payload]
+        events = payload.get("events") if isinstance(payload, dict) else None
+        if isinstance(events, list):
+            payloads.extend([item for item in events if isinstance(item, dict)])
 
     extracted: List[Dict[str, Any]] = []
     seen = set()
@@ -252,7 +356,22 @@ def _extract_iocs_from_raw(raw_event: Any, type_index: Dict[str, int]) -> List[D
                         continue
 
                     type_hint = _type_hint_from_path(path, key_hint)
-                    type_id = _resolve_type_id(type_hint, type_index, value_str)
+                    if type_hint == "hash":
+                        parsed = _extract_labeled_hashes(value_str)
+                        if parsed:
+                            for label, hash_value in parsed:
+                                type_id = _resolve_type_id(label, type_index, hash_value, type_validation_by_id)
+                                key = (hash_value.lower(), type_id)
+                                if key in seen:
+                                    continue
+                                seen.add(key)
+                                extracted.append({
+                                    "ioc_value": hash_value,
+                                    "ioc_type_id": type_id,
+                                })
+                            continue
+
+                    type_id = _resolve_type_id(type_hint, type_index, value_str, type_validation_by_id)
                     key = (value_str.lower(), type_id)
                     if key in seen:
                         continue
@@ -290,7 +409,8 @@ def _merge_iocs(existing: List[Dict[str, Any]], incoming: List[Dict[str, Any]]) 
             incoming_type = ioc.get("ioc_type_id")
             if incoming_type is not None:
                 for existing_ioc in by_value[value_key]:
-                    if existing_ioc.get("ioc_type_id") is None:
+                    existing_type = existing_ioc.get("ioc_type_id")
+                    if existing_type is None or existing_type != incoming_type:
                         existing_ioc["ioc_type_id"] = incoming_type
             continue
         merged.append(ioc)
@@ -429,9 +549,10 @@ def alerts_add_route() -> Response:
         iocs_list = data.pop('alert_iocs', [])
         assets_list = data.pop('alert_assets', [])
 
-        type_index = {row['type_name'].lower(): row['type_id'] for row in get_ioc_types_list()}
+        type_index, type_validation_by_id = _build_type_maps()
+        iocs_list = _sanitize_iocs(iocs_list, type_validation_by_id)
         raw_event = data.get('alert_source_content')
-        extracted_iocs = _extract_iocs_from_raw(raw_event, type_index)
+        extracted_iocs = _extract_iocs_from_raw(raw_event, type_index, type_validation_by_id)
         if _parse_raw_event(raw_event) is not None:
             allowed_values = {
                 (ioc.get("ioc_value") or "").strip().lower()
@@ -641,11 +762,29 @@ def alerts_update_route(alert_id) -> Response:
             if not isinstance(iocs_list, list):
                 return response_error('Invalid alert_iocs format')
             ioc_schema = IocSchema()
+            type_index, type_validation_by_id = _build_type_maps()
+            iocs_list = _sanitize_iocs(iocs_list, type_validation_by_id)
+            raw_event = data.get('alert_source_content', alert.alert_source_content)
+            extracted_iocs = _extract_iocs_from_raw(raw_event, type_index, type_validation_by_id)
+            if _parse_raw_event(raw_event) is not None:
+                allowed_values = {
+                    (ioc.get("ioc_value") or "").strip().lower()
+                    for ioc in extracted_iocs
+                    if (ioc.get("ioc_value") or "").strip()
+                }
+                filtered_iocs = [
+                    ioc for ioc in iocs_list
+                    if (ioc.get("ioc_value") or "").strip().lower() in allowed_values
+                ]
+                iocs_list = _merge_iocs(filtered_iocs, extracted_iocs)
+            else:
+                iocs_list = _merge_iocs(iocs_list, extracted_iocs)
+
             new_iocs = ioc_schema.load(iocs_list, many=True)
 
             existing_by_value = {}
             for existing_ioc in alert.iocs:
-                value_key = (existing_ioc.ioc_value or '').lower
+                value_key = str(existing_ioc.ioc_value or '').lower()
                 if value_key not in existing_by_value:
                     existing_by_value[value_key] = []
                 existing_by_value[value_key].append(existing_ioc)
