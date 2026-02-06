@@ -1915,6 +1915,52 @@ function renderEnrichmentSummary(enrichment) {
     return `<div class="alert alert-secondary mb-0">No summary available for this enrichment.</div>`;
 }
 
+function getOpenCTIMatchInfo(opencti) {
+    const toNumber = (value) => {
+        const parsed = Number(value);
+        return Number.isNaN(parsed) ? 0 : parsed;
+    };
+
+    const observablesCount = toNumber(opencti && opencti.observables && opencti.observables.count);
+    const indicatorsCount = toNumber(opencti && opencti.indicators && opencti.indicators.count);
+    const match = opencti && opencti.match ? opencti.match : null;
+
+    if (!match) {
+        return {
+            observablesCount,
+            indicatorsCount,
+            found: (observablesCount + indicatorsCount) > 0,
+            mode: null,
+            rawTotal: null,
+            filteredTotal: observablesCount + indicatorsCount
+        };
+    }
+
+    const rawObservables = match.raw_counts && match.raw_counts.observables !== undefined
+        ? toNumber(match.raw_counts.observables)
+        : observablesCount;
+    const rawIndicators = match.raw_counts && match.raw_counts.indicators !== undefined
+        ? toNumber(match.raw_counts.indicators)
+        : indicatorsCount;
+    const filteredObservables = match.filtered_counts && match.filtered_counts.observables !== undefined
+        ? toNumber(match.filtered_counts.observables)
+        : observablesCount;
+    const filteredIndicators = match.filtered_counts && match.filtered_counts.indicators !== undefined
+        ? toNumber(match.filtered_counts.indicators)
+        : indicatorsCount;
+    const modeValue = match.mode ? String(match.mode).toLowerCase() : 'exact';
+    const mode = modeValue === 'fuzzy' ? 'fuzzy' : 'exact';
+
+    return {
+        observablesCount: filteredObservables,
+        indicatorsCount: filteredIndicators,
+        found: (filteredObservables + filteredIndicators) > 0,
+        mode,
+        rawTotal: rawObservables + rawIndicators,
+        filteredTotal: filteredObservables + filteredIndicators
+    };
+}
+
 function renderEnrichmentInline(enrichment) {
     if (!enrichment || typeof enrichment !== 'object') {
         return '';
@@ -1924,9 +1970,16 @@ function renderEnrichmentInline(enrichment) {
     }
 
     const opencti = enrichment.opencti;
-    const observablesCount = Number((opencti && opencti.observables && opencti.observables.count) || 0);
-    const indicatorsCount = Number((opencti && opencti.indicators && opencti.indicators.count) || 0);
-    const found = (observablesCount + indicatorsCount) > 0;
+    const matchInfo = getOpenCTIMatchInfo(opencti);
+    const observablesCount = matchInfo.observablesCount;
+    const indicatorsCount = matchInfo.indicatorsCount;
+    const found = matchInfo.found;
+    const matchBadge = matchInfo.mode
+        ? `<span class="badge badge-info">${matchInfo.mode === 'fuzzy' ? 'Fuzzy' : 'Exact'}</span>`
+        : '';
+    const exactBadge = matchInfo.mode && matchInfo.rawTotal !== null && matchInfo.rawTotal !== matchInfo.filteredTotal
+        ? `<span class="badge badge-secondary">Exact ${matchInfo.filteredTotal} of ${matchInfo.rawTotal}</span>`
+        : '';
 
     const scoreInfo = computeOpenCTIScore(opencti);
     const scoreValue = scoreInfo.score !== null ? scoreInfo.score : null;
@@ -1940,6 +1993,8 @@ function renderEnrichmentInline(enrichment) {
             <span class="badge ${found ? 'badge-danger' : 'badge-success'}">
                 ${found ? 'Found' : 'Not found'}
             </span>
+            ${matchBadge}
+            ${exactBadge}
             <span class="badge badge-light">${scoreLabel}</span>
             <span class="badge ${severityClass}">${severity}</span>
             <span class="badge badge-secondary">Indicators ${indicatorsCount}</span>
@@ -1950,9 +2005,16 @@ function renderEnrichmentInline(enrichment) {
 }
 
 function renderOpenCTISummary(opencti) {
-    const observablesCount = Number((opencti && opencti.observables && opencti.observables.count) || 0);
-    const indicatorsCount = Number((opencti && opencti.indicators && opencti.indicators.count) || 0);
-    const found = (observablesCount + indicatorsCount) > 0;
+    const matchInfo = getOpenCTIMatchInfo(opencti);
+    const observablesCount = matchInfo.observablesCount;
+    const indicatorsCount = matchInfo.indicatorsCount;
+    const found = matchInfo.found;
+    const matchBadge = matchInfo.mode
+        ? `<span class="badge badge-info ml-2">${matchInfo.mode === 'fuzzy' ? 'Fuzzy' : 'Exact'}</span>`
+        : '';
+    const exactBadge = matchInfo.mode && matchInfo.rawTotal !== null && matchInfo.rawTotal !== matchInfo.filteredTotal
+        ? `<span class="badge badge-secondary ml-2">Exact ${matchInfo.filteredTotal} of ${matchInfo.rawTotal}</span>`
+        : '';
 
     const scoreInfo = computeOpenCTIScore(opencti);
     const scoreValue = scoreInfo.score !== null ? scoreInfo.score : null;
@@ -2008,6 +2070,8 @@ function renderOpenCTISummary(opencti) {
                         <span class="badge ${found ? 'badge-danger' : 'badge-success'}">
                             ${found ? 'Found in OpenCTI' : 'Not found'}
                         </span>
+                        ${matchBadge}
+                        ${exactBadge}
                     </div>
                 </div>
                 <div class="row mt-2">

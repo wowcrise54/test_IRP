@@ -1,7 +1,7 @@
 module_name = "UTMN_OpenCTI_module"
 module_description = "Обогащает IoCs с помощью OpenCTI"
 interface_version = "1.2.0"
-module_version = "0.1.0"
+module_version = "2.0.0"
 pipeline_support = False
 pipeline_info = {}
 
@@ -74,6 +74,33 @@ module_configuration = [
         "default": "ip,domain,url,hash,email,hostname",
         "mandatory": True,
         "type": "string",
+        "section": "Search"
+    },
+    {
+        "param_name": "opencti_match_mode",
+        "param_human_name": "Match mode",
+        "param_description": "Режим сопоставления результатов (fuzzy, exact, hybrid)",
+        "default": "fuzzy",
+        "mandatory": True,
+        "type": "string",
+        "section": "Search"
+    },
+    {
+        "param_name": "opencti_defang_enabled",
+        "param_human_name": "Defang input",
+        "param_description": "Применять дефанг (hxxp, [.], [:]) при строгом сопоставлении",
+        "default": True,
+        "mandatory": True,
+        "type": "bool",
+        "section": "Search"
+    },
+    {
+        "param_name": "opencti_normalize_urls",
+        "param_human_name": "Normalize URLs",
+        "param_description": "Нормализовать URL (scheme/host/ports) при строгом сопоставлении",
+        "default": True,
+        "mandatory": True,
+        "type": "bool",
         "section": "Search"
     },
     {
