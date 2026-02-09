@@ -23,7 +23,7 @@ function Collaborator( session_id ) {
         delta = JSON.parse( data.delta ) ;
         console.log(delta);
         last_applied_change = delta ;
-        $("#content_typing").text(data.last_change + " is typing..");
+        $("#content_typing").text(t('{user} is typing..', { user: data.last_change }));
         editor.getSession().getDocument().applyDeltas( [delta] ) ;
     }.bind() ) ;
 
@@ -34,7 +34,7 @@ function Collaborator( session_id ) {
     }.bind() ) ;
 
     this.collaboration_socket.on( "save", function(data) {
-        $("#content_last_saved_by").text("Last saved by " + data.last_saved);
+        $("#content_last_saved_by").text(t('Last saved by {user}', { user: data.last_saved }));
          sync_editor(true);
     }.bind() ) ;
 }
@@ -89,7 +89,7 @@ function handle_ed_paste(event) {
         if (blob !== null) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                notify_success('The file is uploading in background. Don\'t leave the page');
+                notify_success(t("The file is uploading in background. Don't leave the page"));
 
                 if (filename === null) {
                     filename = random_filename(25);
@@ -104,7 +104,7 @@ function handle_ed_paste(event) {
             };
             reader.readAsDataURL(blob);
         } else {
-            notify_error('Unsupported direct paste of this item. Use datastore to upload.');
+            notify_error(t('Unsupported direct paste of this item. Use datastore to upload.'));
         }
       }
     }
@@ -139,13 +139,13 @@ function edit_case_summary() {
     if ($('#container_editor_summary').is(':visible')) {
         $('#ctrd_casesum').removeClass('col-md-12').addClass('col-md-6');
         $('#summary_edition_btn').show(100);
-        $("#sum_refresh_btn").html('Save');
-        $("#sum_edit_btn").html('Close editor');
+        $("#sum_refresh_btn").html(t('Save'));
+        $("#sum_edit_btn").html(t('Close editor'));
     } else {
         $('#ctrd_casesum').removeClass('col-md-6').addClass('col-md-12');
         $('#summary_edition_btn').hide();
-        $("#sum_refresh_btn").html('Refresh');
-        $("#sum_edit_btn").html('Edit');
+        $("#sum_refresh_btn").html(t('Refresh'));
+        $("#sum_edit_btn").html(t('Edit'));
     }
 }
 
@@ -156,7 +156,7 @@ function edit_case_summary() {
 */
 function sync_editor(no_check) {
 
-    $('#last_saved').text('Syncing..').addClass('badge-danger').removeClass('badge-success');
+    $('#last_saved').text(t('Syncing..')).addClass('badge-danger').removeClass('badge-success');
 
     get_request_api('/case/summary/fetch')
     .done((data) => {
@@ -168,8 +168,8 @@ function sync_editor(no_check) {
 
                 // Set the CRC in page
                 $('#fetched_crc').val(data.data.crc32.toString());
-                $('#last_saved').text('Changes saved').removeClass('badge-danger').addClass('badge-success');
-                $('#content_last_sync').text("Last synced: " + new Date().toLocaleTimeString());
+                $('#last_saved').text(t('Changes saved')).removeClass('badge-danger').addClass('badge-success');
+                $('#content_last_sync').text(t('Last synced: {time}', { time: new Date().toLocaleTimeString() }));
             }
             else {
                 // Check if content is different
@@ -185,13 +185,14 @@ function sync_editor(no_check) {
                         // No local change, we can sync and update local CRC
                         editor.getSession().setValue(data.data.case_description);
                         $('#fetched_crc').val(data.data.crc32);
-                        $('#last_saved').text('Changes saved').removeClass('badge-danger').addClass('badge-success');
-                        $('#content_last_sync').text("Last synced: " + new Date().toLocaleTimeString());
+                        $('#last_saved').text(t('Changes saved')).removeClass('badge-danger').addClass('badge-success');
+                        $('#content_last_sync').text(t('Last synced: {time}', { time: new Date().toLocaleTimeString() }));
                     } else {
                         // We have a conflict
-                        $('#last_saved').text('Conflict !').addClass('badge-danger').removeClass('badge-success');
-                        swal ( "Oh no !" ,
-                        "We have a conflict with the remote content.\nSomeone may just have changed the description at the same time.\nThe local content will be copied into clipboard and content will be updated with remote." ,
+                        $('#last_saved').text(t('Conflict!')).addClass('badge-danger').removeClass('badge-success');
+                        swal(
+                        t('Oh no!'),
+                        t('We have a conflict with the remote content.\nSomeone may just have changed the description at the same time.\nThe local content will be copied into clipboard and content will be updated with remote.'),
                         "error"
                         ).then((value) => {
                             // Old fashion trick
@@ -200,8 +201,8 @@ function sync_editor(no_check) {
                             document.execCommand('copy');
                             editor.getSession().setValue(data.data.desc);
                             $('#fetched_crc').val(data.data.crc32);
-                            notify_success('Content updated with remote. Local changes copied to clipboard.');
-                            $('#content_last_sync').text("Last synced: " + new Date().toLocaleTimeString());
+                            notify_success(t('Content updated with remote. Local changes copied to clipboard.'));
+                            $('#content_last_sync').text(t('Last synced: {time}', { time: new Date().toLocaleTimeString() }));
                         });
                     }
                 } else {
@@ -224,22 +225,22 @@ function sync_editor(no_check) {
                             success: function (data) {
                                 if (data.status == 'success') {
                                     collaborator.save();
-                                    $('#content_last_sync').text("Last synced: " + new Date().toLocaleTimeString());
+                                    $('#content_last_sync').text(t('Last synced: {time}', { time: new Date().toLocaleTimeString() }));
                                     $('#fetched_crc').val(data.data);
-                                    $('#last_saved').text('Changes saved').removeClass('badge-danger').addClass('badge-success');
+                                    $('#last_saved').text(t('Changes saved')).removeClass('badge-danger').addClass('badge-success');
                                 } else {
-                                    notify_error("Unable to save content to remote server");
-                                    $('#last_saved').text('Error saving !').addClass('badge-danger').removeClass('badge-success');
+                                    notify_error(t('Unable to save content to remote server'));
+                                    $('#last_saved').text(t('Error saving!')).addClass('badge-danger').removeClass('badge-success');
                                 }
                             },
                             error: function(error) {
                                 notify_error(error.responseJSON.message);
-                                ('#last_saved').text('Error saving !').addClass('badge-danger').removeClass('badge-success');
+                                $('#last_saved').text(t('Error saving!')).addClass('badge-danger').removeClass('badge-success');
                             }
                         });
                     }
-                    $('#content_last_sync').text("Last synced: " + new Date().toLocaleTimeString());
-                    $('#last_saved').text('Changes saved').removeClass('badge-danger').addClass('badge-success');
+                    $('#content_last_sync').text(t('Last synced: {time}', { time: new Date().toLocaleTimeString() }));
+                    $('#last_saved').text(t('Changes saved')).removeClass('badge-danger').addClass('badge-success');
                 }
             }
         }
@@ -397,7 +398,7 @@ $(document).ready(function() {
     //var textarea = $('#case_summary');
     editor.getSession().on("change", function () {
         //textarea.val(do_md_filter_xss(editor.getSession().getValue()));
-        $('#last_saved').text('Changes not saved').addClass('badge-danger').removeClass('badge-success');
+        $('#last_saved').text(t('Changes not saved')).addClass('badge-danger').removeClass('badge-success');
         let target = document.getElementById('targetDiv');
         let converter = get_showdown_convert();
         let html = converter.makeHtml(do_md_filter_xss(editor.getSession().getValue()));
@@ -419,7 +420,7 @@ $(document).ready(function() {
             $(".btn-start-review").hide();
             $(".btn-confirm-review").show();
             $(".btn-cancel-review").show();
-            $('#reviewSubtitle').text('You started this review. Press "Confirm review" when you are done.');
+            $('#reviewSubtitle').text(t('You started this review. Press "Confirm review" when you are done.'));
         } else if (current_review_state === 'Review completed') {
             $(".btn-start-review").hide();
             $(".btn-confirm-review").hide();
@@ -464,8 +465,8 @@ $(document).ready(function() {
 
         if (reviewer_id !== "None") {
             swal({
-                title: "Request review",
-                text: "Request a case review from " + reviewer_name + "?",
+                title: t('Request review'),
+                text: t('Request a case review from {user}?', { user: reviewer_name }),
                 icon: "info",
                 buttons: true,
                 dangerMode: false,
@@ -514,5 +515,4 @@ $(document).ready(function() {
      });
 
 });
-
 

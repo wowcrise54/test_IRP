@@ -74,7 +74,7 @@ function add_ioc() {
 
                     data['ioc_value'] = iocs_list[index];
                     post_request_api('ioc/add', JSON.stringify(data), true, function () {
-                        $('#submit_new_ioc').text('Saving data..')
+                        $('#submit_new_ioc').text(t('Saving data..'))
                             .attr("disabled", true)
                             .removeClass('bt-outline-success')
                             .addClass('btn-success', 'text-dark');
@@ -87,8 +87,8 @@ function add_ioc() {
                                     $('#modal_add_ioc').modal('hide');
                                 }
                         } else {
-                            $('#submit_new_ioc').text('Save again');
-                            swal("Oh no !", data.message, "error")
+                            $('#submit_new_ioc').text(t('Save again'));
+                            swal(t("Oh no!"), data.message, "error")
                         }
                     })
                     .always(function () {
@@ -102,7 +102,7 @@ function add_ioc() {
 
             else {
                 post_request_api('ioc/add', JSON.stringify(data), true, function () {
-                        $('#submit_new_ioc').text('Saving data..')
+                        $('#submit_new_ioc').text(t('Saving data..'))
                             .attr("disabled", true)
                             .removeClass('bt-outline-success')
                             .addClass('btn-success', 'text-dark');
@@ -114,8 +114,8 @@ function add_ioc() {
                             $('#modal_add_ioc').modal('hide');
 
                     } else {
-                        $('#submit_new_ioc').text('Save again');
-                        swal("Oh no !", data.message, "error")
+                        $('#submit_new_ioc').text(t('Save again'));
+                        swal(t("Oh no!"), data.message, "error")
                     }
                 })
                 .always(function () {
@@ -177,7 +177,7 @@ function get_case_ioc() {
 
             } else {
                 Table.clear().draw();
-                swal("Oh no !", data.message, "error")
+                swal(t("Oh no!"), data.message, "error")
             }
         } else {
             Table.clear().draw()
@@ -269,7 +269,7 @@ function update_ioc_ext(ioc_id, do_close) {
         if (data.status == 'success') {
             reload_iocs();
 
-            $('#submit_new_ioc').text("Saved").addClass('btn-outline-success').removeClass('btn-outline-danger').removeClass('btn-outline-warning');
+            $('#submit_new_ioc').text(t("Saved")).addClass('btn-outline-success').removeClass('btn-outline-danger').removeClass('btn-outline-warning');
             $('#last_saved').removeClass('btn-danger').addClass('btn-success');
             $('#last_saved > i').attr('class', "fa-solid fa-file-circle-check");
 
@@ -280,8 +280,8 @@ function update_ioc_ext(ioc_id, do_close) {
             notify_success(data.message);
 
         } else {
-            $('#submit_new_ioc').text('Save again');
-            swal("Oh no !", data.message, "error")
+            $('#submit_new_ioc').text(t('Save again'));
+            swal(t("Oh no!"), data.message, "error")
         }
     })
 
@@ -289,7 +289,7 @@ function update_ioc_ext(ioc_id, do_close) {
 
 /* Delete an ioc */
 function delete_ioc(ioc_id) {
-    do_deletion_prompt("You are about to delete IOC #" + ioc_id)
+    do_deletion_prompt(t("You are about to delete IOC #{id}", { id: ioc_id }))
     .then((doDelete) => {
         if (doDelete) {
             post_request_api('ioc/delete/' + ioc_id)
@@ -300,7 +300,7 @@ function delete_ioc(ioc_id) {
                     $('#modal_add_ioc').modal('hide');
 
                 } else {
-                    swal("Oh no !", data.message, "error")
+                    swal(t("Oh no!"), data.message, "error")
                 }
             })
         }
@@ -327,10 +327,10 @@ function upload_ioc() {
             if (jsdata.status == "success") {
                 reload_iocs();
                 $('#modal_upload_ioc').modal('hide');
-                swal("Got news for you", data.message, "success");
+                swal(t("Got news for you"), data.message, "success");
 
             } else {
-                swal("Got bad news for you", data.message, "error");
+                swal(t("Got bad news for you"), data.message, "error");
             }
         })
     };
@@ -469,14 +469,14 @@ $(document).ready(function(){
     });
 
     var buttons = new $.fn.dataTable.Buttons(Table, {
-     buttons: [
-        { "extend": 'csvHtml5', "text":'<i class="fas fa-cloud-download-alt"></i>',"className": 'btn btn-link text-white'
-        , "titleAttr": 'Download as CSV', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
-        { "extend": 'copyHtml5', "text":'<i class="fas fa-copy"></i>',"className": 'btn btn-link text-white'
-        , "titleAttr": 'Copy', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
-        { "extend": 'colvis', "text":'<i class="fas fa-eye-slash"></i>',"className": 'btn btn-link text-white'
-        , "titleAttr": 'Toggle columns' }
-    ]
+        buttons: [
+            { "extend": 'csvHtml5', "text":'<i class="fas fa-cloud-download-alt"></i>',"className": 'btn btn-link text-white'
+        , "titleAttr": t('Download as CSV'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
+            { "extend": 'copyHtml5', "text":'<i class="fas fa-copy"></i>',"className": 'btn btn-link text-white'
+        , "titleAttr": t('Copy'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
+            { "extend": 'colvis', "text":'<i class="fas fa-eye-slash"></i>',"className": 'btn btn-link text-white'
+        , "titleAttr": t('Toggle columns') }
+        ]
 }).container().appendTo($('#tables_button'));
 
     get_case_ioc();

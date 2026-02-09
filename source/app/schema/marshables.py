@@ -224,6 +224,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     user_name: str = auto_field('name', required=True, validate=Length(min=2))
     user_login: str = auto_field('user', required=True, validate=Length(min=2))
     user_email: str = auto_field('email', required=True, validate=Length(min=2))
+    user_language: Optional[str] = auto_field('language', required=False)
     user_password: Optional[str] = auto_field('password', required=False)
     user_isadmin: bool = fields.Boolean(required=True)
     user_id: Optional[int] = fields.Integer(required=False)
@@ -234,7 +235,8 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         model = User
         load_instance = True
         include_fk = True
-        exclude = ['api_key', 'password', 'ctx_case', 'ctx_human_case', 'user', 'name', 'email', 'is_service_account']
+        exclude = ['api_key', 'password', 'ctx_case', 'ctx_human_case', 'user', 'name', 'email',
+                   'language', 'is_service_account']
         unknown = EXCLUDE
 
     @pre_load()
@@ -2096,13 +2098,14 @@ class BasicUserSchema(ma.SQLAlchemyAutoSchema):
     user_name: str = auto_field('name', required=True, validate=Length(min=2))
     user_login: str = auto_field('user', required=True, validate=Length(min=2))
     user_email: str = auto_field('email', required=True, validate=Length(min=2))
+    user_language: Optional[str] = auto_field('language', required=False)
     has_deletion_confirmation: Optional[bool] = auto_field('has_deletion_confirmation', required=False, default=False)
 
     class Meta:
         model = User
         load_instance = True
         exclude = ['password', 'api_key', 'ctx_case', 'ctx_human_case', 'active', 'external_id', 'in_dark_mode',
-                   'id', 'name', 'email', 'user', 'uuid']
+                   'id', 'name', 'email', 'user', 'uuid', 'language']
         unknown = EXCLUDE
 
 

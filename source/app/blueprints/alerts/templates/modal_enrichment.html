@@ -2,21 +2,21 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="enrichmentModalLabel">Enrichment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+        <h5 class="modal-title" id="enrichmentModalLabel">{{ _('Enrichment') }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Close') }}">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="btn-group mb-2" role="group" aria-label="Enrichment view">
-          <button type="button" class="btn btn-sm btn-outline-primary" id="enrichmentShowSummary">Summary</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="enrichmentShowRaw">Raw JSON</button>
+        <div class="btn-group mb-2" role="group" aria-label="{{ _('Enrichment view') }}">
+          <button type="button" class="btn btn-sm btn-outline-primary" id="enrichmentShowSummary">{{ _('Summary') }}</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="enrichmentShowRaw">{{ _('Raw JSON') }}</button>
         </div>
         <div id="enrichmentSummary" class="mb-3"></div>
         <div id="enrichmentData"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">{{ _('Close') }}</button>
       </div>
     </div>
   </div>

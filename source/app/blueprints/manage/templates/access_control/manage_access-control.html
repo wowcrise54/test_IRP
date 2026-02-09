@@ -1,6 +1,6 @@
 {% extends "layouts/default.html" %}
 
-{% block title %} Access Control {% endblock title %}
+{% block title %} {{ _('Access control') }} {% endblock title %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="/static/assets/css/suggestags.css">
@@ -17,14 +17,14 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col col-heading" href="#collapse_user_mgmt" title="Click to unfold"  data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapse_user_mgmt">
+                        <div class="col col-heading" href="#collapse_user_mgmt" title="{{ _('Click to unfold') }}"  data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapse_user_mgmt">
                             <span class="accicon float-left mr-3"><i class="fas fa-angle-right rotate-icon"></i></span>
-                            <div class="card-title">Users</div>
+                            <div class="card-title">{{ _('Users') }}</div>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-sm btn-dark float-right ml-2" onclick="refresh_users(true);">Refresh</button>
-                            <a class="btn btn-sm btn-dark float-right ml-2" href="access-control/audit/users?cid={{ session['current_case'].case_id }}">Audit users</a>
-                            <button class="btn btn-sm btn-dark float-right ml-2" onclick="add_user();">Add user</button>
+                            <button type="button" class="btn btn-sm btn-dark float-right ml-2" onclick="refresh_users(true);">{{ _('Refresh') }}</button>
+                            <a class="btn btn-sm btn-dark float-right ml-2" href="access-control/audit/users?cid={{ session['current_case'].case_id }}">{{ _('Audit users') }}</a>
+                            <button class="btn btn-sm btn-dark float-right ml-2" onclick="add_user();">{{ _('Add user') }}</button>
                         </div>
                     </div>
                 </div>
@@ -39,21 +39,21 @@
                             <tr>
 
                                 <th>#ID</th>
-                                <th>Name</th>
-                                <th>Login Name</th>
-                                <th>Email</th>
-                                <th>Active</th>
-                                <th>Service Account</th>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Login Name') }}</th>
+                                <th>{{ _('Email') }}</th>
+                                <th>{{ _('Active') }}</th>
+                                <th>{{ _('Service Account') }}</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
                                 <th>#ID</th>
-                                <th>Name</th>
-                                <th>Login Name</th>
-                                <th>Email</th>
-                                <th>Active</th>
-                                <th>Service Account</th>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Login Name') }}</th>
+                                <th>{{ _('Email') }}</th>
+                                <th>{{ _('Active') }}</th>
+                                <th>{{ _('Service Account') }}</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -63,13 +63,13 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col col-heading" href="#collapse_groups_mgmt" title="Click to unfold"  data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapse_groups_mgmt">
+                        <div class="col col-heading" href="#collapse_groups_mgmt" title="{{ _('Click to unfold') }}"  data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapse_groups_mgmt">
                             <span class="accicon float-left mr-3"><i class="fas fa-angle-right rotate-icon"></i></span>
-                            <div class="card-title">Groups</div>
+                            <div class="card-title">{{ _('Groups') }}</div>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-sm btn-dark float-right ml-2" onclick="refresh_groups(true);">Refresh</button>
-                            <button class="btn btn-sm btn-dark float-right" onclick="add_group();">Add group</button>
+                            <button type="button" class="btn btn-sm btn-dark float-right ml-2" onclick="refresh_groups(true);">{{ _('Refresh') }}</button>
+                            <button class="btn btn-sm btn-dark float-right" onclick="add_group();">{{ _('Add group') }}</button>
                         </div>
                     </div>
                 </div>
@@ -84,19 +84,19 @@
                             <tr>
 
                                 <th>#ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Permissions</th>
-                                <th>#Members</th>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Description') }}</th>
+                                <th>{{ _('Permissions') }}</th>
+                                <th>#{{ _('Members') }}</th>
                             </tr>
                             </thead>
                             <tfoot>
                             <tr>
                                 <th>#ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Permissions</th>
-                                <th>#Members</th>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Description') }}</th>
+                                <th>{{ _('Permissions') }}</th>
+                                <th>#{{ _('Members') }}</th>
                             </tr>
                             </tfoot>
                         </table>

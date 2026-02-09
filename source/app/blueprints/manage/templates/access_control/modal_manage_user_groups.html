@@ -1,7 +1,7 @@
 <div class="modal-lg modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title mt-2 mr-4">Manage user groups</h4>
+            <h4 class="modal-title mt-2 mr-4">{{ _('Manage user groups') }}</h4>
             <div class="row text-right">
                 <button type="button" class="pull-right btn bg-transparent" data-dismiss="modal" aria-label="Close"><span
                     aria-hidden="true"><i class="fa fa-times"></i></span></button>
@@ -11,7 +11,7 @@
             <div class="container col-md-12" >
                 <div class="row">
                     <div class="form-group" data-select2-id="7">
-                        <label>Groups membership *</label>
+                        <label>{{ _('Groups membership') }} *</label>
                         <div class="select2-input ml-12" data-select2-id="6">
                             <select id="user_groups_membership" name="user_groups_membership" class="form-control select2-hidden-accessible ml-12" multiple=""
                                     tabindex="-1" aria-hidden="true" style="width: 100%">
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-outline-success ml-4 mt-5 float-right"
-                    id="save_user_groups_membership">Save</button>
+                    id="save_user_groups_membership">{{ _('Save') }}</button>
             </div>
         </div>
     </div><!-- /.modal-content -->
@@ -40,11 +40,11 @@ for (group in current_groups_list) {
 
 $('#user_groups_membership').multiselect({
     buttonWidth: 400,
-    nonSelectedText: 'Select groups',
+    nonSelectedText: '{{ _('Select groups') }}',
     includeSelectAllOption: true,
     enableFiltering: true,
     enableCaseInsensitiveFiltering: true,
-    filterPlaceholder: 'Search',
+    filterPlaceholder: '{{ _('Search') }}',
     filterBehavior: 'both',
     widthSynchronizationMode: 'ifPopupIsSmaller'
 });

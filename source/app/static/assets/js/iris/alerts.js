@@ -187,13 +187,13 @@ function extractIocsFromContent(content, iocTypeMap) {
 
 async function enrichAlertsIocs(alertIds) {
     if (!alertIds || alertIds.length === 0) {
-        notify_error('Please select at least one alert to perform this action on.');
+        notify_error(t('Please select at least one alert to perform this action on.'));
         return;
     }
 
     window.swal({
-        title: "Extracting IOCs, please wait",
-        text: "This window will close automatically when it's done",
+        title: t('Extracting IOCs, please wait'),
+        text: t("This window will close automatically when it's done"),
         icon: "/static/assets/img/loader.gif",
         button: false,
         allowOutsideClick: false
@@ -207,7 +207,7 @@ async function enrichAlertsIocs(alertIds) {
     try {
         const iocTypes = await fetchIocTypes();
         if (!iocTypes) {
-            notify_error('Unable to load IOC types.');
+            notify_error(t('Unable to load IOC types.'));
             return;
         }
         const iocTypeMap = buildIocTypeMap(iocTypes);
@@ -242,18 +242,21 @@ async function enrichAlertsIocs(alertIds) {
     }
 
     if (updatedAlerts > 0) {
-        notify_success(`Found ${totalIocs} IOC(s) in ${updatedAlerts} alert(s).`);
+        notify_success(t('Found {ioc_count} IOC(s) in {alert_count} alert(s).', {
+            ioc_count: totalIocs,
+            alert_count: updatedAlerts
+        }));
         if (alertIds.length === 1) {
             refreshAlert(alertIds[0]);
         } else {
             refreshAlerts();
         }
     } else if (emptyAlerts > 0 && failedAlerts === 0) {
-        notify_error('No IOCs found in selected alerts.');
+        notify_error(t('No IOCs found in selected alerts.'));
     }
 
     if (failedAlerts > 0) {
-        notify_error(`Failed to enrich ${failedAlerts} alert(s).`);
+        notify_error(t('Failed to enrich {count} alert(s).', { count: failedAlerts }));
     }
 }
 
@@ -352,15 +355,18 @@ function toggleSelectDeselect(toggleButton, listSelector) {
     });
 
     if (allChecked) {
-        toggleButton.text("Select All");
+        toggleButton.text(t("Select all"));
     } else {
-        toggleButton.text("Deselect All");
+        toggleButton.text(t("Deselect all"));
     }
 }
 
 function unlinkAlertFromCase(alert_id, case_id) {
 
-    do_deletion_prompt(`Unlink alert #${alert_id} from the case #${case_id}?`, true)
+    do_deletion_prompt(t('Unlink alert #{alert_id} from the case #{case_id}?', {
+        alert_id: alert_id,
+        case_id: case_id
+    }), true)
         .then( () => {
             unlinkAlertFromCaseRequest(alert_id, case_id)
                 .then((data) => {
@@ -384,7 +390,7 @@ function mergeMultipleAlertsModal() {
     const selectedAlerts = getBatchAlerts();
     const escalateButton = $("#escalateOrMergeButton");
     if (selectedAlerts.length === 0) {
-        notify_error('Please select at least one alert to perform this action on.');
+        notify_error(t('Please select at least one alert to perform this action on.'));
         return;
     }
     fetchMultipleAlerts(selectedAlerts)
@@ -394,11 +400,11 @@ function mergeMultipleAlertsModal() {
                     const assetsList = $("#assetsList");
 
                     // Configure the modal for both escalation and merging
-                    $('#escalateModalLabel').text('Merge multiple alerts in a new case');
-                    $('#escalateModalExplanation').text('These alerts will be merged into a new case. Set the case title and select the IOCs and Assets to escalate into the case.');
+                    $('#escalateModalLabel').text(t('Merge multiple alerts in a new case'));
+                    $('#escalateModalExplanation').text(t('These alerts will be merged into a new case. Set the case title and select the IOCs and Assets to escalate into the case.'));
                     $('#modalAlertTitleContainer').hide();
 
-                    $('#modalEscalateCaseTitle').val(`[ALERT] Escalation of ${selectedAlerts.length} alerts`);
+                    $('#modalEscalateCaseTitle').val(t('[ALERT] Escalation of {count} alerts', { count: selectedAlerts.length }));
                     $('#modalEscalateCaseTitleContainer').show();
 
                     escalateButton.attr("data-merge", false);
@@ -423,7 +429,7 @@ function mergeMultipleAlertsModal() {
                         clearOnEmpty: false,
                         emptyRequest: true,
                         locale: {
-                            emptyTitle: 'Select and Begin Typing',
+                            emptyTitle: t('Select and begin typing'),
                             statusInitialized: '',
                         },
                         preprocessData: function (data) {
@@ -443,7 +449,7 @@ function mergeMultipleAlertsModal() {
                                         dataTemplate = dataTemplate.data;
                                         const templateSelect = $('#mergeAlertCaseTemplateSelect');
                                         templateSelect.html('');
-                                        templateSelect.append('<option value="">Select a template</option>');
+                                        templateSelect.append(`<option value="">${t('Select a template')}</option>`);
                                         for (let i = 0; i < dataTemplate.length; i++) {
                                             templateSelect.append(`<option value="${dataTemplate[i].id}">${filterXSS(dataTemplate[i].display_name)}</option>`);
                                         }
@@ -476,8 +482,8 @@ function mergeMultipleAlertsModal() {
 
                                         $("input[type='radio'][name='mergeOption']").off('change').on("change", function () {
                                             if ($(this).val() === "existing_case") {
-                                                $('#escalateModalLabel').text(`Merge ${selectedAlerts.length} alerts in an existing case`);
-                                                $('#escalateModalExplanation').text('These alerts will be merged into the selected case. Select the IOCs and Assets to merge into the case.');
+                                                $('#escalateModalLabel').text(t('Merge {count} alerts in an existing case', { count: selectedAlerts.length }));
+                                                $('#escalateModalExplanation').text(t('These alerts will be merged into the selected case. Select the IOCs and Assets to merge into the case.'));
                                                 $('#mergeAlertCaseSelectSection').show();
                                                 $('#mergeAlertCaseTemplateSection').hide();
                                                 $('#modalEscalateCaseTitleContainer').hide();
@@ -485,9 +491,8 @@ function mergeMultipleAlertsModal() {
                                                 $('#mergeAlertCaseSelect').selectpicker('val', get_caseid());
                                                 escalateButton.data("merge", true);
                                             } else {
-                                                console.log('change')
-                                                $('#escalateModalLabel').text(`Merge ${selectedAlerts.length} alerts in new case`);
-                                                $('#escalateModalExplanation').text('This alert will be merged into a new case. Set the case title and select the IOCs and Assets to merge into the case.');
+                                                $('#escalateModalLabel').text(t('Merge {count} alerts in a new case', { count: selectedAlerts.length }));
+                                                $('#escalateModalExplanation').text(t('This alert will be merged into a new case. Set the case title and select the IOCs and Assets to merge into the case.'));
                                                 $('#mergeAlertCaseSelectSection').hide();
                                                 $('#mergeAlertCaseTemplateSection').show();
                                                 $('#modalEscalateCaseTitleContainer').show();
@@ -527,10 +532,10 @@ function mergeAlertModal(alert_id) {
             $("#modalAlertTitle").val(alert_title);
 
             // Configure the modal for both escalation and merging
-            $('#escalateModalLabel').html(`Merge alert #${alert_id} in a new case`);
+            $('#escalateModalLabel').html(t('Merge alert #{id} in a new case', { id: alert_id }));
             $('#escalateModalLabel')[0].offsetHeight;
 
-            $('#escalateModalExplanation').text('This alert will be escalated into a new case. Set a title and select the IOCs and Assets to escalate into the case.');
+            $('#escalateModalExplanation').text(t('This alert will be escalated into a new case. Set a title and select the IOCs and Assets to escalate into the case.'));
 
             $('#modalEscalateCaseTitle').val(`[ALERT] ${alert_title}`);
             $('#modalEscalateCaseTitleContainer').show();
@@ -557,7 +562,7 @@ function mergeAlertModal(alert_id) {
                 clearOnEmpty: false,
                 emptyRequest: true,
                 locale: {
-                    emptyTitle: 'Select and Begin Typing',
+                    emptyTitle: t('Select and begin typing'),
                     statusInitialized: '',
                 },
                 preprocessData: function (data) {
@@ -578,7 +583,7 @@ function mergeAlertModal(alert_id) {
                             data = data.data;
                             const templateSelect = $('#mergeAlertCaseTemplateSelect');
                             templateSelect.html('');
-                            templateSelect.append('<option value="">Select a template</option>');
+                            templateSelect.append(`<option value="">${t('Select a template')}</option>`);
                             for (let i = 0; i < data.length; i++) {
                                 templateSelect.append(`<option value="${data[i].id}">${filterXSS(data[i].display_name)}</option>`);
                             }
@@ -619,8 +624,8 @@ function mergeAlertModal(alert_id) {
 
                             $("input[type='radio'][name='mergeOption']").off("change").on("change", function () {
                                 if ($(this).val() === "existing_case") {
-                                    $('#escalateModalLabel').text(`Merge alert #${alert_id} in existing case`);
-                                    $('#escalateModalExplanation').text('This alert will be merged into the selected case. Select the IOCs and Assets to merge into the case.');
+                                    $('#escalateModalLabel').text(t('Merge alert #{id} in an existing case', { id: alert_id }));
+                                    $('#escalateModalExplanation').text(t('This alert will be merged into the selected case. Select the IOCs and Assets to merge into the case.'));
                                     $('#mergeAlertCaseSelectSection').show();
                                     $('#mergeAlertCaseTemplateSection').hide();
                                     $('#modalEscalateCaseTitleContainer').hide();
@@ -628,8 +633,8 @@ function mergeAlertModal(alert_id) {
                                     $('#mergeAlertCaseSelect').selectpicker('val', get_caseid());
                                     escalateButton.data("merge", true);
                                 } else {
-                                    $('#escalateModalLabel').text(`Merge alert #${alert_id} in new case`);
-                                    $('#escalateModalExplanation').text('This alert will be merged into a new case. Set the case title and select the IOCs and Assets to merge into the case.');
+                                    $('#escalateModalLabel').text(t('Merge alert #{id} in a new case', { id: alert_id }));
+                                    $('#escalateModalExplanation').text(t('This alert will be merged into a new case. Set the case title and select the IOCs and Assets to merge into the case.'));
                                     $('#mergeAlertCaseSelectSection').hide();
                                     $('#mergeAlertCaseTemplateSection').show();
                                     $('#modalEscalateCaseTitleContainer').show();
@@ -666,8 +671,8 @@ function mergeAlertCasesSelectOption(data) {
     if(notify_auto_api(data, true)) {
         $('#mergeAlertCaseSelect').empty();
 
-        $('#mergeAlertCaseSelect').append('<optgroup label="Open" id="switchMergeAlertCasesOpen"></optgroup>');
-        $('#mergeAlertCaseSelect').append('<optgroup label="Closed" id="switchMergeAlertCasesClose"></optgroup>');
+        $('#mergeAlertCaseSelect').append(`<optgroup label="${t('Open')}" id="switchMergeAlertCasesOpen"></optgroup>`);
+        $('#mergeAlertCaseSelect').append(`<optgroup label="${t('Closed')}" id="switchMergeAlertCasesClose"></optgroup>`);
         let ocs = data.data;
         let ret_data = [];
         for (index in ocs) {
@@ -706,9 +711,9 @@ function buildAlertLink(alert_id){
 function copyAlertLink(alert_id) {
     const link = buildAlertLink(alert_id);
     navigator.clipboard.writeText(link).then(function() {
-        notify_success('Link copied');
+        notify_success(t('Link copied'));
     }, function(err) {
-        notify_error('Can\'t copy link. I printed it in console.');
+        notify_error(t("Can't copy link. I printed it in console."));
         console.error('Shared link', err);
     });
 }
@@ -716,9 +721,9 @@ function copyAlertLink(alert_id) {
 function copyMDAlertLink(alert_id){
     const link = `[<i class="fa-solid fa-bell"></i> #${alert_id}](${buildAlertLink(alert_id)})`;
     navigator.clipboard.writeText(link).then(function() {
-        notify_success('MD link copied');
+        notify_success(t('MD link copied'));
     }, function(err) {
-        notify_error('Can\'t copy link. I printed it in console.');
+        notify_error(t("Can't copy link. I printed it in console."));
         console.error('Shared link', err);
     });
 }
@@ -735,7 +740,7 @@ function createNetwork(alert_id, relatedAlerts, nb_nodes, containerId, container
   const { nodes, edges } = relatedAlerts;
 
   if (nodes.length === 0 || nodes.length === undefined) {
-      $(`#similarAlertsNotify-${alert_id}`).text(`No relationships found for this alert`);
+      $(`#similarAlertsNotify-${alert_id}`).text(t('No relationships found for this alert'));
      return;
   }
 
@@ -839,9 +844,15 @@ const network = new vis.Network(container, data, options);
               $('#view-alert').data('node-id', node_id);
               $('#view-alert').data('node-type', node_type);
               if (node_type === 'alert' || node_type === 'case') {
-                  $('#view-alert-text').text(`View ${node_type} #${node_id}`);
+                  $('#view-alert-text').text(t('View {type} #{id}', {
+                      type: node_type,
+                      id: node_id
+                  }));
               } else {
-                    $('#view-alert-text').text(`Pivot on ${node_type} ${node_id}`);
+                    $('#view-alert-text').text(t('Pivot on {type} {id}', {
+                        type: node_type,
+                        id: node_id
+                    }));
               }
               contextMenu.show();
           }
@@ -854,7 +865,7 @@ const network = new vis.Network(container, data, options);
     });
 
       if (nodes.length >= nb_nodes) {
-            $(`#similarAlertsNotify-${alert_id}`).text(`Relationships node exceeded the nodes limit. Expect truncated results.`)
+            $(`#similarAlertsNotify-${alert_id}`).text(t('Relationships node exceeded the nodes limit. Expect truncated results.'))
       } else {
             $(`#similarAlertsNotify-${alert_id}`).text(``);
       }
@@ -897,7 +908,7 @@ function fetchSimilarAlerts(alert_id,
           'number-of-nodes': nb_nodes
         }).toString();
 
-        $(`#similarAlertsNotify-${alert_id}`).text('Fetching relationships...');
+        $(`#similarAlertsNotify-${alert_id}`).text(t('Fetching relationships...'));
         get_raw_request_api(`/alerts/similarities/${alert_id}?${queryString}&cid=${get_caseid()}`)
           .done((data) => {
             createNetwork(alert_id, data.data, nb_nodes, `similarAlerts-${alert_id}`, `graphConfigure-${alert_id}`);
@@ -1064,25 +1075,50 @@ function alertResolutionToARC(resolution, alert_id) {
     }
     switch (resolution.resolution_status_name) {
         case 'True Positive With Impact':
-            return `<span class="badge alert-bade-status badge-pill badge-danger mr-2" id="alertResolution-${alert_id}" data-value="true_positive_with_impact">True Positive with impact</span>`
+            return `<span class="badge alert-bade-status badge-pill badge-danger mr-2" id="alertResolution-${alert_id}" data-value="true_positive_with_impact">${t('True positive with impact')}</span>`
         case 'True Positive Without Impact':
-            return `<span class="badge alert-bade-status badge-pill badge-warning mr-2" id="alertResolution-${alert_id}" data-value="true_positive_without_impact">True Positive without impact</span>`
+            return `<span class="badge alert-bade-status badge-pill badge-warning mr-2" id="alertResolution-${alert_id}" data-value="true_positive_without_impact">${t('True positive without impact')}</span>`
         case 'False Positive':
-            return `<span class="badge alert-bade-status badge-pill badge-success mr-2" id="alertResolution-${alert_id}" data-value="false_positive">False Positive</span>`
+            return `<span class="badge alert-bade-status badge-pill badge-success mr-2" id="alertResolution-${alert_id}" data-value="false_positive">${t('False positive')}</span>`
         case 'Legitimate':
-            return `<span class="badge alert-bade-status badge-pill badge-info mr-2" id="alertResolution-${alert_id}" data-value="legitimate">Legitimate</span>`
+            return `<span class="badge alert-bade-status badge-pill badge-info mr-2" id="alertResolution-${alert_id}" data-value="legitimate">${t('Legitimate')}</span>`
         case 'Unknown':
-            return `<span class="badge alert-bade-status badge-pill badge-light mr-2" id="alertResolution-${alert_id}" data-value="unknown">Unknown resolution</span>`
+            return `<span class="badge alert-bade-status badge-pill badge-light mr-2" id="alertResolution-${alert_id}" data-value="unknown">${t('Unknown resolution')}</span>`
     }
+}
+
+const ALERT_CONTEXT_KEY_LABELS = {
+    'rule id': 'Rule ID',
+    'rule level': 'Rule Level',
+    'rule description': 'Rule Description',
+    'agent id': 'Agent ID',
+    'agent name': 'Agent Name',
+    'mitre ids': 'MITRE IDs',
+    'mitre tactics': 'MITRE Tactics',
+    'mitre techniques': 'MITRE Techniques',
+    'full log': 'Full Log',
+    'location': 'Location'
+};
+
+function localizeAlertContextKey(key) {
+    if (typeof key !== 'string') {
+        return key;
+    }
+
+    const normalizedKey = key.trim().toLowerCase().replace(/[._]+/g, ' ').replace(/\s+/g, ' ');
+    const translationKey = ALERT_CONTEXT_KEY_LABELS[normalizedKey] || key;
+
+    return t(translationKey);
 }
 
 function renderNestedObject(obj) {
     let output = '';
     Object.entries(obj).forEach(([key, value]) => {
+        const localizedKey = localizeAlertContextKey(key);
         if (typeof value === 'object' && value !== null) {
-            output += `<dt class="col-sm-3">${filterXSS(key)}:</dt><dd class="col-sm-9"><br /><dl class="row">${renderNestedObject(value)}</dl></dd>`;
+            output += `<dt class="col-sm-3">${filterXSS(localizedKey)}:</dt><dd class="col-sm-9"><br /><dl class="row">${renderNestedObject(value)}</dl></dd>`;
         } else {
-            output += `<dt class="col-sm-3">${filterXSS(key)}:</dt><dd class="col-sm-9">${filterXSS(value)}</dd>`;
+            output += `<dt class="col-sm-3">${filterXSS(localizedKey)}:</dt><dd class="col-sm-9">${filterXSS(value)}</dd>`;
         }
     });
     return output;
@@ -1097,9 +1133,9 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
   if (alert.owner !== null) {
       alert.owner.user_name = filterXSS(alert.owner.user_name);
   }
-  alert.alert_title = alert.alert_title ? filterXSS(alert.alert_title) : 'No title provided';
-  alert.alert_description = alert.alert_description ? filterXSS(alert.alert_description) : 'No description provided';
-  alert.alert_source = alert.alert_description ? filterXSS(alert.alert_source) : 'No source provided';
+  alert.alert_title = alert.alert_title ? filterXSS(alert.alert_title) : t('No title provided');
+  alert.alert_description = alert.alert_description ? filterXSS(alert.alert_description) : t('No description provided');
+  alert.alert_source = alert.alert_source ? filterXSS(alert.alert_source) : t('No source provided');
   alert.alert_source_link = filterXSS(alert.alert_source_link);
   alert.alert_source_ref = filterXSS(alert.alert_source_ref);
   alert.alert_note = filterXSS(alert.alert_note);
@@ -1141,7 +1177,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                     <i class="fa-solid fa-fire"></i>
                                   </span>
                                 </div>
-                                ${alert.owner ? get_avatar_initials(alert.owner.user_name, true, `changeAlertOwner(${alert.alert_id})`) : `<div title="Assign to me" class="avatar avatar-sm" onclick="updateAlert(${alert.alert_id}, {alert_owner_id: userWhoami.user_id}, true);"><span class="avatar-title avatar-iris rounded-circle btn-alert-primary" style="cursor:pointer;"><i class="fa-solid fa-hand"></i></span></div>`}
+                                ${alert.owner ? get_avatar_initials(alert.owner.user_name, true, `changeAlertOwner(${alert.alert_id})`) : `<div title="${t('Assign to me')}" class="avatar avatar-sm" onclick="updateAlert(${alert.alert_id}, {alert_owner_id: userWhoami.user_id}, true);"><span class="avatar-title avatar-iris rounded-circle btn-alert-primary" style="cursor:pointer;"><i class="fa-solid fa-hand"></i></span></div>`}
                               </div>
                               <div class="tickbox" style="display:none;">
                                 <input type="checkbox" class="alert-selection-checkbox" data-alert-id="${alert.alert_id}" />
@@ -1155,7 +1191,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                             <span class="text-${colorSeverity} pl-3"></span>
                             <div class="d-flex mb-3">
                                
-                                <span title="Alert IDs" class=""><small class="text-muted"><i>#${alert.alert_id} - ${alert.alert_uuid}</i></small></span>
+                                <span title="${t('Alert IDs')}" class=""><small class="text-muted"><i>#${alert.alert_id} - ${alert.alert_uuid}</i></small></span>
                             </div>
                         </h6>
                     </div>
@@ -1164,7 +1200,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                         
                         <div class=" d-flex mt-3">
                             <div class="ml-auto">
-                                <button type="button" class="btn bg-transparent btn-sm mt--4" onclick="comment_element(${alert.alert_id}, 'alerts', true)" title="Comments">
+                                <button type="button" class="btn bg-transparent btn-sm mt--4" onclick="comment_element(${alert.alert_id}, 'alerts', true)" title="${t('Comments')}">
                                   <span class="btn-label">
                                     <i class="fa-solid fa-comments"></i><span class="notification" id="object_comments_number_${alert.alert_id}">${alert.comments.length || ''}</span>
                                   </span>
@@ -1174,13 +1210,13 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                   <span aria-hidden="true"><i class="fas fa-ellipsis-v"></i></span>
                                 </button>
                                 <div class="dropdown-menu" role="menu">
-                                  <a href="javascript:void(0)" class="dropdown-item" onclick="copyAlertLink(${alert.alert_id});return false;"><small class="fa fa-share mr-2"></small>Share</a>
-                                  <a href="javascript:void(0)" class="dropdown-item" onclick="copyMDAlertLink(${alert.alert_id});return false;"><small class="fa-brands fa-markdown mr-2"></small>Markdown Link</a>
+                                  <a href="javascript:void(0)" class="dropdown-item" onclick="copyAlertLink(${alert.alert_id});return false;"><small class="fa fa-share mr-2"></small>${t('Share')}</a>
+                                  <a href="javascript:void(0)" class="dropdown-item" onclick="copyMDAlertLink(${alert.alert_id});return false;"><small class="fa-brands fa-markdown mr-2"></small>${t('Markdown link')}</a>
                                   ${menuOptionsHtmlAlert}
                                   <div class="dropdown-divider"></div>
-                                  <a href="javascript:void(0)" class="dropdown-item" onclick="showAlertHistory(${alert.alert_id});return false;"><small class="fa fa-clock-rotate-left mr-2"></small>History</a>
+                                  <a href="javascript:void(0)" class="dropdown-item" onclick="showAlertHistory(${alert.alert_id});return false;"><small class="fa fa-clock-rotate-left mr-2"></small>${t('History')}</a>
                                   <div class="dropdown-divider"></div>
-                                  <a href="javascript:void(0)" class="dropdown-item text-danger" onclick="delete_alert(${alert.alert_id});"><small class="fa fa-trash mr-2"></small>Delete alert</a>
+                                  <a href="javascript:void(0)" class="dropdown-item text-danger" onclick="delete_alert(${alert.alert_id});"><small class="fa fa-trash mr-2"></small>${t('Delete alert')}</a>
                                 </div>
                             </div>
                         </div>          
@@ -1192,40 +1228,40 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                 <div class="float-right alert-actions mt--4">
                       <div class="dropdown ml-2 d-inline-block">
                           <button type="button" class="btn btn-alert-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Enricher
+                              ${t('Enricher')}
                           </button>
                           <div class="dropdown-menu">
                               <a class="dropdown-item enricher-option" href="javascript:void(0)" data-alert-id="${alert.alert_id}" data-enricher="ioc">IoC</a>
                           </div>
                       </div>
-                      <button type="button" class="btn btn-alert-primary btn-sm ml-2" onclick="mergeAlertModal(${alert.alert_id}, false);">Merge</button>
+                      <button type="button" class="btn btn-alert-primary btn-sm ml-2" onclick="mergeAlertModal(${alert.alert_id}, false);">${t('Merge')}</button>
                       
                       <div class="dropdown ml-2 d-inline-block">
                           <button type="button" class="btn btn-alert-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Assign
+                              ${t('Assign')}
                           </button>
                           <div class="dropdown-menu">
-                              <a class="dropdown-item" href="javascript:void(0)" onclick="updateAlert(${alert.alert_id}, {alert_owner_id: userWhoami.user_id}, true);">Assign to me</a>
-                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeAlertOwner(${alert.alert_id});">Assign</a>
+                              <a class="dropdown-item" href="javascript:void(0)" onclick="updateAlert(${alert.alert_id}, {alert_owner_id: userWhoami.user_id}, true);">${t('Assign to me')}</a>
+                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeAlertOwner(${alert.alert_id});">${t('Assign')}</a>
                           </div>
                       </div>
                       <div class="dropdown ml-2 d-inline-block">
                           <button type="button" class="btn btn-alert-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Set status
+                              ${t('Set status')}
                           </button>
                           <div class="dropdown-menu">
-                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'New');">New</a>
-                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'In progress');">In progress</a>
-                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'Pending');">Pending</a>
-                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'Closed');">Closed</a>
-                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'Merged');">Merged</a>
+                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'New');">${t('New')}</a>
+                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'In progress');">${t('In progress')}</a>
+                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'Pending');">${t('Pending')}</a>
+                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'Closed');">${t('Closed')}</a>
+                              <a class="dropdown-item" href="javascript:void(0)" onclick="changeStatusAlert(${alert.alert_id}, 'Merged');">${t('Merged')}</a>
                             </div>
                       </div>
                       ${alert.status.status_name === 'Closed' ? `
-                          <button type="button" class="btn btn-alert-success btn-sm ml-2" onclick="changeStatusAlert(${alert.alert_id}, 'In progress');">Set in progress</button>
+                          <button type="button" class="btn btn-alert-success btn-sm ml-2" onclick="changeStatusAlert(${alert.alert_id}, 'In progress');">${t('Set in progress')}</button>
                       `: ` 
-                      <button type="button" class="btn btn-alert-danger btn-sm ml-2" onclick="editAlert(${alert.alert_id}, true);">Close with note</button>
-                      <button type="button" class="btn btn-alert-danger btn-sm ml-2" onclick="changeStatusAlert(${alert.alert_id}, 'Closed');">Close</button>
+                      <button type="button" class="btn btn-alert-danger btn-sm ml-2" onclick="editAlert(${alert.alert_id}, true);">${t('Close with note')}</button>
+                      <button type="button" class="btn btn-alert-danger btn-sm ml-2" onclick="changeStatusAlert(${alert.alert_id}, 'Closed');">${t('Close')}</button>
                       `}
                 </div>
                 <span class="mt-4">${alert.alert_description.replaceAll('\n', '<br/>').replaceAll('\t', '  ')}</span>
@@ -1236,23 +1272,23 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
               <div id="additionalDetails-${alert.alert_id}" class="collapse mt-4 ${expanded? 'show': ''} alert-collapsible">
                 <div class="card-no-pd mt-2">
                     <div class="card-body">
-                    <h3 class="title mb-3"><strong>General info</strong></h3>  
-                        ${alert.alert_source ? `<div class="row"><div class="col-md-3"><b>Source:</b></div>
+                    <h3 class="title mb-3"><strong>${t('General info')}</strong></h3>  
+                        ${alert.alert_source ? `<div class="row"><div class="col-md-3"><b>${t('Source')}:</b></div>
                         <div class="col-md-9">${alert.alert_source}</div>
                       </div>` : ''}
                       ${alert.alert_source_link ? `<div class="row mt-2">
-                        <div class="col-md-3"><b>Source Link:</b></div>
+                        <div class="col-md-3"><b>${t('Source link')}:</b></div>
                         <div class="col-md-9 copy-value">${
                             alert.alert_source_link && alert.alert_source_link.startsWith('http') 
                             ? `<a href="${alert.alert_source_link}" target="_blank" rel="noopener noreferrer">${alert.alert_source_link}</a>
                                 <button class="copy-btn ml-2" data-value="${escapeHtml(alert.alert_source_link)}">
                                     <i class="fa fa-copy text-dark"></i>
                                 </button>`
-                            : 'No valid link provided'
+                            : t('No valid link provided')
                           }</div>
                       </div>` : ''}
                       ${alert.alert_source_ref ? `<div class="row mt-2">
-                        <div class="col-md-3"><b>Source Reference:</b></div>
+                        <div class="col-md-3"><b>${t('Source reference')}:</b></div>
                         <div class="col-md-9 copy-value">
                             ${alert.alert_source_ref}
                             <button class="copy-btn ml-2" data-value="${escapeHtml(alert.alert_source_ref)}">
@@ -1261,7 +1297,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                         </div>
                       </div>` : ''}
                       ${alert.alert_source_event_time ? `<div class="row mt-2">
-                        <div class="col-md-3"><b>Source Event Time:</b></div>
+                        <div class="col-md-3"><b>${t('Source event time')}:</b></div>
                         <div class="col-md-9 copy-value">
                             ${formatTime(alert.alert_source_event_time)} UTC
                             <button class="copy-btn ml-2" data-value="${formatTime(alert.alert_source_event_time)}">
@@ -1270,7 +1306,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                         </div>
                       </div>` : ''}
                       ${alert.alert_creation_time ? `<div class="row mt-2">
-                        <div class="col-md-3"><b>IRIS Creation Time:</b></div>
+                        <div class="col-md-3"><b>${t('IRIS creation time')}:</b></div>
                         <div class="col-md-9 copy-value">
                             ${formatTime(alert.alert_creation_time)} UTC
                             <button class="copy-btn ml-2" data-value="${formatTime(alert.alert_creation_time)}">
@@ -1280,13 +1316,13 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                       </div>` : ''}
                     
                     <div class="separator-solid"></div>
-                    <h3 class="title mb-3"><strong>Alert note</strong></h3>
+                    <h3 class="title mb-3"><strong>${t('Alert note')}</strong></h3>
                     <pre id=alertNote-${alert.alert_id}>${alert.alert_note}</pre>
                     
                     <!-- Alert Context section -->
                     ${
                         alert.alert_context && Object.keys(alert.alert_context).length > 0
-                            ? `<div class="separator-solid"></div><h3 class="title mt-3 mb-3"><strong>Context</strong></h3>
+                            ? `<div class="separator-solid"></div><h3 class="title mt-3 mb-3"><strong>${t('Context')}</strong></h3>
                                 <dl class="row">
                                 ${renderNestedObject(alert.alert_context)}
                                 </dl>`
@@ -1294,35 +1330,34 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                       }
                     
                     <div class="separator-solid"></div>
-                    <h3 class="title mt-3 mb-3"><strong>Relationships</strong></h3>
+                    <h3 class="title mt-3 mb-3"><strong>${t('Relationships')}</strong></h3>
                     <button class="btn btn-sm btn-outline-dark" type="button" data-toggle="collapse" data-target="#relationsAlert-${alert.alert_id}" 
-                    aria-expanded="true" aria-controls="relationsAlert-${alert.alert_id}" onclick="fetchSmartRelations(${alert.alert_id});" id="relationsAlertButton-${alert.alert_id}">Toggle Relations</button>
+                    aria-expanded="true" aria-controls="relationsAlert-${alert.alert_id}" onclick="fetchSmartRelations(${alert.alert_id});" id="relationsAlertButton-${alert.alert_id}">${t('Toggle relations')}</button>
                     <div class="collapse mt-3 show" id="relationsAlert-${alert.alert_id}">
-                        The following relationships are automatically generated by IRIS based on the alert's IOCs and assets 
-                        in the system. They are an indication only and may not be accurate. 
+                        ${t("The following relationships are automatically generated by IRIS based on the alert's IOCs and assets in the system. They are an indication only and may not be accurate.")}
                         <div class="row ml-1">
                             <div class="selectgroup selectgroup-pills mt-4">
                                 <label class="selectgroup-item">
                                     <input type="checkbox" name="open_alerts_${alert.alert_id}" class="selectgroup-input filter-graph-alert-checkbox" onclick="refreshAlertRelationships(${alert.alert_id});">
-                                    <span class="selectgroup-button">Show open alerts</span>
+                                    <span class="selectgroup-button">${t('Show open alerts')}</span>
                                 </label>
                                 <label class="selectgroup-item">
                                     <input type="checkbox" name="closed_alerts_${alert.alert_id}" class="selectgroup-input filter-graph-alert-checkbox" onclick="refreshAlertRelationships(${alert.alert_id})">
-                                    <span class="selectgroup-button">Show closed alerts</span>
+                                    <span class="selectgroup-button">${t('Show closed alerts')}</span>
                                 </label>
                                 <label class="selectgroup-item">
                                     <input type="checkbox" name="open_cases_${alert.alert_id}" class="selectgroup-input filter-graph-alert-checkbox" onclick="refreshAlertRelationships(${alert.alert_id})">
-                                    <span class="selectgroup-button">Show open cases</span>
+                                    <span class="selectgroup-button">${t('Show open cases')}</span>
                                 </label>
                                 <label class="selectgroup-item">
                                     <input type="checkbox" name="closed_cases_${alert.alert_id}" class="selectgroup-input filter-graph-alert-checkbox" onclick="refreshAlertRelationships(${alert.alert_id})">
-                                    <span class="selectgroup-button">Show closed cases</span>
+                                    <span class="selectgroup-button">${t('Show closed cases')}</span>
                                 </label>
                             </div>
                             <div class="mt-4">
                                 <div class="input-group ">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">Nodes limit</span>
+                                        <span class="input-group-text">${t('Nodes limit')}</span>
                                     </div>
                                     <input type="number" name="value" value="100" class="form-control" id="nbResultsGraphFilter-${alert.alert_id}" onchange="refreshAlertRelationships(${alert.alert_id})">
                                 </div>
@@ -1330,7 +1365,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                             <div class="ml-2 mt-4">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">Lookback (days)</span>
+                                        <span class="input-group-text">${t('Lookback (days)')}</span>
                                     </div>
                                     <input type="number" name="value" value="180" class="form-control" id="daysBackGraphFilter-${alert.alert_id}" onchange="refreshAlertRelationships(${alert.alert_id})">
                                 </div>
@@ -1347,17 +1382,17 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                     <!-- Alert IOCs section -->
                     ${
                       alert.iocs && alert.iocs.length > 0
-                          ? `<div class="separator-solid"></div><h3 class="title mb-3"><strong>IOCs</strong></h3>
+                          ? `<div class="separator-solid"></div><h3 class="title mb-3"><strong>${t('IOCs')}</strong></h3>
                                        <div class="table-responsive">
                                          <table class="table table-sm table-striped alert-ioc-table">
                                            <thead>
                                              <tr>
-                                               <th>Value</th>
-                                               <th>Description</th>
-                                               <th>Type</th>
+                                               <th>${t('Value')}</th>
+                                               <th>${t('Description')}</th>
+                                               <th>${t('Type')}</th>
                                                <th>TLP</th>
-                                               <th>Tags</th>
-                                               <th>Enrichment</th>
+                                               <th>${t('Tags')}</th>
+                                               <th>${t('Enrichment')}</th>
                                                <th></th>
                                              </tr>
                                            </thead>
@@ -1382,11 +1417,11 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                                     <button type="button" class="btn btn-sm btn-outline-primary mt-2"
                                                       onclick='openctiEnrichIoc(${alert.alert_id}, ${ioc.ioc_id}, "${openctiIocOption.hook_name}",
                                                       "${openctiIocOption.manual_hook_ui_name}","${openctiIocOption.module_name}");return false;'>
-                                                      OpenCTI
+                                                      ${t('OpenCTI')}
                                                     </button>` : ''}
                                                     ${ioc.ioc_enrichment ? `
                                                     <button type="button" class="btn btn-primary btn-sm btn-outline-dark btn-view-enrichment mt-2" data-toggle="modal" data-target="#enrichmentModal" onclick="showEnrichment(${JSON.stringify(ioc.ioc_enrichment).replace(/"/g, '&quot;')})">
-                                                      View Enrichment
+                                                      ${t('View enrichment')}
                                                     </button>` : ''}
                                                     ${!ioc.ioc_enrichment && !openctiIocOption ? '-' : ''}
                                                     </td>
@@ -1395,7 +1430,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                                           <span aria-hidden="true"><i class="fas fa-ellipsis-v"></i></span>
                                                         </button>
                                                         <div class="dropdown-menu" role="menu">
-                                                        ${ modulesOptionsIocReq.length === 0 ? `<a class="dropdown-item" href="javascript:void(0);"><i class="fas fa-rocket mr-2"></i> No module available</a>` :
+                                                        ${ modulesOptionsIocReq.length === 0 ? `<a class="dropdown-item" href="javascript:void(0);"><i class="fas fa-rocket mr-2"></i> ${t('No module available')}</a>` :
                                                           modulesOptionsIocReq.map((opt) => `
                                                                 <a class="dropdown-item" href="javascript:void(0);" onclick='init_module_processing([${ioc.ioc_id}], "${opt.hook_name}","${opt.manual_hook_ui_name}","${opt.module_name}", "ioc");return false;'><i class="fas fa-rocket mr-2"></i> ${opt.manual_hook_ui_name}</a>`
                                                             ).join('')
@@ -1414,18 +1449,18 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                     <!-- Alert assets section -->
                     ${
                     alert.assets && alert.assets.length > 0
-              ? `<div class="separator-solid"></div><h3 class="title mb-3"><strong>Assets</strong></h3>
+              ? `<div class="separator-solid"></div><h3 class="title mb-3"><strong>${t('Assets')}</strong></h3>
                            <div class="table-responsive">
                              <table class="table table-sm table-striped">
                                <thead>
                                  <tr>
-                                   <th>Name</th>
-                                   <th>Description</th>
-                                   <th>Type</th>
-                                   <th>Domain</th>
+                                   <th>${t('Name')}</th>
+                                   <th>${t('Description')}</th>
+                                   <th>${t('Type')}</th>
+                                   <th>${t('Domain')}</th>
                                    <th>IP</th>
-                                   <th>Tags</th>
-                                   <th>Enrichment</th>
+                                   <th>${t('Tags')}</th>
+                                   <th>${t('Enrichment')}</th>
                                  </tr>
                                </thead>
                                <tbody>
@@ -1446,7 +1481,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                                        <td>${asset.asset_ip ? filterXSS(asset.asset_ip) : '-'}</td>
                                        <td>${asset.asset_tags ? asset.asset_tags.split(',').map((tag) => get_tag_from_data(tag, 'badge badge-pill badge-light ml-1')).join('') : ''}</td>
                                        <td>${asset.asset_enrichment ? `<button type="button" class="btn btn-sm btn-outline-dark btn-view-enrichment" data-toggle="modal" data-target="#enrichmentModal" onclick="showEnrichment(${JSON.stringify(asset.asset_enrichment).replace(/"/g, '&quot;')})">
-                                          View Enrichment
+                                          ${t('View enrichment')}
                                         </button>` : ''}
                                         </td>
                                      </tr>`
@@ -1460,9 +1495,9 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
                     
                     ${
           alert.alert_source_content
-              ? `<div class="separator-solid"></div><h3 class="title mt-3 mb-3"><strong>Raw Alert</strong></h3>
+              ? `<div class="separator-solid"></div><h3 class="title mt-3 mb-3"><strong>${t('Raw alert')}</strong></h3>
                            <button class="btn btn-sm btn-outline-dark" type="button" data-toggle="collapse" data-target="#rawAlert-${alert.alert_id}" 
-                           aria-expanded="false" aria-controls="rawAlert-${alert.alert_id}">Toggle Raw Alert</button>
+                           aria-expanded="false" aria-controls="rawAlert-${alert.alert_id}">${t('Toggle raw alert')}</button>
                            <div class="collapse mt-3" id="rawAlert-${alert.alert_id}">
                              <pre class="pre-scrollable">${filterXSS(JSON.stringify(alert.alert_source_content, null, 2))}</pre>
                            </div>`
@@ -1474,13 +1509,13 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
               </div>
               ${alert.cases ? `<div class='row mt-4 mb-2'>` + alert.cases.map((case_) => `
                 <div class="dropdown ml-2 d-inline-block">
-                      <a class="bg-transparent ml-3" title="Merged in case #${case_}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">
+                      <a class="bg-transparent ml-3" title="${t('Merged in case #{id}', { id: case_ })}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="javascript:void(0)">
                           <span aria-hidden="true"><i class="fa-solid fa-link"></i>#${case_}</span>
                       </a>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/case?cid=${case_}" target="_blank"><i class="fa-solid fa-eye mr-2"></i> View case #${case_}</a>    
+                        <a class="dropdown-item" href="/case?cid=${case_}" target="_blank"><i class="fa-solid fa-eye mr-2"></i> ${t('View case #{id}', { id: case_ })}</a>    
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="unlinkAlertFromCase(${alert.alert_id}, ${case_})"><i class="fa-solid fa-unlink mr-2"></i>Unlink alert from case #${case_}</a>
+                        <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="unlinkAlertFromCase(${alert.alert_id}, ${case_})"><i class="fa-solid fa-unlink mr-2"></i>${t('Unlink alert from case #{id}', { id: case_ })}</a>
                       </div>
                 </div>
               `).join('') + '</div>' : '<div class="mb-4"></div>'}
@@ -1488,16 +1523,16 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
               <div class="alert-meta">  
                 ${alert_resolution === undefined ? "": alert_resolution} 
                 ${alert.status ? `<span class="badge alert-bade-status badge-pill badge-light mr-3">${alert.status.status_name}</span>` : ''}                    
-                <span title="Alert source event UTC time"><b><i class="fa-regular fa-calendar-check"></i></b>
+                <span title="${t('Alert source event UTC time')}"><b><i class="fa-regular fa-calendar-check"></i></b>
                 <small class="text-muted ml-1">${formatTime(alert.alert_source_event_time)}</small></span>
-                <span title="Alert severity"><b class="ml-3"><i class="fa-solid fa-bolt"></i></b>
+                <span title="${t('Alert severity')}"><b class="ml-3"><i class="fa-solid fa-bolt"></i></b>
                   <small class="text-muted ml-1" id="alertSeverity-${alert.alert_id}" data-severity-id="${alert.severity.severity_id}">${alert.severity.severity_name}</small></span>
-                <span title="Alert source"><b class="ml-3"><i class="fa-solid fa-cloud-arrow-down"></i></b>
-                  <small class="text-muted ml-1">${filterXSS(alert.alert_source) || 'Unspecified'}</small></span>
-                <span title="Alert client"><b class="ml-3"><i class="fa-regular fa-circle-user"></i></b>
-                  <small class="text-muted ml-1 mr-2">${filterXSS(alert.customer.customer_name) || 'Unspecified'}</small></span>
-                ${alert.classification && alert.classification.name_expanded ? `<span class="badge badge-pill badge-light" title="Classification" id="alertClassification-${alert.alert_id}" data-classification-id="${alert.classification.id}"><i class="fa-solid fa-shield-virus mr-1"></i>${filterXSS(alert.classification.name_expanded)}</span>`: ''}
-                ${alert.alert_tags ? alert.alert_tags.split(',').map((tag) => `<span class="badge badge-pill badge-light ml-1" title="Add as filter" style="cursor: pointer;" data-tag="${filterXSS(tag)}" onclick="addTagFilter(this);"><i class="fa fa-tag mr-1"></i>${filterXSS(tag)}</span>`).join('') + `<div style="display:none;" id="alertTags-${alert.alert_id}">${filterXSS(alert.alert_tags)}</div>` : ''}
+                <span title="${t('Alert source')}"><b class="ml-3"><i class="fa-solid fa-cloud-arrow-down"></i></b>
+                  <small class="text-muted ml-1">${filterXSS(alert.alert_source) || t('Unspecified')}</small></span>
+                <span title="${t('Alert client')}"><b class="ml-3"><i class="fa-regular fa-circle-user"></i></b>
+                  <small class="text-muted ml-1 mr-2">${filterXSS(alert.customer.customer_name) || t('Unspecified')}</small></span>
+                ${alert.classification && alert.classification.name_expanded ? `<span class="badge badge-pill badge-light" title="${t('Classification')}" id="alertClassification-${alert.alert_id}" data-classification-id="${alert.classification.id}"><i class="fa-solid fa-shield-virus mr-1"></i>${filterXSS(alert.classification.name_expanded)}</span>`: ''}
+                ${alert.alert_tags ? alert.alert_tags.split(',').map((tag) => `<span class="badge badge-pill badge-light ml-1" title="${t('Add as filter')}" style="cursor: pointer;" data-tag="${filterXSS(tag)}" onclick="addTagFilter(this);"><i class="fa fa-tag mr-1"></i>${filterXSS(tag)}</span>`).join('') + `<div style="display:none;" id="alertTags-${alert.alert_id}">${filterXSS(alert.alert_tags)}</div>` : ''}
                 
               </div>
 
@@ -1508,7 +1543,7 @@ function renderAlert(alert, expanded=false, modulesOptionsAlertReq,
               <div class="d-flex float-right alert-actions mt--2 ml-auto">
                 <button type="button" class="btn btn-sm btn-outline-secondary"
                   onclick="refreshAlert(${alert.alert_id}); return false;">
-                  <i class="fa fa-rotate-right mr-1"></i> Обновить card
+                  <i class="fa fa-rotate-right mr-1"></i> ${t('Refresh card')}
                 </button>
               </div>
             </div>
@@ -1632,12 +1667,12 @@ async function updateAlerts(page, per_page, filters = {}, paging=false){
   filters.custom_conditions = editor.getValue();
 
   const alertsContainer = $('.alerts-container');
-  alertsContainer.html('<h4 class="ml-auto mr-auto">Retrieving alerts...</h4>');
+  alertsContainer.html(`<h4 class="ml-auto mr-auto">${t('Retrieving alerts...')}</h4>`);
 
   const filterString = objectToQueryString(filters);
   const data = await fetchAlerts(page, per_page, filterString, sortOrder).catch((error) => {
-        notify_error('Failed to fetch alerts');
-        alertsContainer.html('<h4 class="ml-auto mr-auto">Oops error loading the alerts - Check logs</h4>');
+        notify_error(t('Failed to fetch alerts'));
+        alertsContainer.html(`<h4 class="ml-auto mr-auto">${t('Oops error loading the alerts - Check logs')}</h4>`);
         console.error(error);
     });
 
@@ -1662,7 +1697,7 @@ async function updateAlerts(page, per_page, filters = {}, paging=false){
   // Check if the selection mode is active
    const selectionModeActive = $('body').hasClass('selection-mode');
    selectionModeActive ? $('body').removeClass('selection-mode') : '';
-   $('#toggle-selection-mode').text('Select');
+   $('#toggle-selection-mode').text(t('Select'));
    $('body').removeClass('selection-mode');
    $('#select-deselect-all').hide();
    $('#alerts-batch-actions').hide();
@@ -1674,7 +1709,7 @@ async function updateAlerts(page, per_page, filters = {}, paging=false){
   alertsContainer.html('');
   if (alerts.length === 0) {
     // Display "No results" message when there are no alerts
-    alertsContainer.append('<div class="ml-auto mr-auto">No results</div>');
+    alertsContainer.append(`<div class="ml-auto mr-auto">${t('No results')}</div>`);
   } else {
 
       // Add the fetched alerts to the alerts container
@@ -1707,7 +1742,7 @@ async function updateAlerts(page, per_page, filters = {}, paging=false){
         filter_tags_info.push(`  
           <span class="badge badge-light">
             <i class="fa-solid fa-magnifying-glass mr-1"></i>${key}: ${filterXSS(filters[key])}
-            <span class="tag-delete-alert-filter" data-filter-key="${key}" style="cursor: pointer;" title="Remove filter"><i class="fa-solid fa-xmark ml-1"></i></span>
+            <span class="tag-delete-alert-filter" data-filter-key="${key}" style="cursor: pointer;" title="${t('Remove filter')}"><i class="fa-solid fa-xmark ml-1"></i></span>
           </span>
         `)
       }
@@ -1718,7 +1753,8 @@ async function updateAlerts(page, per_page, filters = {}, paging=false){
 
   history.replaceState(null, null, `?${queryParams.toString()}`);
 
-  $('#alertsInfoFilter').text(`${data.data.total} Alert${ data.data.total > 1 ? 's' : ''} ${ filterString ? `(filtered)` : '' }`);
+  const totalAlertsText = data.data.total === 1 ? t('Alert') : t('Alerts');
+  $('#alertsInfoFilter').text(`${data.data.total} ${totalAlertsText} ${ filterString ? `(${t('filtered')})` : '' }`);
 
   if (filter_tags_info) {
     $('#alertsInfoFilterTags').html(filter_tags_info.join(' + '));
@@ -1782,7 +1818,7 @@ function refreshAlerts(){
 
     updateAlerts(page_number, per_page, filters)
         .then(() => {
-            notify_success('Refreshed');
+            notify_success(t('Refreshed'));
             $('#newAlertsBadge').text(0).hide();
         });
 }
@@ -1804,11 +1840,11 @@ function collapseAlerts(isExpanded) {
 
     if (isExpanded) {
         alertsContainer.collapse('show');
-        toggleAllBtn.text('Collapse All');
+        toggleAllBtn.text(t('Collapse all'));
         toggleAllBtn.data('is-expanded', true);
     } else {
         alertsContainer.collapse('hide');
-        toggleAllBtn.text('Expand All');
+        toggleAllBtn.text(t('Expand all'));
         toggleAllBtn.data('is-expanded', false);
     }
 }
@@ -1905,14 +1941,14 @@ function setEnrichmentView(mode) {
 
 function renderEnrichmentSummary(enrichment) {
     if (!enrichment || typeof enrichment !== 'object') {
-        return `<div class="alert alert-secondary mb-0">No enrichment data available.</div>`;
+        return `<div class="alert alert-secondary mb-0">${t('No enrichment data available.')}</div>`;
     }
 
     if (enrichment.opencti) {
         return renderOpenCTISummary(enrichment.opencti);
     }
 
-    return `<div class="alert alert-secondary mb-0">No summary available for this enrichment.</div>`;
+    return `<div class="alert alert-secondary mb-0">${t('No summary available for this enrichment.')}</div>`;
 }
 
 function getOpenCTIMatchInfo(opencti) {
@@ -1920,6 +1956,29 @@ function getOpenCTIMatchInfo(opencti) {
         const parsed = Number(value);
         return Number.isNaN(parsed) ? 0 : parsed;
     };
+
+    if (opencti && opencti.schema_version === '2.1') {
+        const results = opencti.results || {};
+        const observables = results.observables || {};
+        const indicators = results.indicators || {};
+        const rawObservables = toNumber(observables.raw_count);
+        const rawIndicators = toNumber(indicators.raw_count);
+        const matchedObservables = toNumber(observables.matched_count);
+        const matchedIndicators = toNumber(indicators.matched_count);
+        const modeValue = opencti.meta && opencti.meta.ioc && opencti.meta.ioc.match_mode
+            ? String(opencti.meta.ioc.match_mode).toLowerCase()
+            : 'exact';
+        const mode = modeValue === 'fuzzy' ? 'fuzzy' : 'exact';
+
+        return {
+            observablesCount: matchedObservables,
+            indicatorsCount: matchedIndicators,
+            found: (matchedObservables + matchedIndicators) > 0,
+            mode,
+            rawTotal: rawObservables + rawIndicators,
+            filteredTotal: matchedObservables + matchedIndicators
+        };
+    }
 
     const observablesCount = toNumber(opencti && opencti.observables && opencti.observables.count);
     const indicatorsCount = toNumber(opencti && opencti.indicators && opencti.indicators.count);
@@ -1975,51 +2034,211 @@ function renderEnrichmentInline(enrichment) {
     const indicatorsCount = matchInfo.indicatorsCount;
     const found = matchInfo.found;
     const matchBadge = matchInfo.mode
-        ? `<span class="badge badge-info">${matchInfo.mode === 'fuzzy' ? 'Fuzzy' : 'Exact'}</span>`
+        ? `<span class="badge badge-info">${matchInfo.mode === 'fuzzy' ? t('Fuzzy') : t('Exact')}</span>`
         : '';
     const exactBadge = matchInfo.mode && matchInfo.rawTotal !== null && matchInfo.rawTotal !== matchInfo.filteredTotal
-        ? `<span class="badge badge-secondary">Exact ${matchInfo.filteredTotal} of ${matchInfo.rawTotal}</span>`
+        ? `<span class="badge badge-secondary">${t('Exact {matched} of {raw}', {matched: matchInfo.filteredTotal, raw: matchInfo.rawTotal})}</span>`
         : '';
 
     const scoreInfo = computeOpenCTIScore(opencti);
     const scoreValue = scoreInfo.score !== null ? scoreInfo.score : null;
     const severity = scoreValue !== null ? openctiScoreToSeverity(scoreValue) : 'Unknown';
+    const severityLabel = t(severity);
     const severityClass = openctiSeverityToBadgeClass(severity);
-    const scoreLabel = scoreValue !== null ? `Score ${scoreValue}` : 'Score N/A';
+    const scoreLabel = scoreValue !== null ? t('Score {score}', {score: scoreValue}) : t('Score N/A');
     const relationsCount = Number((opencti && opencti.relations && opencti.relations.count) || 0);
 
     return `
         <div class="ioc-enrichment-inline">
             <span class="badge ${found ? 'badge-danger' : 'badge-success'}">
-                ${found ? 'Found' : 'Not found'}
+                ${found ? t('Found') : t('Not found')}
             </span>
             ${matchBadge}
             ${exactBadge}
             <span class="badge badge-light">${scoreLabel}</span>
-            <span class="badge ${severityClass}">${severity}</span>
-            <span class="badge badge-secondary">Indicators ${indicatorsCount}</span>
-            <span class="badge badge-secondary">Observables ${observablesCount}</span>
-            ${relationsCount > 0 ? `<span class="badge badge-secondary">Relations ${relationsCount}</span>` : ''}
+            <span class="badge ${severityClass}">${severityLabel}</span>
+            <span class="badge badge-secondary">${t('Indicators')} ${indicatorsCount}</span>
+            <span class="badge badge-secondary">${t('Observables')} ${observablesCount}</span>
+            ${relationsCount > 0 ? `<span class="badge badge-secondary">${t('Relations')} ${relationsCount}</span>` : ''}
+        </div>
+    `;
+}
+
+function renderOpenCTIMatchedEntities(opencti, key) {
+    const results = opencti && opencti.results ? opencti.results : null;
+    const section = results && results[key] ? results[key] : null;
+    if (!section || !Array.isArray(section.matched) || section.matched.length === 0) {
+        return '';
+    }
+    const title = key === 'observables' ? t('Matched Observables') : t('Matched Indicators');
+    const detailKey = key === 'observables' ? 'matched_fields' : 'matched_literals';
+    const detailLabel = key === 'observables' ? t('fields') : t('literals');
+    const items = section.matched.slice(0, 5).map((entry) => {
+        const node = entry && entry.node ? entry.node : null;
+        let labelValue = openctiEntityLabel(node);
+        if (labelValue === '-' && node && node.pattern) {
+            labelValue = node.pattern;
+        }
+        const label = escapeHtml(String(labelValue));
+        const details = entry && Array.isArray(entry[detailKey]) ? entry[detailKey] : [];
+        const detailsText = details.length
+            ? details.map((item) => escapeHtml(String(item))).join(', ')
+            : t('Fuzzy');
+        const score = node && node.x_opencti_score !== undefined
+            ? t('score {score}', {score: escapeHtml(String(node.x_opencti_score))})
+            : '';
+        const confidence = node && node.confidence !== undefined
+            ? t('confidence {confidence}', {confidence: escapeHtml(String(node.confidence))})
+            : '';
+        const meta = [score, confidence].filter(Boolean).join(' ');
+        const metaHtml = meta ? ` <span class="text-muted">${meta}</span>` : '';
+        return `<li>${label} <span class="text-muted">(${detailLabel}: ${detailsText})</span>${metaHtml}</li>`;
+    }).join('');
+
+    return `
+        <div class="row mt-2">
+            <div class="col-md-3"><strong>${title}</strong></div>
+            <div class="col-md-9"><ul class="mb-0">${items}</ul></div>
         </div>
     `;
 }
 
 function renderOpenCTISummary(opencti) {
+    if (opencti && opencti.schema_version === '2.1') {
+        return renderOpenCTISummaryV21(opencti);
+    }
+    return renderOpenCTISummaryLegacy(opencti);
+}
+
+function renderOpenCTISummaryV21(opencti) {
     const matchInfo = getOpenCTIMatchInfo(opencti);
     const observablesCount = matchInfo.observablesCount;
     const indicatorsCount = matchInfo.indicatorsCount;
     const found = matchInfo.found;
     const matchBadge = matchInfo.mode
-        ? `<span class="badge badge-info ml-2">${matchInfo.mode === 'fuzzy' ? 'Fuzzy' : 'Exact'}</span>`
+        ? `<span class="badge badge-info ml-2">${matchInfo.mode === 'fuzzy' ? t('Fuzzy') : t('Exact')}</span>`
         : '';
     const exactBadge = matchInfo.mode && matchInfo.rawTotal !== null && matchInfo.rawTotal !== matchInfo.filteredTotal
-        ? `<span class="badge badge-secondary ml-2">Exact ${matchInfo.filteredTotal} of ${matchInfo.rawTotal}</span>`
+        ? `<span class="badge badge-secondary ml-2">${t('Exact {matched} of {raw}', {matched: matchInfo.filteredTotal, raw: matchInfo.rawTotal})}</span>`
         : '';
 
     const scoreInfo = computeOpenCTIScore(opencti);
     const scoreValue = scoreInfo.score !== null ? scoreInfo.score : null;
     const severity = scoreValue !== null ? openctiScoreToSeverity(scoreValue) : 'Unknown';
-    const scoreLabel = scoreValue !== null ? `${scoreValue} (${scoreInfo.source})` : 'N/A';
+    const scoreLabel = scoreValue !== null ? `${scoreValue} (${scoreInfo.source})` : t('N/A');
+
+    const meta = opencti && opencti.meta ? opencti.meta : {};
+    const iocMeta = meta.ioc || {};
+    const checkedAt = meta.checked_at ? formatTime(meta.checked_at) : '-';
+    const searchValue = iocMeta.value ? escapeHtml(String(iocMeta.value)) : '-';
+    const iocType = iocMeta.type ? escapeHtml(String(iocMeta.type)) : '-';
+    const matchMode = iocMeta.match_mode ? escapeHtml(String(iocMeta.match_mode)) : '-';
+    const normalized = iocMeta.normalized ? escapeHtml(String(iocMeta.normalized)) : '-';
+    const defanged = iocMeta.defanged === undefined ? '-' : (iocMeta.defanged ? t('Yes') : t('No'));
+    const openctiUrlRaw = (meta.source && meta.source.opencti_url)
+        ? String(meta.source.opencti_url)
+        : '';
+    const openctiUrl = openctiUrlRaw
+        ? `<a href="${escapeHtml(openctiUrlRaw)}" target="_blank" rel="noopener noreferrer">${escapeHtml(openctiUrlRaw)}</a>`
+        : '-';
+
+    const relationsJson = opencti && opencti.relations ? JSON.stringify(opencti.relations).replace(/"/g, '&quot;') : null;
+    const searchValueRaw = iocMeta.value ? iocMeta.value : '';
+    const searchValueArg = JSON.stringify(searchValueRaw).replace(/"/g, '&quot;');
+    const relationsAvailable = opencti && opencti.relations && Array.isArray(opencti.relations.items) && opencti.relations.items.length > 0;
+    const relationsButton = relationsAvailable
+        ? `<button type="button" class="btn btn-sm btn-outline-primary mt-2" data-toggle="modal" data-target="#openctiRelationsModal"\n             onclick="showOpenCTIRelationsGraph(${relationsJson}, ${searchValueArg});">${t('View relations graph')}</button>`
+        : '';
+
+    const relationsBlock = renderOpenCTIRelations(opencti);
+    const indicatorsBlock = renderOpenCTIMatchedEntities(opencti, 'indicators');
+    const observablesBlock = renderOpenCTIMatchedEntities(opencti, 'observables');
+
+    let errorsHtml = '';
+    if (opencti && Array.isArray(opencti.errors) && opencti.errors.length > 0) {
+        const errText = opencti.errors.map((item) => escapeHtml(JSON.stringify(item))).join('<br/>');
+        errorsHtml = `<div class="alert alert-warning mt-3 mb-0">${t('Errors:')}<br/>${errText}</div>`;
+    }
+
+    return `
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3"><strong>${t('OpenCTI')}</strong></div>
+                    <div class="col-md-9">${openctiUrl}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('IOC')}</strong></div>
+                    <div class="col-md-9">${searchValue} <span class="badge badge-light ml-2">${iocType}</span></div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Checked at')}</strong></div>
+                    <div class="col-md-9">${escapeHtml(String(checkedAt))}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Match mode')}</strong></div>
+                    <div class="col-md-9">${matchMode}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Normalized')}</strong></div>
+                    <div class="col-md-9">${normalized}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Defanged')}</strong></div>
+                    <div class="col-md-9">${defanged}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Presence')}</strong></div>
+                    <div class="col-md-9">
+                        <span class="badge ${found ? 'badge-danger' : 'badge-success'}">
+                            ${found ? t('Found in OpenCTI') : t('Not found')}
+                        </span>
+                        ${matchBadge}
+                        ${exactBadge}
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Indicators')}</strong></div>
+                    <div class="col-md-9">${indicatorsCount}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Observables')}</strong></div>
+                    <div class="col-md-9">${observablesCount}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Score')}</strong></div>
+                    <div class="col-md-9">${scoreLabel}</div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-3"><strong>${t('Criticality')}</strong></div>
+                    <div class="col-md-9">${t(severity)}</div>
+                </div>
+                ${relationsButton ? `<div class="row mt-2"><div class="col-md-3"></div><div class="col-md-9">${relationsButton}</div></div>` : ''}
+                ${relationsBlock}
+                ${indicatorsBlock}
+                ${observablesBlock}
+                ${errorsHtml}
+            </div>
+        </div>
+    `;
+}
+
+function renderOpenCTISummaryLegacy(opencti) {
+    const matchInfo = getOpenCTIMatchInfo(opencti);
+    const observablesCount = matchInfo.observablesCount;
+    const indicatorsCount = matchInfo.indicatorsCount;
+    const found = matchInfo.found;
+    const matchBadge = matchInfo.mode
+        ? `<span class="badge badge-info ml-2">${matchInfo.mode === 'fuzzy' ? t('Fuzzy') : t('Exact')}</span>`
+        : '';
+    const exactBadge = matchInfo.mode && matchInfo.rawTotal !== null && matchInfo.rawTotal !== matchInfo.filteredTotal
+        ? `<span class="badge badge-secondary ml-2">${t('Exact {matched} of {raw}', {matched: matchInfo.filteredTotal, raw: matchInfo.rawTotal})}</span>`
+        : '';
+
+    const scoreInfo = computeOpenCTIScore(opencti);
+    const scoreValue = scoreInfo.score !== null ? scoreInfo.score : null;
+    const severity = scoreValue !== null ? openctiScoreToSeverity(scoreValue) : 'Unknown';
+    const scoreLabel = scoreValue !== null ? `${scoreValue} (${scoreInfo.source})` : t('N/A');
 
     const checkedAt = (opencti && opencti.checked_at) ? formatTime(opencti.checked_at) : '-';
     const searchValue = (opencti && opencti.search_value) ? escapeHtml(String(opencti.search_value)) : '-';
@@ -2036,59 +2255,62 @@ function renderOpenCTISummary(opencti) {
     const searchValueArg = JSON.stringify(searchValueRaw).replace(/"/g, '&quot;');
     const relationsAvailable = opencti && opencti.relations && Array.isArray(opencti.relations.items) && opencti.relations.items.length > 0;
     const relationsButton = relationsAvailable
-        ? `<button type="button" class="btn btn-sm btn-outline-primary mt-2" data-toggle="modal" data-target="#openctiRelationsModal"\n             onclick="showOpenCTIRelationsGraph(${relationsJson}, ${searchValueArg});">View relations graph</button>`
+        ? `<button type="button" class="btn btn-sm btn-outline-primary mt-2" data-toggle="modal" data-target="#openctiRelationsModal"\n             onclick="showOpenCTIRelationsGraph(${relationsJson}, ${searchValueArg});">${t('View relations graph')}</button>`
         : '';
 
     const relationsBlock = renderOpenCTIRelations(opencti);
-    const indicatorsBlock = renderOpenCTIEntities(opencti, 'indicators', 'Indicators');
-    const observablesBlock = renderOpenCTIEntities(opencti, 'observables', 'Observables');
+    const indicatorsBlock = renderOpenCTIEntities(opencti, 'indicators', t('Indicators'));
+    const observablesBlock = renderOpenCTIEntities(opencti, 'observables', t('Observables'));
 
     let errorsHtml = '';
     if (opencti && Array.isArray(opencti.errors) && opencti.errors.length > 0) {
         const errText = opencti.errors.map((item) => escapeHtml(JSON.stringify(item))).join('<br/>');
-        errorsHtml = `<div class="alert alert-warning mt-3 mb-0">Errors:<br/>${errText}</div>`;
+        errorsHtml = `<div class="alert alert-warning mt-3 mb-0">${t('Errors:')}<br/>${errText}</div>`;
     }
+
+    const legacyBanner = `<div class=\"alert alert-info mb-3\">${t('Legacy OpenCTI data (v2.0). Re-enrich to see match details.')}</div>`;
 
     return `
         <div class="card">
             <div class="card-body">
+                ${legacyBanner}
                 <div class="row">
-                    <div class="col-md-3"><strong>OpenCTI</strong></div>
+                    <div class="col-md-3"><strong>${t('OpenCTI')}</strong></div>
                     <div class="col-md-9">${openctiUrl}</div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3"><strong>IOC</strong></div>
+                    <div class="col-md-3"><strong>${t('IOC')}</strong></div>
                     <div class="col-md-9">${searchValue} <span class="badge badge-light ml-2">${iocType}</span></div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3"><strong>Checked at</strong></div>
+                    <div class="col-md-3"><strong>${t('Checked at')}</strong></div>
                     <div class="col-md-9">${escapeHtml(String(checkedAt))}</div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3"><strong>Presence</strong></div>
+                    <div class="col-md-3"><strong>${t('Presence')}</strong></div>
                     <div class="col-md-9">
                         <span class="badge ${found ? 'badge-danger' : 'badge-success'}">
-                            ${found ? 'Found in OpenCTI' : 'Not found'}
+                            ${found ? t('Found in OpenCTI') : t('Not found')}
                         </span>
                         ${matchBadge}
                         ${exactBadge}
                     </div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3"><strong>Indicators</strong></div>
+                    <div class="col-md-3"><strong>${t('Indicators')}</strong></div>
                     <div class="col-md-9">${indicatorsCount}</div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3"><strong>Observables</strong></div>
+                    <div class="col-md-3"><strong>${t('Observables')}</strong></div>
                     <div class="col-md-9">${observablesCount}</div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3"><strong>Score</strong></div>
+                    <div class="col-md-3"><strong>${t('Score')}</strong></div>
                     <div class="col-md-9">${scoreLabel}</div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3"><strong>Criticality</strong></div>
-                    <div class="col-md-9">${severity}</div>
+                    <div class="col-md-3"><strong>${t('Criticality')}</strong></div>
+                    <div class="col-md-9">${t(severity)}</div>
                 </div>
                 ${relationsButton ? `<div class="row mt-2"><div class="col-md-3"></div><div class="col-md-9">${relationsButton}</div></div>` : ''}
                 ${relationsBlock}
@@ -2113,11 +2335,27 @@ function computeOpenCTIScore(opencti) {
     };
 
     const nodes = [];
-    if (opencti && opencti.indicators && Array.isArray(opencti.indicators.nodes)) {
-        nodes.push(...opencti.indicators.nodes);
-    }
-    if (opencti && opencti.observables && Array.isArray(opencti.observables.nodes)) {
-        nodes.push(...opencti.observables.nodes);
+    if (opencti && opencti.schema_version === '2.1') {
+        const results = opencti.results || {};
+        const collect = (section) => {
+            if (!section || !Array.isArray(section.matched)) {
+                return;
+            }
+            section.matched.forEach((entry) => {
+                if (entry && entry.node) {
+                    nodes.push(entry.node);
+                }
+            });
+        };
+        collect(results.indicators);
+        collect(results.observables);
+    } else {
+        if (opencti && opencti.indicators && Array.isArray(opencti.indicators.nodes)) {
+            nodes.push(...opencti.indicators.nodes);
+        }
+        if (opencti && opencti.observables && Array.isArray(opencti.observables.nodes)) {
+            nodes.push(...opencti.observables.nodes);
+        }
     }
 
     nodes.forEach((node) => {
@@ -2198,14 +2436,14 @@ function renderOpenCTIRelations(opencti) {
     const hasErrors = Array.isArray(opencti.relations.errors) && opencti.relations.errors.length > 0;
 
     const list = items.map((rel) => {
-        const relType = rel && rel.relationship_type ? escapeHtml(rel.relationship_type) : 'related-to';
+        const relType = rel && rel.relationship_type ? escapeHtml(rel.relationship_type) : t('related-to');
         const fromLabel = escapeHtml(openctiEntityLabel(rel ? rel.from : null));
         const toLabel = escapeHtml(openctiEntityLabel(rel ? rel.to : null));
         return `<li>${relType}: ${fromLabel} -> ${toLabel}</li>`;
     }).join('');
 
     const errorsHtml = hasErrors
-        ? `<div class="alert alert-warning mt-2 mb-0">Relations errors: ${escapeHtml(JSON.stringify(opencti.relations.errors))}</div>`
+        ? `<div class="alert alert-warning mt-2 mb-0">${t('Relations errors: {errors}', {errors: escapeHtml(JSON.stringify(opencti.relations.errors))})}</div>`
         : '';
 
     if (items.length === 0 && !hasErrors) {
@@ -2214,7 +2452,7 @@ function renderOpenCTIRelations(opencti) {
 
     return `
         <div class="row mt-3">
-            <div class="col-md-3"><strong>Relations</strong></div>
+            <div class="col-md-3"><strong>${t('Relations')}</strong></div>
             <div class="col-md-9">
                 ${items.length > 0 ? `<ul class="mb-0">${list}</ul>` : ''}
                 ${errorsHtml}
@@ -2233,9 +2471,15 @@ function renderOpenCTIEntities(opencti, key, title) {
     }
     const list = nodes.map((node) => {
         const label = escapeHtml(openctiEntityLabel(node));
-        const score = node && node.x_opencti_score !== undefined ? `score ${node.x_opencti_score}` : '';
-        const confidence = node && node.confidence !== undefined ? `confidence ${node.confidence}` : '';
-        const pattern = key === 'indicators' && node && node.pattern ? `pattern ${truncateText(node.pattern, 80)}` : '';
+        const score = node && node.x_opencti_score !== undefined
+            ? t('score {score}', {score: node.x_opencti_score})
+            : '';
+        const confidence = node && node.confidence !== undefined
+            ? t('confidence {confidence}', {confidence: node.confidence})
+            : '';
+        const pattern = key === 'indicators' && node && node.pattern
+            ? t('pattern {pattern}', {pattern: truncateText(node.pattern, 80)})
+            : '';
         const meta = [score, confidence, pattern].filter((item) => item).join(', ');
         return `<li>${label}${meta ? ` (${escapeHtml(meta)})` : ''}</li>`;
     }).join('');
@@ -2260,11 +2504,11 @@ function showOpenCTIRelationsGraph(relations, searchValue) {
     }
 
     if (infoEl) {
-        infoEl.textContent = searchValue ? `IOC: ${searchValue}` : '';
+        infoEl.textContent = searchValue ? t('IOC: {ioc}', {ioc: searchValue}) : '';
     }
 
     if (!relations || !Array.isArray(relations.items) || relations.items.length === 0) {
-        graphEl.innerHTML = '<div class="alert alert-secondary">No relations to display.</div>';
+        graphEl.innerHTML = `<div class="alert alert-secondary">${t('No relations to display.')}</div>`;
         return;
     }
 
@@ -2287,15 +2531,15 @@ function showOpenCTIRelationsGraph(relations, searchValue) {
         if (!nodesMap.has(fromId)) {
             nodesMap.set(fromId, {
                 id: fromId,
-                label: `${openctiEntityLabel(from)}\\n(${from.entity_type || 'Entity'})`,
-                group: from.entity_type || 'Entity'
+                label: `${openctiEntityLabel(from)}\\n(${from.entity_type || t('Entity')})`,
+                group: from.entity_type || t('Entity')
             });
         }
         if (!nodesMap.has(toId)) {
             nodesMap.set(toId, {
                 id: toId,
-                label: `${openctiEntityLabel(to)}\\n(${to.entity_type || 'Entity'})`,
-                group: to.entity_type || 'Entity'
+                label: `${openctiEntityLabel(to)}\\n(${to.entity_type || t('Entity')})`,
+                group: to.entity_type || t('Entity')
             });
         }
 
@@ -2304,7 +2548,7 @@ function showOpenCTIRelationsGraph(relations, searchValue) {
             from: fromId,
             to: toId,
             arrows: 'to',
-            label: rel.relationship_type || 'related-to',
+            label: rel.relationship_type || t('related-to'),
             font: { align: 'middle', size: 10 }
         });
     });
@@ -2369,7 +2613,7 @@ function truncateText(text, maxLen) {
 }
 
 function delete_alert(alert_id) {
-    do_deletion_prompt(`Are you sure you want to delete alert #${alert_id}?`, true)
+    do_deletion_prompt(t('Are you sure you want to delete alert #{id}?', { id: alert_id }), true)
         .then((doDelete) => {
             if (doDelete) {
                 post_request_api(`/alerts/delete/${alert_id}`)
@@ -2397,7 +2641,7 @@ async function editAlert(alert_id, close=false) {
 
     let alert_resolution = getAlertResolutionName(alert_id);
     if (alert_resolution === '') {
-        alert_resolution = 'Unknown';
+        alert_resolution = 'unknown';
     }
 
     // Uncheck all radio buttons
@@ -2406,13 +2650,13 @@ async function editAlert(alert_id, close=false) {
     $(`input[type='radio'][name='resolutionStatus'][value='${alert_resolution}']`).prop('checked', true);
 
     if (close) {
-        confirmAlertEdition.text('Close alert');
+        confirmAlertEdition.text(t('Close alert'));
         $('.alert-edition-part').hide();
-        $('#closeAlertModalLabel').text(`Close alert #${alert_id}`);
+        $('#closeAlertModalLabel').text(t('Close alert #{id}', { id: alert_id }));
     } else {
         $('.alert-edition-part').show();
-        $('#closeAlertModalLabel').text(`Edit alert #${alert_id}`);
-        confirmAlertEdition.text('Save')
+        $('#closeAlertModalLabel').text(t('Edit alert #{id}', { id: alert_id }));
+        confirmAlertEdition.text(t('Save'))
     }
 
     fetchSelectOptions('editAlertClassification', selectsConfig['alert_classification_id']).then(() => {
@@ -2461,9 +2705,9 @@ function closeBatchAlerts() {
     $('#editAlertNote').val('');
     alertTag.val('');
 
-    confirmAlertEdition.text('Close alerts');
+    confirmAlertEdition.text(t('Close alerts'));
     $('.alert-edition-part').hide();
-    $('#closeAlertModalLabel').text(`Close multiple alerts`);
+    $('#closeAlertModalLabel').text(t('Close multiple alerts'));
 
     $('#editAlertModal').modal('show');
 
@@ -2499,13 +2743,13 @@ async function fetchSavedFilters() {
                 savedFiltersDropdown.empty();
 
                 let dropdownHtml = `
-                    <select class="selectpicker ml-2" data-style="btn-sm" data-live-search="true" title="Select preset filter" id="savedFilters">
+                    <select class="selectpicker ml-2" data-style="btn-sm" data-live-search="true" title="${t('Select preset filter')}" id="savedFilters">
                 `;
 
                 data.data.forEach(filter => {
                     let filter_name = filterXSS(filter.filter_name);
                     dropdownHtml += `
-                                <option value="${filter.filter_id}" data-content='<div class="d-flex align-items-center"><span>${filter_name} ${filter.filter_is_private ? '(private)' : ''}</span><div class="trash-wrapper hidden-trash"><i class="fas fa-trash delete-filter text-danger" id="dropfilter-id-${filter.filter_id}" title="Delete filter"></i></div></div>'>${filter_name}</option>
+                                <option value="${filter.filter_id}" data-content='<div class="d-flex align-items-center"><span>${filter_name} ${filter.filter_is_private ? `(${t('private')})` : ''}</span><div class="trash-wrapper hidden-trash"><i class="fas fa-trash delete-filter text-danger" id="dropfilter-id-${filter.filter_id}" title="${t('Delete filter')}"></i></div></div>'>${filter_name}</option>
                     `;
                 });
 
@@ -2527,7 +2771,7 @@ async function fetchSavedFilters() {
 
                         if (!filterId) return;
 
-                        do_deletion_prompt(`Are you sure you want to delete filter #${filterId}?`, true)
+                        do_deletion_prompt(t('Are you sure you want to delete filter #{id}?', { id: filterId }), true)
                             .then((do_delete) => {
                                 if (!do_delete) return;
                                 const url = `/filters/delete/${filterId}`;
@@ -2657,7 +2901,7 @@ async function changeBatchAlertOwner(alertId) {
 
     const selectedAlerts = getBatchAlerts();
     if (selectedAlerts.length === 0) {
-        notify_error('Please select at least one alert to perform this action on.');
+        notify_error(t('Please select at least one alert to perform this action on.'));
         return;
     }
 
@@ -2759,7 +3003,7 @@ function setFormValuesFromUrl() {
       form.trigger('submit');
     })
     .catch(error => {
-      console.error('Error setting form values:', error);
+      console.error(t('Error setting form values:'), error);
     });
 }
 
@@ -2769,7 +3013,7 @@ function fetchSelectOptions(selectElementId, configItem) {
     get_request_api(configItem.url)
       .then(function (data) {
         if (!notify_auto_api(data, true)) {
-          reject('Failed to fetch options');
+          reject(t('Failed to fetch options'));
           return;
         }
         const selectElement = $(`#${selectElementId}`);
@@ -2781,7 +3025,7 @@ function fetchSelectOptions(selectElementId, configItem) {
         if (selectElementId === 'alert_owner_id') {
             selectElement.append($('<option>', {
                 value: '-1',
-                text: 'Unassigned'
+                text: t('Unassigned')
             }));
         }
 
@@ -2818,7 +3062,7 @@ function changeStatusBatchAlerts(status_name) {
 async function updateBatchAlerts(data_content= {}) {
     const selectedAlerts = getBatchAlerts();
     if (selectedAlerts.length === 0) {
-        notify_error('Please select at least one alert to perform this action on.');
+        notify_error(t('Please select at least one alert to perform this action on.'));
         return;
     }
 
@@ -2829,8 +3073,8 @@ async function updateBatchAlerts(data_content= {}) {
     };
 
        window.swal({
-          title: "Alerts are being updated, please wait",
-          text: "This window will close automatically when it's done",
+          title: t('Alerts are being updated, please wait'),
+          text: t("This window will close automatically when it's done"),
           icon: "/static/assets/img/loader.gif",
           button: false,
           allowOutsideClick: false
@@ -2850,15 +3094,15 @@ async function updateBatchAlerts(data_content= {}) {
 async function deleteBatchAlerts(data_content= {}) {
     const selectedAlerts = getBatchAlerts();
     if (selectedAlerts.length === 0) {
-        notify_error('Please select at least one alert to perform this action on.');
+        notify_error(t('Please select at least one alert to perform this action on.'));
         return;
     }
 
-    do_deletion_prompt(`You are about to delete ${selectedAlerts.length} alerts`, true)
+    do_deletion_prompt(t('You are about to delete {count} alerts', { count: selectedAlerts.length }), true)
     .then((doDelete) => {
        window.swal({
-              title: "Alerts are being deleted, please wait",
-              text: "This window will close automatically when it's done",
+              title: t('Alerts are being deleted, please wait'),
+              text: t("This window will close automatically when it's done"),
               icon: "/static/assets/img/loader.gif",
               button: false,
               allowOutsideClick: false
@@ -2999,7 +3243,7 @@ $(document).ready(function () {
     const selectionModeActive = $('body').hasClass('selection-mode');
 
     // Update the button text
-    $(this).text(selectionModeActive ? 'Cancel' : 'Select');
+    $(this).text(selectionModeActive ? t('Cancel') : t('Select'));
 
     // Toggle the display of avatars, tickboxes and selection-related buttons
     $('.alert-card-selectable').each(function() {
@@ -3008,7 +3252,7 @@ $(document).ready(function () {
       avatarTickboxWrapper.find('.tickbox').toggle(selectionModeActive);
     });
 
-    $('#select-deselect-all').toggle(selectionModeActive).text('Select all');
+    $('#select-deselect-all').toggle(selectionModeActive).text(t('Select all'));
     $('#alerts-batch-actions').toggle(selectionModeActive);
   });
 
@@ -3016,7 +3260,7 @@ $(document).ready(function () {
     const allSelected = $('.tickbox input[type="checkbox"]:not(:checked)').length === 0;
 
     $('.tickbox input[type="checkbox"]').prop('checked', !allSelected);
-    $(this).text(allSelected ? 'Select all' : 'Deselect all');
+    $(this).text(allSelected ? t('Select all') : t('Deselect all'));
   });
 
   $(document).on('click', '.enricher-option', function (event) {
@@ -3040,7 +3284,7 @@ $(document).ready(function () {
         const badge = $('#newAlertsBadge');
         const currentCount = parseInt(badge.text()) || 0;
         badge.text(currentCount + 1).show();
-        badge.attr('title', 'New alerts available');
+        badge.attr('title', t('New alerts available'));
     });
 
 });

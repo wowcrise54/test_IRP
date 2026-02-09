@@ -76,7 +76,7 @@ function add_assets() {
                 data['custom_attributes'] = attributes;
 
                 post_request_api('assets/add', JSON.stringify(data), true, function () {
-                    $('#submit_new_assets').text('Saving data..')
+                    $('#submit_new_assets').text(t('Saving data..'))
                         .attr("disabled", true)
                         .removeClass('bt-outline-success')
                         .addClass('btn-success', 'text-dark');
@@ -86,11 +86,11 @@ function add_assets() {
                             reload_assets();
                             if (index == (assets_list.length - 1)) {
                                 $('#modal_add_asset').modal('hide');
-                                notify_success("Assets created");
+                                notify_success(t('Assets created'));
                             }
                         } else {
-                            $('#submit_new_assets').text('Save again');
-                            swal("Oh no !", data.message, "error")
+                            $('#submit_new_assets').text(t('Save again'));
+                            swal(t("Oh no!"), data.message, "error")
                         }
                     })
                     .always(function () {
@@ -100,7 +100,7 @@ function add_assets() {
                             .removeClass('btn-success', 'text-dark');
                     })
                     .fail(function (error) {
-                        $('#submit_new_assets').text('Save');
+                        $('#submit_new_assets').text(t('Save'));
                         propagate_form_api_errors(error.responseJSON.data);
                     })
             }
@@ -126,7 +126,7 @@ function get_case_assets() {
             if (response.data != null) {
                 jsdata = response.data;
                 if (jsdata.assets.length > 299) {
-                    set_page_warning("Backref disabled due to too many assets in the case");
+                    set_page_warning(t("Back references disabled due to too many assets in this case"));
                 } else {
                     set_page_warning("");
                 }
@@ -135,7 +135,7 @@ function get_case_assets() {
                 Table.columns.adjust().draw();
                 load_menu_mod_options('asset', Table, delete_asset, [{
                     type: 'option',
-                    title: 'Check Alerts',
+                    title: t('Check alerts'),
                     multi: false,
                     iconClass: 'fas fa-bell',
                     action: function(rows) {
@@ -159,7 +159,7 @@ function get_case_assets() {
 
             } else {
                 Table.clear().draw();
-                swal("Oh no !", data.message, "error")
+                swal(t("Oh no!"), data.message, "error")
             }
         } else {
             Table.clear().draw()
@@ -169,7 +169,7 @@ function get_case_assets() {
 
 /* Delete an asset */
 function delete_asset(asset_id) {
-    do_deletion_prompt("You are about to delete asset #" + asset_id)
+    do_deletion_prompt(t("You are about to delete asset #{id}", { id: asset_id }))
     .then((doDelete) => {
         if (doDelete) {
             post_request_api('assets/delete/' + asset_id)
@@ -177,9 +177,9 @@ function delete_asset(asset_id) {
                 if (data.status == 'success') {
                     reload_assets();
                     $('#modal_add_asset').modal('hide');
-                    notify_success('Asset deleted');
+                    notify_success(t('Asset deleted'));
                 } else {
-                    swal("Oh no !", data.message, "error")
+                    swal(t("Oh no!"), data.message, "error")
                 }
             });
         }
@@ -292,16 +292,16 @@ function update_asset(do_close){
     .done((data) => {
         if (data.status == 'success') {
             reload_assets();
-            $('#submit_new_asset').text("Saved").addClass('btn-outline-success').removeClass('btn-outline-danger').removeClass('btn-outline-warning');
+            $('#submit_new_asset').text(t("Saved")).addClass('btn-outline-success').removeClass('btn-outline-danger').removeClass('btn-outline-warning');
             $('#last_saved').removeClass('btn-danger').addClass('btn-success');
             $('#last_saved > i').attr('class', "fa-solid fa-file-circle-check");
             if (do_close) {
                 $('#modal_add_asset').modal('hide');
             }
-            notify_success('Asset updated');
+            notify_success(t('Asset updated'));
         } else {
-            $('#submit_new_asset').text('Save again');
-            swal("Oh no !", data.message, "error")
+            $('#submit_new_asset').text(t('Save again'));
+            swal(t("Oh no!"), data.message, "error")
         }
     })
 
@@ -328,10 +328,10 @@ function upload_assets() {
             if (jsdata.status == "success") {
                 reload_assets();
                 $('#modal_upload_assets').modal('hide');
-                swal("Got news for you", data.message, "success");
+                swal(t("Got news for you"), data.message, "success");
 
             } else {
-                swal("Got bad news for you", data.message, "error");
+                swal(t("Got bad news for you"), data.message, "error");
             }
         })
 
@@ -389,19 +389,19 @@ $(document).ready(function(){
                         let datacontent = 'data-content="';
 
                         row.link.forEach(link => {
-                            const caseInfo = `<b><a target='_blank' rel='noopener' href='/case/assets?cid=${link.case_id}&shared=${link.asset_id}'>Observed <sup><i class='fa-solid fa-arrow-up-right-from-square ml-1 mr-1 text-muted'></i></sup></a></b>`;
-                            const caseLink = `<b><a href='/case?cid=${link.case_id}'>case #${link.case_id} <sup><i class='fa-solid fa-arrow-up-right-from-square ml-1 mr-1 text-muted'></i></sup></a></b>`;
+                            const caseInfo = `<b><a target='_blank' rel='noopener' href='/case/assets?cid=${link.case_id}&shared=${link.asset_id}'>${t('Observed')} <sup><i class='fa-solid fa-arrow-up-right-from-square ml-1 mr-1 text-muted'></i></sup></a></b>`;
+                            const caseLink = `<b><a href='/case?cid=${link.case_id}'>${t('case')} #${link.case_id} <sup><i class='fa-solid fa-arrow-up-right-from-square ml-1 mr-1 text-muted'></i></sup></a></b>`;
                             const date = link.case_open_date.replace('00:00:00 GMT', '');
 
                             if (link.asset_compromise_status_id === 1) {
                                 has_compro = true;
-                                datacontent += `${caseInfo} as <b class='text-danger'>compromised</b><br/> on ${caseLink} (${date}) for the same customer.<br/><br/>`;
+                                datacontent += `${caseInfo} ${t('as')} <b class='text-danger'>${t('compromised')}</b><br/> ${t('on')} ${caseLink} (${date}) ${t('for the same customer')}.<br/><br/>`;
                             } else {
-                                datacontent += `${caseInfo} as <b class='text-success'>not compromised</b><br/> on ${caseLink} (${date}) for the same customer.<br/><br/>`;
+                                datacontent += `${caseInfo} ${t('as')} <b class='text-success'>${t('not compromised')}</b><br/> ${t('on')} ${caseLink} (${date}) ${t('for the same customer')}.<br/><br/>`;
                             }
                         });
 
-                        compro += `<i tabindex="0" class="fas ${has_compro ? 'fa-meteor text-danger' : 'fa-info-circle text-success'} ml-2" style="cursor: pointer;" data-html="true" data-toggle="popover" data-trigger="focus" title="Observed in previous case" ${datacontent}"></i>`;
+                        compro += `<i tabindex="0" class="fas ${has_compro ? 'fa-meteor text-danger' : 'fa-info-circle text-success'} ml-2" style="cursor: pointer;" data-html="true" data-toggle="popover" data-trigger="focus" title="${t('Observed in previous case')}" ${datacontent}"></i>`;
                     }
 
                     if (row.alerts.length > 0) {
@@ -410,10 +410,10 @@ $(document).ready(function(){
                         row.alerts.forEach(alert => {
                             alerts_content += `<i tabindex="0" class="fas fa-bell text-warning mr-2"></i><a href=\"/alerts?alert_ids=${alert.alert_id}&page=1&per_page=1&sort=desc\" target="_blank" rel="noopener">#${alert.alert_id} - ${alert.alert_title.replace(/'/g, "&#39;").replace(/"/g, "&quot;")}</a><br/>`;
                         }  );
-                        alerts_content += `<i tabindex="0" class="fas fa-external-link-square mr-2"></i><a href=\"/alerts?alert_assets=${data}" target="_blank" rel="noopener">More..</a>`;
+                        alerts_content += `<i tabindex="0" class="fas fa-external-link-square mr-2"></i><a href=\"/alerts?alert_assets=${data}" target="_blank" rel="noopener">${t('More..')}</a>`;
 
 
-                        compro += `<i tabindex="0" class="fas fa-bell text-warning ml-2" style="cursor: pointer;" data-html="true" data-toggle="popover" data-trigger="focus" title="Alerts" data-content='${alerts_content}'></i>`;
+                        compro += `<i tabindex="0" class="fas fa-bell text-warning ml-2" style="cursor: pointer;" data-html="true" data-toggle="popover" data-trigger="focus" title="${t('Alerts')}" data-content='${alerts_content}'></i>`;
                     }
 
                     let img = $('<img>')
@@ -461,10 +461,10 @@ $(document).ready(function(){
           },
           { "data": "asset_compromise_status_id",
            "render": function(data, type, row) {
-                if (data == 0) { ret = '<span class="badge badge-muted">TBD</span>';}
-                else if (data == 1) { ret = '<span class="badge badge-danger">Yes</span>';}
-                else if (data == 2) { ret = '<span class="badge badge-success">No</span>';}
-                else { ret = '<span class="badge badge-warning">Unknown</span>';}
+                if (data == 0) { ret = `<span class="badge badge-muted">${t('TBD')}</span>`;}
+                else if (data == 1) { ret = `<span class="badge badge-danger">${t('Yes')}</span>`;}
+                else if (data == 2) { ret = `<span class="badge badge-success">${t('No')}</span>`;}
+                else { ret = `<span class="badge badge-warning">${t('Unknown')}</span>`;}
                 return ret;
             }
           },
@@ -545,14 +545,14 @@ $(document).ready(function(){
     });
 
     var buttons = new $.fn.dataTable.Buttons(Table, {
-     buttons: [
-        { "extend": 'csvHtml5', "text":'<i class="fas fa-cloud-download-alt"></i>',"className": 'btn btn-link text-white'
-        , "titleAttr": 'Download as CSV', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
-        { "extend": 'copyHtml5', "text":'<i class="fas fa-copy"></i>',"className": 'btn btn-link text-white'
-        , "titleAttr": 'Copy', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
-        { "extend": 'colvis', "text":'<i class="fas fa-eye-slash"></i>',"className": 'btn btn-link text-white'
-        , "titleAttr": 'Toggle columns' }
-    ]
+        buttons: [
+            { "extend": 'csvHtml5', "text":'<i class="fas fa-cloud-download-alt"></i>',"className": 'btn btn-link text-white'
+        , "titleAttr": t('Download as CSV'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
+            { "extend": 'copyHtml5', "text":'<i class="fas fa-copy"></i>',"className": 'btn btn-link text-white'
+        , "titleAttr": t('Copy'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
+            { "extend": 'colvis', "text":'<i class="fas fa-eye-slash"></i>',"className": 'btn btn-link text-white'
+        , "titleAttr": t('Toggle columns') }
+        ]
     }).container().appendTo($('#tables_button'));
 
     get_case_assets();

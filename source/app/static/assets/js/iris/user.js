@@ -1,13 +1,13 @@
 function renew_api() {
     swal({
-        title: "Are you sure?",
-        text: "The current key will be revoked and cannot be used anymore",
+        title: t("Are you sure?"),
+        text: t("The current key will be revoked and cannot be used anymore"),
         icon: "warning",
         buttons: true,
         dangerMode: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Go for it'
+        confirmButtonText: t('Go for it')
     })
         .then((willDelete) => {
             if (willDelete) {
@@ -18,7 +18,7 @@ function renew_api() {
                     }
                 })
             } else {
-                swal("Pfew, that was close");
+                swal(t("Pfew, that was close"));
             }
         });
 }
@@ -28,7 +28,7 @@ function save_user_password() {
 
     if ( $('#user_password').val() != $('#user_password_v').val()) {
         $('#user_password').addClass('is-invalid');
-        $('#user_password').after("<div class='invalid-feedback' id='user_password-invalid-msg'>Password and verification are not the same</div>");
+        $('#user_password').after("<div class='invalid-feedback' id='user_password-invalid-msg'>" + t('Password and verification are not the same') + "</div>");
         $('#user_password').show();
         return False;
     }
@@ -58,7 +58,7 @@ function update_password(user_id) {
 
 function refresh_user_permissions() {
     var ori_txt = $('#user_refresh_perms_btn').text();
-    $('#user_refresh_perms_btn').text('Refreshing..');
+    $('#user_refresh_perms_btn').text(t('Refreshing..'));
      get_request_api('refresh-permissions')
     .done((data) => {
         notify_auto_api(data);
@@ -101,4 +101,17 @@ $('input[type=radio][name=user-has-deletion-prompt]').change(function() {
         }
     });
 
+});
+
+$('input[type=radio][name=user-language]').change(function() {
+    if (!this.value) {
+        return;
+    }
+    const lang = this.value;
+    get_request_api('language/set/' + lang)
+        .then((data) => {
+            if (notify_auto_api(data, true)) {
+                location.reload(true);
+            }
+        });
 });

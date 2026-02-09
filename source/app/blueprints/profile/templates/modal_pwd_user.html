@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4>Change password</h4>
+    <h4>{{ _('Change password') }}</h4>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
             aria-hidden="true">&times;</span></button>
 </div>
@@ -11,32 +11,32 @@
                 {{ form.hidden_tag() }}
 
                 <div class="form-group mt-3">
-                   <label for="user_password" class="placeholder">Password</label>
+                   <label for="user_password" class="placeholder">{{ _('Password') }}</label>
                     <ul >
-                        <li><small>Must contain at least {{ server_settings.password_policy_min_length }} chars</small></li>
+                        <li><small>{{ _('Must contain at least %(min_length)s chars', min_length=server_settings.password_policy_min_length) }}</small></li>
                         {% if server_settings.password_policy_upper_case %}
-                            <li class="text-sm"><small>Must contain at least an upper case</small></li>
+                            <li class="text-sm"><small>{{ _('Must contain at least an upper case') }}</small></li>
                         {% endif %}
                         {% if server_settings.password_policy_lower_case %}
-                            <li class="text-sm"><small>Must contain at least a lower case</small></li>
+                            <li class="text-sm"><small>{{ _('Must contain at least a lower case') }}</small></li>
                         {% endif %}
                         {% if server_settings.password_policy_digit %}
-                            <li class="text-sm"><small>Must contain at least a digit</small></li>
+                            <li class="text-sm"><small>{{ _('Must contain at least a digit') }}</small></li>
                         {% endif %}
                         {% if server_settings.password_policy_special_chars %}
-                            <li class="text-sm"><small>Must contain at least one of : {{ server_settings.password_policy_special_chars }}</small></li>
+                            <li class="text-sm"><small>{{ _('Must contain at least one of : %(chars)s', chars=server_settings.password_policy_special_chars) }}</small></li>
                         {% endif %}
                     </ul>
-                    <input type="password" class="form-control" id="user_password" placeholder="Password">
+                    <input type="password" class="form-control" id="user_password" placeholder="{{ _('Password') }}">
                 </div>
                 <div class="form-group mt-3">
-                    <label for="user_password" class="placeholder">Password verification</label>
-                    <input type="password" class="form-control" id="user_password_v" placeholder="Verification">
+                    <label for="user_password" class="placeholder">{{ _('Password verification') }}</label>
+                    <input type="password" class="form-control" id="user_password_v" placeholder="{{ _('Verification') }}">
                 </div>
             </div>
 
             <button type="button" class="btn btn-outline-success ml-4 mt-5 float-right"
-            onclick="save_user_password();">Save</button>
+            onclick="save_user_password();">{{ _('Save') }}</button>
 
         </form>
     </div>

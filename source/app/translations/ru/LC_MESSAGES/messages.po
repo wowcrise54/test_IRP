@@ -1,0 +1,2139 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: iris\n"
+"POT-Creation-Date: 2026-02-06 00:00+0000\n"
+"PO-Revision-Date: 2026-02-06 00:00+0000\n"
+"Language: ru\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "404 Error"
+msgstr "Ошибка 404"
+
+msgid "ACCESS DENIED"
+msgstr "ДОСТУП ЗАПРЕЩЁН"
+
+msgid "Access control"
+msgstr "Контроль доступа"
+
+msgid "Access control and permissions refreshed"
+msgstr "Контроль доступа и права обновлены"
+
+msgid "Access denied"
+msgstr "Доступ запрещён"
+
+msgid "Access denied while trying to access case #%(caseid)s"
+msgstr "Доступ запрещён при попытке открыть дело №%(caseid)s"
+
+msgid "Access denied while trying to access the resource"
+msgstr "Доступ запрещён при попытке открыть ресурс"
+
+msgid "Activities"
+msgstr "Активности"
+
+msgid "Add task log"
+msgstr "Добавить запись задачи"
+
+msgid "Advanced"
+msgstr "Дополнительно"
+
+msgid "Alerts"
+msgstr "Оповещения"
+
+msgid "API Key"
+msgstr "API ключ"
+
+msgid "Are you sure?"
+msgstr "Вы уверены?"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Case"
+msgstr "Дело"
+
+msgid "Case Objects"
+msgstr "Объекты дела"
+
+msgid "Case Templates"
+msgstr "Шаблоны дел"
+
+msgid "Change password"
+msgstr "Сменить пароль"
+
+msgid "Checked at"
+msgstr "Проверено"
+
+msgid "Confirm"
+msgstr "Подтвердить"
+
+msgid "Context changed successfully"
+msgstr "Контекст успешно изменён"
+
+msgid "Deletion prompt %(state)s"
+msgstr "Подтверждение удаления %(state)s"
+
+msgid "Create case"
+msgstr "Создать дело"
+
+msgid "Critical"
+msgstr "Критический"
+
+msgid "Criticality"
+msgstr "Критичность"
+
+msgid "Customers"
+msgstr "Клиенты"
+
+msgid "Dashboard"
+msgstr "Панель"
+
+msgid "Dark mode"
+msgstr "Тёмная тема"
+
+msgid "Datastore"
+msgstr "Хранилище"
+
+msgid "Defanged"
+msgstr "Дефанж"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "disabled"
+msgstr "отключено"
+
+msgid "DIM Tasks"
+msgstr "DIM задачи"
+
+msgid "Do not prompt a confirmation popup and delete objects directly"
+msgstr "Не спрашивать подтверждение"
+
+msgid "Don't have an account yet ?"
+msgstr "Ещё нет учётной записи?"
+
+msgid "Email"
+msgstr "Эл. почта"
+
+msgid "enabled"
+msgstr "включено"
+
+msgid "Entity"
+msgstr "Сущность"
+
+msgid "Error UUID %(error_uuid)s"
+msgstr "UUID ошибки %(error_uuid)s"
+
+msgid "Error:"
+msgstr "Ошибка:"
+
+msgid "Errors:"
+msgstr "Ошибки:"
+
+msgid "Exact"
+msgstr "Точное"
+
+msgid "Exact {matched} of {raw}"
+msgstr "Точное {matched} из {raw}"
+
+msgid "fields"
+msgstr "поля"
+
+msgid "Forensicator"
+msgstr "Форензик-аналитик"
+
+msgid "Found"
+msgstr "Найдено"
+
+msgid "Found in OpenCTI"
+msgstr "Найдено в OpenCTI"
+
+msgid "Fuzzy"
+msgstr "Нечёткое"
+
+msgid "Go"
+msgstr "Перейти"
+
+msgid "Go for it"
+msgstr "Подтвердить"
+
+msgid "Go to case number"
+msgstr "Перейти к делу по номеру"
+
+msgid "Go to case number #"
+msgstr "Перейти к делу №"
+
+msgid "Go to my default case"
+msgstr "Перейти к делу по умолчанию"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "High"
+msgstr "Высокий"
+
+msgid "IOC"
+msgstr "IOC"
+
+msgid "IOC: {ioc}"
+msgstr "IOC: {ioc}"
+
+msgid "Indicators"
+msgstr "Индикаторы"
+
+msgid "Investigation"
+msgstr "Расследование"
+
+msgid "IRIS Theme"
+msgstr "Тема IRIS"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Language changed"
+msgstr "Язык изменён"
+
+msgid "Last page"
+msgstr "Последняя"
+
+msgid "Legacy OpenCTI data (v2.0). Re-enrich to see match details."
+msgstr "Данные OpenCTI (v2.0) в устаревшем формате. Переобогатите, чтобы увидеть детали совпадений."
+
+msgid "Light mode"
+msgstr "Светлая тема"
+
+msgid "Login"
+msgstr "Вход"
+
+msgid "Logout"
+msgstr "Выйти"
+
+msgid "Low"
+msgstr "Низкий"
+
+msgid "Manage"
+msgstr "Управление"
+
+msgid "Manage cases"
+msgstr "Управление делами"
+
+msgid "Mini sidebar %(state)s"
+msgstr "Мини-боковая панель %(state)s"
+
+msgid "Matched Indicators"
+msgstr "Совпавшие индикаторы"
+
+msgid "Matched Observables"
+msgstr "Совпавшие наблюдаемые"
+
+msgid "Match mode"
+msgstr "Режим сопоставления"
+
+msgid "Medium"
+msgstr "Средний"
+
+msgid "Modules"
+msgstr "Модули"
+
+msgid "Must contain at least %(min_length)s chars"
+msgstr "Минимум %(min_length)s символов"
+
+msgid "Must contain at least a digit"
+msgstr "Должна быть хотя бы одна цифра"
+
+msgid "Must contain at least a lower case"
+msgstr "Должна быть хотя бы одна строчная буква"
+
+msgid "Must contain at least an upper case"
+msgstr "Должна быть хотя бы одна заглавная буква"
+
+msgid "Must contain at least one of : %(chars)s"
+msgstr "Должен содержать один из: %(chars)s"
+
+msgid "My settings"
+msgstr "Мои настройки"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "N/A"
+msgstr "н/д"
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "No context"
+msgstr "Нет контекста"
+
+msgid "No relations to display."
+msgstr "Нет связей для отображения."
+
+msgid "Not found"
+msgstr "Не найдено"
+
+msgid "Normalized"
+msgstr "Нормализовано"
+
+msgid "Observables"
+msgstr "Наблюдаемые"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "OpenCTI"
+msgstr "OpenCTI"
+
+msgid "Operation failed"
+msgstr "Операция не выполнена"
+
+msgid "Operation succeeded"
+msgstr "Операция выполнена"
+
+msgid "Overview"
+msgstr "Обзор"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Password and verification are not the same"
+msgstr "Пароль и подтверждение не совпадают"
+
+msgid "Password verification"
+msgstr "Подтверждение пароля"
+
+msgid "Permission denied"
+msgstr "Доступ запрещён"
+
+msgid "Pfew, that was close"
+msgstr "Фух, пронесло"
+
+msgid "Presence"
+msgstr "Наличие"
+
+msgid "Prompt a confirmation box before deleting objects"
+msgstr "Подтверждать удаление объектов"
+
+msgid "Prompt a confirmation popup before deleting objects"
+msgstr "Спрашивать подтверждение"
+
+msgid "Quick actions"
+msgstr "Быстрые действия"
+
+msgid "Refreshing.."
+msgstr "Обновление.."
+
+msgid "Reloading..."
+msgstr "Перезагрузка..."
+
+msgid "Relations"
+msgstr "Связи"
+
+msgid "Relations errors: {errors}"
+msgstr "Ошибки связей: {errors}"
+
+msgid "Renew"
+msgstr "Обновить"
+
+msgid "Report Templates"
+msgstr "Шаблоны отчётов"
+
+msgid "Reset MFA"
+msgstr "Сбросить MFA"
+
+msgid "Theme changed"
+msgstr "Тема изменена"
+
+msgid "Russian"
+msgstr "Русский"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Score"
+msgstr "Оценка"
+
+msgid "Score {score}"
+msgstr "Оценка {score}"
+
+msgid "Score N/A"
+msgstr "Оценка недоступна"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Server settings"
+msgstr "Настройки сервера"
+
+msgid "Seems like you shouldn't be here"
+msgstr "Похоже, вам сюда нельзя"
+
+msgid "Sign In"
+msgstr "Войти"
+
+msgid "SORRY!"
+msgstr "ИЗВИНИТЕ!"
+
+msgid "Stop everything !"
+msgstr "Остановитесь!"
+
+msgid "Switch case"
+msgstr "Сменить дело"
+
+msgid "The case you attempted to reach wasn't found.\nYou have been redirected to a default case."
+msgstr "Запрошенное дело не найдено.\nВы перенаправлены на дело по умолчанию."
+
+msgid "The case you are working on was deleted"
+msgstr "Дело, с которым вы работали, удалено"
+
+msgid "The current key will be revoked and cannot be used anymore"
+msgstr "Текущий ключ будет отозван и больше не может использоваться"
+
+msgid "The page you’re looking for was not found."
+msgstr "Страница не найдена."
+
+msgid "That's done !"
+msgstr "Готово!"
+
+msgid "Unknown"
+msgstr "Неизвестно"
+
+msgid "Use SSO"
+msgstr "Войти через SSO"
+
+msgid "Username"
+msgstr "Логин"
+
+msgid "Verification"
+msgstr "Подтверждение"
+
+msgid "View relations graph"
+msgstr "Показать граф связей"
+
+msgid "We got error {status} - {statusText} requesting {url}"
+msgstr "Ошибка {status} - {statusText} при запросе {url}"
+
+msgid "Welcome page"
+msgstr "Страница приветствия"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "You've been redirected"
+msgstr "Вы были перенаправлены"
+
+msgid "#ID"
+msgstr "#ID"
+
+msgid "#UUID"
+msgstr "#UUID"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "literals"
+msgstr "литералы"
+
+msgid "related-to"
+msgstr "связан-с"
+
+msgid "pattern {pattern}"
+msgstr "шаблон {pattern}"
+
+msgid "score {score}"
+msgstr "оценка {score}"
+
+msgid "confidence {confidence}"
+msgstr "уверенность {confidence}"
+
+msgid "Add a task log that will be registered under activities"
+msgstr "Добавить запись задачи, которая будет зарегистрирована в активностях"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Datastore folder"
+msgstr "Папка хранилища"
+
+msgid "Filter Description"
+msgstr "Описание фильтра"
+
+msgid "Filter description"
+msgstr "Описание фильтра"
+
+msgid "Filter Name *"
+msgstr "Название фильтра *"
+
+msgid "Filter name"
+msgstr "Название фильтра"
+
+msgid "Folder name"
+msgstr "Имя папки"
+
+msgid "If checked, the filter will be only visible to you"
+msgstr "Если отмечено, фильтр будет виден только вам"
+
+msgid "Input the folder name below"
+msgstr "Введите имя папки ниже"
+
+msgid "Log content"
+msgstr "Содержимое записи"
+
+msgid "Private Filter"
+msgstr "Приватный фильтр"
+
+msgid "Save Filter"
+msgstr "Сохранить фильтр"
+
+msgid "Submit"
+msgstr "Отправить"
+
+msgid "Switch"
+msgstr "Переключить"
+
+msgid "Switch context"
+msgstr "Сменить контекст"
+
+msgid "Task info"
+msgstr "Информация о задаче"
+
+msgid "Custom Attributes"
+msgstr "Пользовательские атрибуты"
+
+msgid "Get back on track"
+msgstr "Вернуться назад"
+
+msgid "Refresh access"
+msgstr "Обновить доступ"
+
+msgid "Updates available"
+msgstr "Доступны обновления"
+
+msgid "Action"
+msgstr "Действие"
+
+msgid "Activity report"
+msgstr "Отчет о деятельности"
+
+msgid "Add alert as event in the timeline"
+msgstr "Добавить оповещение как событие на временной шкале"
+
+msgid "Add as filter"
+msgstr "Добавить как фильтр"
+
+msgid "Alert"
+msgstr "Тревога"
+
+msgid "Alert IDs"
+msgstr "Идентификаторы оповещений"
+
+msgid "Alert client"
+msgstr "Оповещение клиента"
+
+msgid "Alert history"
+msgstr "История оповещений"
+
+msgid "Alert note"
+msgstr "Предупреждающее примечание"
+
+msgid "Alert severity"
+msgstr "Серьезность оповещения"
+
+msgid "Alert source"
+msgstr "Источник оповещения"
+
+msgid "Alert source event UTC time"
+msgstr "Событие источника оповещения по времени UTC"
+
+msgid "Alert title"
+msgstr "Название оповещения"
+
+msgid "Alert(s) ID"
+msgstr "Идентификатор оповещения"
+
+msgid "Alerts are being deleted, please wait"
+msgstr "Оповещения удаляются, подождите."
+
+msgid "Alerts are being updated, please wait"
+msgstr "Оповещения обновляются, пожалуйста, подождите"
+
+msgid "Apply filters"
+msgstr "Применить фильтры"
+
+msgid "Asset(s) name"
+msgstr "Название актива(ов)"
+
+msgid "Assets"
+msgstr "Ресурсы"
+
+msgid "Assets to import"
+msgstr "Активы для импорта"
+
+msgid "Assign"
+msgstr "Назначать"
+
+msgid "Assign to me"
+msgstr "Назначьте мне"
+
+msgid "Bold"
+msgstr "Смелый"
+
+msgid "Can't copy link. I printed it in console."
+msgstr "Не могу скопировать ссылку. Я распечатал это в консоли."
+
+msgid "Cancel review"
+msgstr "Отменить отзыв"
+
+msgid "Case ID"
+msgstr "Идентификатор дела"
+
+msgid "Case outcome"
+msgstr "Исход дела"
+
+msgid "Case review"
+msgstr "Обзор дела"
+
+msgid "Case reviewed by"
+msgstr "Дело рассмотрено"
+
+msgid "Case severity"
+msgstr "Серьезность случая"
+
+msgid "Case state"
+msgstr "Состояние дела"
+
+msgid "Case summary"
+msgstr "Краткое описание дела"
+
+msgid "Case tags"
+msgstr "Теги дела"
+
+msgid "Changes not saved"
+msgstr "Изменения не сохранены"
+
+msgid "Changes saved"
+msgstr "Изменения сохранены."
+
+msgid "Choose reviewer"
+msgstr "Выберите рецензента"
+
+msgid "Classification"
+msgstr "Классификация"
+
+msgid "Clear filters"
+msgstr "Очистить фильтры"
+
+msgid "Close alert"
+msgstr "Закрыть оповещение"
+
+msgid "Close alerts"
+msgstr "Закрыть оповещения"
+
+msgid "Close editor"
+msgstr "Закрыть редактор"
+
+msgid "Close multiple alerts"
+msgstr "Закрыть несколько оповещений"
+
+msgid "Close with note"
+msgstr "Закрыть с примечанием"
+
+msgid "Closed"
+msgstr "Закрыто"
+
+msgid "Closed on"
+msgstr "Закрыто"
+
+msgid "Collapse all"
+msgstr "Свернуть все"
+
+msgid "Comments"
+msgstr "Комментарии"
+
+msgid "Confirm review"
+msgstr "Подтвердить отзыв"
+
+msgid "Conflict!"
+msgstr "Конфликт!"
+
+msgid "Content updated with remote. Local changes copied to clipboard."
+msgstr "Содержимое обновляется удаленно. Локальные изменения скопированы в буфер обмена."
+
+msgid "Context"
+msgstr "Контекст"
+
+msgid "Copy one of these conditions and paste it into the \"Custom Conditions\" field above, then adjust the values as needed."
+msgstr "Скопируйте одно из этих условий и вставьте его в поле «Пользовательские условия» выше, затем измените значения по мере необходимости."
+
+msgid "Creation end date"
+msgstr "Дата окончания создания"
+
+msgid "Creation start date"
+msgstr "Дата начала создания"
+
+msgid "Custom conditions"
+msgstr "Индивидуальные условия"
+
+msgid "Customer"
+msgstr "Клиент"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Delete alert"
+msgstr "Удалить оповещение"
+
+msgid "Delete filter"
+msgstr "Удалить фильтр"
+
+msgid "Deselect all"
+msgstr "Отменить выбор всех"
+
+msgid "Do you confirm that the case has been reviewed?"
+msgstr "Вы подтверждаете, что дело рассмотрено?"
+
+msgid "Domain"
+msgstr "Домен"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Enricher"
+msgstr "Обогащение"
+
+msgid "Enrichment"
+msgstr "Обогащение"
+
+msgid "Enrichment view"
+msgstr "Расширенный вид"
+
+msgid "Error saving!"
+msgstr "Ошибка сохранения!"
+
+msgid "Error setting form values:"
+msgstr "Ошибка установки значений формы:"
+
+msgid "Escalation note"
+msgstr "Примечание об эскалации"
+
+msgid "Evidence"
+msgstr "Доказательство"
+
+msgid "Expand all"
+msgstr "Развернуть все"
+
+msgid "Extracting IOCs, please wait"
+msgstr "Извлечение IOC, пожалуйста, подождите"
+
+msgid "Failed to fetch alerts"
+msgstr "Не удалось получить оповещения."
+
+msgid "Failed to fetch options"
+msgstr "Не удалось получить параметры."
+
+msgid "False positive"
+msgstr "Ложное срабатывание"
+
+msgid "Fetching relationships..."
+msgstr "Получение отношений..."
+
+msgid "Filter"
+msgstr "Фильтр"
+
+msgid "General info"
+msgstr "Общая информация"
+
+msgid "Generate"
+msgstr "Генерировать"
+
+msgid "Generate in Safe Mode"
+msgstr "Генерировать в безопасном режиме"
+
+msgid "Generate report"
+msgstr "Создать отчет"
+
+msgid "Graph"
+msgstr "График"
+
+msgid "Heading 1"
+msgstr "Заголовок 1"
+
+msgid "Heading 2"
+msgstr "Заголовок 2"
+
+msgid "Heading 3"
+msgstr "Заголовок 3"
+
+msgid "Heading 4"
+msgstr "Заголовок 4"
+
+msgid "Here are two sample custom conditions:"
+msgstr "Вот два примера пользовательских условий:"
+
+msgid "History"
+msgstr "История"
+
+msgid "IOC(s)"
+msgstr "МОК(и)"
+
+msgid "IOCs"
+msgstr "МОК"
+
+msgid "IOCs to import"
+msgstr "МНК для импорта"
+
+msgid "IRIS creation time"
+msgstr "Время создания ИРИС"
+
+msgid "In progress"
+msgstr "В ходе выполнения"
+
+msgid "Insert bullet list"
+msgstr "Вставить список маркеров"
+
+msgid "Insert code"
+msgstr "Вставить код"
+
+msgid "Insert link"
+msgstr "Вставить ссылку"
+
+msgid "Insert numbered list"
+msgstr "Вставить нумерованный список"
+
+msgid "Insert table"
+msgstr "Вставить таблицу"
+
+msgid "Italic"
+msgstr "Курсив"
+
+msgid "Legitimate"
+msgstr "Законный"
+
+msgid "Link copied"
+msgstr "Ссылка скопирована"
+
+msgid "Loading.."
+msgstr "Загрузка.."
+
+msgid "Lookback (days)"
+msgstr "Обзор (дней)"
+
+msgid "MD link copied"
+msgstr "Ссылка на МД скопирована"
+
+msgid "Markdown link"
+msgstr "Ссылка на уценку"
+
+msgid "Merge"
+msgstr "Объединить"
+
+msgid "Merge into a new case"
+msgstr "Объединить в новое дело"
+
+msgid "Merge into existing case"
+msgstr "Объединить в существующий случай"
+
+msgid "Merge multiple alerts in a new case"
+msgstr "Объединение нескольких оповещений в новом случае"
+
+msgid "Merge options"
+msgstr "Объединить параметры"
+
+msgid "Merged"
+msgstr "Объединено"
+
+msgid "New"
+msgstr "Новый"
+
+msgid "New alerts available"
+msgstr "Доступны новые оповещения"
+
+msgid "New case title *"
+msgstr "Название нового дела *"
+
+msgid "New owner"
+msgstr "Новый владелец"
+
+msgid "No IOCs found in selected alerts."
+msgstr "В выбранных оповещениях не обнаружено IOC."
+
+msgid "No description provided"
+msgstr "Описание не предоставлено"
+
+msgid "No enrichment data available."
+msgstr "Данных об обогащении нет."
+
+msgid "No module available"
+msgstr "Нет доступного модуля"
+
+msgid "No relationships found for this alert"
+msgstr "Для этого оповещения не найдено связей"
+
+msgid "No report template found"
+msgstr "Шаблон отчета не найден"
+
+msgid "No results"
+msgstr "Нет результатов"
+
+msgid "No source provided"
+msgstr "Источник не указан"
+
+msgid "No summary available for this enrichment."
+msgstr "Для этого дополнения нет сводки."
+
+msgid "No title provided"
+msgstr "Название не указано"
+
+msgid "No valid link provided"
+msgstr "Не предоставлена ​​действительная ссылка"
+
+msgid "Nodes limit"
+msgstr "Лимит узлов"
+
+msgid "Not applicable"
+msgstr "Непригодный"
+
+msgid "Note"
+msgstr "Примечание"
+
+msgid "Notes"
+msgstr "Примечания"
+
+msgid "Oh no!"
+msgstr "О, нет!"
+
+msgid "Oops error loading the alerts - Check logs"
+msgstr "К сожалению, ошибка при загрузке оповещений – проверьте журналы."
+
+msgid "Open"
+msgstr "Открыть"
+
+msgid "Open on"
+msgstr "Открыто"
+
+msgid "OpenCTI Relations Graph"
+msgstr "Граф связей OpenCTI"
+
+msgid "Owned by"
+msgstr "Владелец"
+
+msgid "Owner"
+msgstr "Владелец"
+
+msgid "Pending"
+msgstr "В ожидании"
+
+msgid "Pipelines"
+msgstr "Трубопроводы"
+
+msgid "Please select at least one alert to perform this action on."
+msgstr "Выберите хотя бы одно оповещение, для которого нужно выполнить это действие."
+
+msgid "Processors"
+msgstr "Процессоры"
+
+msgid "Raw JSON"
+msgstr "Сырой JSON"
+
+msgid "Raw alert"
+msgstr "Необработанное оповещение"
+
+msgid "Reassign alert #"
+msgstr "Переназначить оповещение #"
+
+msgid "Refresh"
+msgstr "Обновить"
+
+msgid "Refresh card"
+msgstr "Обновить карту"
+
+msgid "Refreshed"
+msgstr "Обновленный"
+
+msgid "Relationships"
+msgstr "Отношения"
+
+msgid "Relationships node exceeded the nodes limit. Expect truncated results."
+msgstr "Узел отношений превысил лимит узлов. Ожидайте усеченных результатов."
+
+msgid "Remove filter"
+msgstr "Удалить фильтр"
+
+msgid "Report templates are configured in"
+msgstr "Шаблоны отчетов настраиваются в"
+
+msgid "Request"
+msgstr "Запрос"
+
+msgid "Request review"
+msgstr "Запросить проверку"
+
+msgid "Resolution status"
+msgstr "Статус разрешения"
+
+msgid "Retrieving alerts..."
+msgstr "Получение оповещений..."
+
+msgid "Review requested"
+msgstr "Запрошена проверка"
+
+msgid "Reviewed"
+msgstr "Рассмотрено"
+
+msgid "SOC ID"
+msgstr "Идентификатор СОЦ"
+
+msgid "Safe Mode"
+msgstr "Безопасный режим"
+
+msgid "Save as filter"
+msgstr "Сохранить как фильтр"
+
+msgid "Save note"
+msgstr "Сохранить заметку"
+
+msgid "Select"
+msgstr "Выбирать"
+
+msgid "Select a template"
+msgstr "Выберите шаблон"
+
+msgid "Select activity report template"
+msgstr "Выберите шаблон отчета о деятельности"
+
+msgid "Select all"
+msgstr "Выбрать все"
+
+msgid "Select and begin typing"
+msgstr "Выберите и начните вводить"
+
+msgid "Select case template"
+msgstr "Выберите шаблон обращения"
+
+msgid "Select case to merge into *"
+msgstr "Выберите регистр для объединения в *"
+
+msgid "Select preset filter"
+msgstr "Выбрать предустановленный фильтр"
+
+msgid "Select report template"
+msgstr "Выберите шаблон отчета"
+
+msgid "Set in progress"
+msgstr "Настройка в процессе"
+
+msgid "Set status"
+msgstr "Установить статус"
+
+msgid "Severity"
+msgstr "Серьезность"
+
+msgid "Share"
+msgstr "Делиться"
+
+msgid "Shortcut"
+msgstr "Ярлык"
+
+msgid "Shortcuts"
+msgstr "Ярлыки"
+
+msgid "Show closed alerts"
+msgstr "Показать закрытые оповещения"
+
+msgid "Show closed cases"
+msgstr "Показать закрытые дела"
+
+msgid "Show examples"
+msgstr "Показать примеры"
+
+msgid "Show open alerts"
+msgstr "Показывать открытые оповещения"
+
+msgid "Show open cases"
+msgstr "Показать открытые дела"
+
+msgid "Since IRIS v2.0.0, the report generation supports images. Integration of images might fail depending on the situation."
+msgstr "Начиная с IRIS v2.0.0, создание отчетов поддерживает изображения. В зависимости от ситуации интеграция изображений может завершиться неудачно."
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "Source end date"
+msgstr "Дата окончания источника"
+
+msgid "Source event time"
+msgstr "Время исходного события"
+
+msgid "Source link"
+msgstr "Ссылка на источник"
+
+msgid "Source reference"
+msgstr "Ссылка на источник"
+
+msgid "Source start date"
+msgstr "Дата начала источника"
+
+msgid "Start review"
+msgstr "Начать проверку"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Summary"
+msgstr "Краткое содержание"
+
+msgid "Syncing.."
+msgstr "Синхронизация.."
+
+msgid "Tags"
+msgstr "Теги"
+
+msgid "Tasks"
+msgstr "Задачи"
+
+msgid "The following relationships are automatically generated by IRIS based on the alert's IOCs and assets in the system. They are an indication only and may not be accurate."
+msgstr "Следующие связи автоматически генерируются IRIS на основе IOC оповещений и активов в системе. Они являются лишь ориентировочными и могут быть неточными."
+
+msgid "These alerts will be merged into a new case. Set the case title and select the IOCs and Assets to escalate into the case."
+msgstr "Эти оповещения будут объединены в новое дело. Задайте название дела и выберите IOC и активы для передачи дела."
+
+msgid "These alerts will be merged into the selected case. Select the IOCs and Assets to merge into the case."
+msgstr "Эти оповещения будут объединены в выбранное дело. Выберите IOC и активы для объединения в дело."
+
+msgid "This alert will be escalated into a new case. Set a title and select the IOCs and Assets to escalate into the case."
+msgstr "Это предупреждение будет перенесено в новое дело. Задайте заголовок и выберите IOC и активы для рассмотрения дела."
+
+msgid "This alert will be merged into a new case. Set the case title and select the IOCs and Assets to merge into the case."
+msgstr "Это предупреждение будет объединено с новым обращением. Задайте название дела и выберите IOC и активы для объединения в дело."
+
+msgid "This alert will be merged into the selected case. Select the IOCs and Assets to merge into the case."
+msgstr "Это предупреждение будет объединено с выбранным обращением. Выберите IOC и активы для объединения в дело."
+
+msgid "This window will close automatically when it's done"
+msgstr "Это окно закроется автоматически, когда все будет готово."
+
+msgid "Timeline"
+msgstr "Хронология"
+
+msgid "Title"
+msgstr "Заголовок"
+
+msgid "Toggle raw alert"
+msgstr "Переключить необработанное оповещение"
+
+msgid "Toggle relations"
+msgstr "Toggle relations"
+
+msgid "True positive with impact"
+msgstr "Настоящий позитив с эффектом"
+
+msgid "True positive without impact"
+msgstr "Настоящий позитив без последствий"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Unable to load IOC types."
+msgstr "Невозможно загрузить типы IOC."
+
+msgid "Unable to save content to remote server"
+msgstr "Невозможно сохранить контент на удаленный сервер"
+
+msgid "Unassigned"
+msgstr "Неназначенный"
+
+msgid "Unknown resolution"
+msgstr "Неизвестное разрешение"
+
+msgid "Unspecified"
+msgstr "Не указано"
+
+msgid "Unsupported direct paste of this item. Use datastore to upload."
+msgstr "Неподдерживаемая прямая вставка этого элемента. Используйте хранилище данных для загрузки."
+
+msgid "Value"
+msgstr "Ценить"
+
+msgid "View alert"
+msgstr "Посмотреть оповещение"
+
+msgid "View enrichment"
+msgstr "Посмотреть обогащение"
+
+msgid "We have a conflict with the remote content.\nSomeone may just have changed the description at the same time.\nThe local content will be copied into clipboard and content will be updated with remote."
+msgstr "У нас конфликт с удаленным контентом.\nВозможно, кто-то просто одновременно изменил описание.\nЛокальный контент будет скопирован в буфер обмена, а контент будет обновлен удаленно."
+
+msgid "You have been requested to review this case."
+msgstr "Вас попросили рассмотреть это дело."
+
+msgid "You started this review. Press \"Confirm review\" when you are done."
+msgstr "Вы начали этот обзор. Когда закончите, нажмите «Подтвердить проверку»."
+
+msgid "by"
+msgstr "к"
+
+msgid "can be used to generate the report without them."
+msgstr "можно использовать для создания отчета без них."
+
+msgid "filtered"
+msgstr "фильтрованный"
+
+msgid "private"
+msgstr "частный"
+
+msgid "related alerts"
+msgstr "связанные оповещения"
+
+msgid "the management section"
+msgstr "раздел управления"
+
+msgid "you"
+msgstr "ты"
+
+msgid "(Syncing with DB)"
+msgstr "(Синхронизация с БД)"
+
+msgid "Alerts per page:"
+msgstr "Оповещений на странице:"
+
+msgid "Are you sure you want to delete alert #{id}?"
+msgstr "Вы уверены, что хотите удалить оповещение №{id}?"
+
+msgid "Are you sure you want to delete filter #{id}?"
+msgstr "Вы уверены, что хотите удалить фильтр №{id}?"
+
+msgid "Close alert #{id}"
+msgstr "Закрыть оповещение №{id}"
+
+msgid "Edit alert #{id}"
+msgstr "Редактировать оповещение №{id}"
+
+msgid "Failed to enrich {count} alert(s)."
+msgstr "Не удалось обогатить {count} оповещений."
+
+msgid "Found {ioc_count} IOC(s) in {alert_count} alert(s)."
+msgstr "Найдено {ioc_count} IOC в {alert_count} оповещениях."
+
+msgid "Last saved by {user}"
+msgstr "Последнее сохранение: {user}"
+
+msgid "Last synced: {time}"
+msgstr "Последняя синхронизация: {time}"
+
+msgid "Merge alert #{id} in a new case"
+msgstr "Объединить оповещение №{id} в новое дело"
+
+msgid "Merge alert #{id} in an existing case"
+msgstr "Объединить оповещение №{id} в существующее дело"
+
+msgid "Merge {count} alerts in a new case"
+msgstr "Объединить {count} оповещений в новое дело"
+
+msgid "Merge {count} alerts in an existing case"
+msgstr "Объединить {count} оповещений в существующее дело"
+
+msgid "Merged in case #{id}"
+msgstr "Объединено в деле №{id}"
+
+msgid "Pivot on {type} {id}"
+msgstr "Перейти по {type} {id}"
+
+msgid "Request a case review from {user}?"
+msgstr "Запросить проверку дела у {user}?"
+
+msgid "The file is uploading in background. Don't leave the page"
+msgstr "Файл загружается в фоне. Не покидайте страницу."
+
+msgid "Unlink alert #{alert_id} from the case #{case_id}?"
+msgstr "Отвязать оповещение №{alert_id} от дела №{case_id}?"
+
+msgid "Unlink alert from case #{id}"
+msgstr "Отвязать оповещение от дела №{id}"
+
+msgid "View case #{id}"
+msgstr "Открыть дело №{id}"
+
+msgid "View {type} #{id}"
+msgstr "Открыть {type} №{id}"
+
+msgid "You are about to delete {count} alerts"
+msgstr "Вы собираетесь удалить {count} оповещений"
+
+msgid "[ALERT] Escalation of {count} alerts"
+msgstr "[ALERT] Эскалация {count} оповещений"
+
+msgid "{user} is typing.."
+msgstr "{user} печатает.."
+
+msgid "Asset deleted"
+msgstr "Ресурс удалён"
+
+msgid "Asset updated"
+msgstr "Ресурс обновлён"
+
+msgid "Assets created"
+msgstr "Ресурсы созданы"
+
+msgid "Back references disabled due to too many assets in this case"
+msgstr "Обратные ссылки отключены из-за слишком большого количества ресурсов в этом деле"
+
+msgid "Check alerts"
+msgstr "Проверить оповещения"
+
+msgid "Copy"
+msgstr "Копировать"
+
+msgid "Done processing"
+msgstr "Обработка завершена"
+
+msgid "Download as CSV"
+msgstr "Скачать как CSV"
+
+msgid "Evidence type"
+msgstr "Тип улики"
+
+msgid "Got bad news for you"
+msgstr "Есть плохие новости"
+
+msgid "Got news for you"
+msgstr "Есть хорошие новости"
+
+msgid "More.."
+msgstr "Ещё.."
+
+msgid "Observed"
+msgstr "Обнаружен"
+
+msgid "Observed in previous case"
+msgstr "Обнаружен в предыдущем деле"
+
+msgid "Please select a file"
+msgstr "Пожалуйста, выберите файл"
+
+msgid "Process"
+msgstr "Обработать"
+
+msgid "Processing {progress}%"
+msgstr "Обработка {progress}%"
+
+msgid "Save again"
+msgstr "Сохранить снова"
+
+msgid "Saved"
+msgstr "Сохранено"
+
+msgid "Saving data.."
+msgstr "Сохранение данных.."
+
+msgid "Select assignee(s)"
+msgstr "Выберите исполнителя(ей)"
+
+msgid "TBD"
+msgstr "Будет определено"
+
+msgid "Toggle columns"
+msgstr "Переключить колонки"
+
+msgid "Unable to find a matching pattern for the date"
+msgstr "Не удалось подобрать шаблон для даты"
+
+msgid "Update"
+msgstr "Обновить"
+
+msgid "Updating.."
+msgstr "Обновление.."
+
+msgid "You are about to delete IOC #{id}"
+msgstr "Вы собираетесь удалить IOC №{id}"
+
+msgid "You are about to delete asset #{id}"
+msgstr "Вы собираетесь удалить ресурс №{id}"
+
+msgid "You are about to delete evidence #{id}"
+msgstr "Вы собираетесь удалить улику №{id}"
+
+msgid "You are about to delete task #{id}"
+msgstr "Вы собираетесь удалить задачу №{id}"
+
+msgid "as"
+msgstr "как"
+
+msgid "case"
+msgstr "дело"
+
+msgid "compromised"
+msgstr "скомпрометирован"
+
+msgid "for the same customer"
+msgstr "для того же клиента"
+
+msgid "not compromised"
+msgstr "не скомпрометирован"
+
+msgid "on"
+msgstr "в"
+
+msgid "Add IOC"
+msgstr "Добавить IOC"
+
+msgid "Add asset"
+msgstr "Добавить ресурс"
+
+msgid "Add assets"
+msgstr "Добавить ресурсы"
+
+msgid "Add event"
+msgstr "Добавить событие"
+
+msgid "Add note"
+msgstr "Добавить заметку"
+
+msgid "Add task"
+msgstr "Добавить задачу"
+
+msgid "Added by"
+msgstr "Добавил"
+
+msgid "Analysis"
+msgstr "Анализ"
+
+msgid "Assigned to"
+msgstr "Назначено"
+
+msgid "CSV File format example"
+msgstr "Пример формата CSV файла"
+
+msgid "Case Assets"
+msgstr "Ресурсы дела"
+
+msgid "Case Evidence"
+msgstr "Улики дела"
+
+msgid "Case Graph Timeline"
+msgstr "Граф хронологии дела"
+
+msgid "Case IOC"
+msgstr "IOC дела"
+
+msgid "Case Tasks"
+msgstr "Задачи дела"
+
+msgid "Choose CSV file to import :"
+msgstr "Выберите CSV-файл для импорта:"
+
+msgid "Compromised"
+msgstr "Скомпрометирован"
+
+msgid "Download sample CSV"
+msgstr "Скачать пример CSV"
+
+msgid "Enter the token displayed on your authentication app"
+msgstr "Введите токен из вашего приложения аутентификации"
+
+msgid "Expected CSV File format"
+msgstr "Ожидаемый формат CSV файла"
+
+msgid "Export page as PNG"
+msgstr "Экспорт страницы в PNG"
+
+msgid "Filter help"
+msgstr "Справка по фильтру"
+
+msgid "Group by asset"
+msgstr "Группировать по ресурсу"
+
+msgid "Group by category"
+msgstr "Группировать по категории"
+
+msgid "Hash"
+msgstr "Хэш"
+
+msgid "Linked cases"
+msgstr "Связанные дела"
+
+msgid "MFA Setup"
+msgstr "Настройка MFA"
+
+msgid "MFA Verify"
+msgstr "Проверка MFA"
+
+msgid "Move"
+msgstr "Переместить"
+
+msgid "No group"
+msgstr "Без группировки"
+
+msgid "Open date"
+msgstr "Дата открытия"
+
+msgid "Register Evidence"
+msgstr "Зарегистрировать улику"
+
+msgid "Register evidence"
+msgstr "Зарегистрировать улику"
+
+msgid "Reset"
+msgstr "Сброс"
+
+msgid "Scan the QR code with your authenticator app and enter the token and your password."
+msgstr "Отсканируйте QR-код в приложении аутентификации и введите токен и пароль."
+
+msgid "Select a destination folder below."
+msgstr "Выберите папку назначения ниже."
+
+msgid "Select the files and destination folder below."
+msgstr "Выберите файлы и папку назначения ниже."
+
+msgid "Setup MFA"
+msgstr "Настроить MFA"
+
+msgid "Size (bytes)"
+msgstr "Размер (байт)"
+
+msgid "Take screenshot of content"
+msgstr "Сделать снимок содержимого"
+
+msgid "Token"
+msgstr "Токен"
+
+msgid "Upload"
+msgstr "Загрузить"
+
+msgid "Upload CSV of IOCs"
+msgstr "Загрузить CSV с IOC"
+
+msgid "Upload CSV of assets"
+msgstr "Загрузить CSV с ресурсами"
+
+msgid "Upload IOC list (CSV format)"
+msgstr "Загрузить список IOC (формат CSV)"
+
+msgid "Upload assets list (CSV format)"
+msgstr "Загрузить список ресурсов (формат CSV)"
+
+msgid "Upload evidence"
+msgstr "Загрузить улику"
+
+msgid "Validate"
+msgstr "Подтвердить"
+
+msgid "Verify MFA"
+msgstr "Проверить MFA"
+
+msgid "Your organisation requires to setup MFA"
+msgstr "Ваша организация требует настроить MFA"
+
+msgid "files selected to be moved to"
+msgstr "файлов выбрано для перемещения в"
+
+msgid "selected to be moved to"
+msgstr "выбрано для перемещения в"
+
+msgid "Add Group"
+msgstr "Добавить группу"
+
+msgid "Add User"
+msgstr "Добавить пользователя"
+
+msgid "Case Name"
+msgstr "Название дела"
+
+msgid "Cases access"
+msgstr "Доступ к делам"
+
+msgid "Cases accesses are usually inherited from groups memberships. These are not displayed here. This tab allows to add granular case access if necessary."
+msgstr "Доступы к делам обычно наследуются от членства в группах. Они здесь не отображаются. Эта вкладка позволяет при необходимости настроить точечный доступ к делам."
+
+msgid "Customer ID"
+msgstr "ID клиента"
+
+msgid "Customers the user belongs to."
+msgstr "Клиенты, к которым относится пользователь."
+
+msgid "Edit group"
+msgstr "Редактировать группу"
+
+msgid "Edit user"
+msgstr "Редактировать пользователя"
+
+msgid "Group ID"
+msgstr "ID группы"
+
+msgid "Group UUID"
+msgstr "UUID группы"
+
+msgid "Group name"
+msgstr "Название группы"
+
+msgid "Groups"
+msgstr "Группы"
+
+msgid "Groups the user is member of."
+msgstr "Группы, в которых состоит пользователь."
+
+msgid "Info"
+msgstr "Информация"
+
+msgid "Inherited from groups"
+msgstr "Наследовано от групп"
+
+msgid "Members"
+msgstr "Участники"
+
+msgid "Permission"
+msgstr "Право"
+
+msgid "Permissions"
+msgstr "Права"
+
+msgid "Permissions are inherited from the groups the user belongs to. The table shows the effective permissions the user has on the platform."
+msgstr "Права наследуются от групп, в которых состоит пользователь. В таблице показаны итоговые права пользователя на платформе."
+
+msgid "Quick action"
+msgstr "Быстрое действие"
+
+msgid "Remove access"
+msgstr "Удалить доступ"
+
+msgid "Remove access to case"
+msgstr "Удалить доступ к делу"
+
+msgid "Remove from group"
+msgstr "Удалить из группы"
+
+msgid "Select permissions"
+msgstr "Выберите права"
+
+msgid "Set case access"
+msgstr "Настроить доступ к делам"
+
+msgid "User ID"
+msgstr "ID пользователя"
+
+msgid "User display name"
+msgstr "Отображаемое имя пользователя"
+
+msgid "User login"
+msgstr "Логин пользователя"
+
+msgid "items selected"
+msgstr "элементов выбрано"
+
+msgid "Access"
+msgstr "Доступ"
+
+msgid "Activate"
+msgstr "Активировать"
+
+msgid "Active"
+msgstr "Активен"
+
+msgid "Add group"
+msgstr "Добавить группу"
+
+msgid "Add user"
+msgstr "Добавить пользователя"
+
+msgid "All access"
+msgstr "Полный доступ"
+
+msgid "Apply to currents and futures cases"
+msgstr "Применить к текущим и будущим делам"
+
+msgid "Audit"
+msgstr "Аудит"
+
+msgid "Audit users"
+msgstr "Аудит пользователей"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Case access"
+msgstr "Доступ к делу"
+
+msgid "Case name"
+msgstr "Название дела"
+
+msgid "Click on a case to unveil access control path"
+msgstr "Нажмите на дело, чтобы показать путь формирования доступа"
+
+msgid "Click on a user to unveil access control path"
+msgstr "Нажмите на пользователя, чтобы показать путь формирования доступа"
+
+msgid "Click to show trace"
+msgstr "Нажмите, чтобы показать трассировку"
+
+msgid "Click to unfold"
+msgstr "Нажмите, чтобы развернуть"
+
+msgid "Customers membership"
+msgstr "Принадлежность к клиентам"
+
+msgid "Deactivate"
+msgstr "Деактивировать"
+
+msgid "Full access"
+msgstr "Полный доступ"
+
+msgid "Full name"
+msgstr "Полное имя"
+
+msgid "Groups membership"
+msgstr "Членство в группах"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "If checked, the user won't appear in the attribution suggestions and won't be able to connect on the UI"
+msgstr "Если отмечено, пользователь не будет появляться в подсказках атрибуции и не сможет войти в UI."
+
+msgid "Inherited from"
+msgstr "Унаследовано от"
+
+msgid "Login Name"
+msgstr "Логин"
+
+msgid "Manage customers membership"
+msgstr "Управление принадлежностью к клиентам"
+
+msgid "Manage members of group"
+msgstr "Управление участниками группы"
+
+msgid "Manage user groups"
+msgstr "Управление группами пользователя"
+
+msgid "Members can be added once the group is created."
+msgstr "Участников можно добавить после создания группы."
+
+msgid "Must contain at least %(count)s chars"
+msgstr "Должен содержать не менее %(count)s символов"
+
+msgid "Must contain at least one of :"
+msgstr "Должен содержать хотя бы один из:"
+
+msgid "No access"
+msgstr "Нет доступа"
+
+msgid "No case available to add"
+msgstr "Нет доступных дел для добавления"
+
+msgid "No groups available to set"
+msgstr "Нет доступных групп для назначения"
+
+msgid "Partial access"
+msgstr "Частичный доступ"
+
+msgid "Password (optional for service accounts)"
+msgstr "Пароль (необязательно для сервисных аккаунтов)"
+
+msgid "Permissions and groups memberships can be set once the user is created."
+msgstr "Права и членство в группах можно настроить после создания пользователя."
+
+msgid "Read only access"
+msgstr "Доступ только на чтение"
+
+msgid "Select access level"
+msgstr "Выберите уровень доступа"
+
+msgid "Select case"
+msgstr "Выберите дело"
+
+msgid "Select group(s)"
+msgstr "Выберите группы"
+
+msgid "Select groups"
+msgstr "Выберите группы"
+
+msgid "Select members"
+msgstr "Выберите участников"
+
+msgid "Service Account"
+msgstr "Сервисный аккаунт"
+
+msgid "Set access"
+msgstr "Назначить доступ"
+
+msgid "Set case access via groups"
+msgstr "Назначить доступ к делу через группы"
+
+msgid "Set cases access of group"
+msgstr "Назначить доступ к делам для группы"
+
+msgid "Set cases access of user"
+msgstr "Назначить доступ к делам для пользователя"
+
+msgid "Set groups case access"
+msgstr "Назначить доступ групп к делу"
+
+msgid "The user is neither in a group nor an organisation who has access to this case"
+msgstr "Пользователь не состоит ни в группе, ни в организации, у которых есть доступ к этому делу"
+
+msgid "This group is set to automatically include all new cases."
+msgstr "Эта группа настроена на автоматическое включение всех новых дел."
+
+msgid "This is a service account. It cannot login interactively nor have a password."
+msgstr "Это сервисный аккаунт. Он не может входить интерактивно и иметь пароль."
+
+msgid "UUID"
+msgstr "UUID"
+
+msgid "Use as service account"
+msgstr "Использовать как сервисный аккаунт"
+
+msgid "User API Key"
+msgstr "API-ключ пользователя"
+
+msgid "User Name"
+msgstr "Имя пользователя"
+
+msgid "User UUID"
+msgstr "UUID пользователя"
+
+msgid "User cases access"
+msgstr "Доступ пользователя к делам"
+
+msgid "User permissions"
+msgstr "Права пользователя"
+
+msgid "Users"
+msgstr "Пользователи"
+
+msgid "Users audit"
+msgstr "Аудит пользователей"
+
+msgid "Auditing user.."
+msgstr "Выполняется аудит пользователя.."
+
+msgid "Deny all"
+msgstr "Запретить всё"
+
+msgid "Disabled"
+msgstr "Отключен"
+
+msgid "Loading manager..."
+msgstr "Загрузка менеджера..."
+
+msgid "Loading users..."
+msgstr "Загрузка пользователей..."
+
+msgid "Members of this group won't be able to access these cases anymore"
+msgstr "Участники этой группы больше не смогут получить доступ к этим делам"
+
+msgid "Please wait. We are updating users access."
+msgstr "Пожалуйста, подождите. Мы обновляем пользовательские доступы."
+
+msgid "Read only"
+msgstr "Только чтение"
+
+msgid "Renewing.."
+msgstr "Обновление.."
+
+msgid "Resetting.."
+msgstr "Сброс.."
+
+msgid "Select customers"
+msgstr "Выберите клиентов"
+
+msgid "Select user to audit"
+msgstr "Выберите пользователя для аудита"
+
+msgid "This user might not be able access these cases anymore"
+msgstr "Этот пользователь может потерять доступ к этим делам"
+
+msgid "This user might not be able access this case anymore"
+msgstr "Этот пользователь может потерять доступ к этому делу"
+
+msgid "This will remove the user from the group"
+msgstr "Это удалит пользователя из группы"
+
+msgid "Updating access"
+msgstr "Обновление доступа"
+
+msgid "Yes, delete it!"
+msgstr "Да, удалить!"
+
+msgid "Yes, remove it!"
+msgstr "Да, удалить!"
+
+msgid "Yes, remove them!"
+msgstr "Да, удалить!"
+
+msgid "You won't be able to revert this !"
+msgstr "Это действие нельзя будет отменить!"
+
+msgid "You won't be able to revert this!\nPlease make sure a group remains with enough rights to avoid a lockdown!"
+msgstr "Это действие нельзя будет отменить!\nУбедитесь, что останется группа с достаточными правами, чтобы избежать блокировки!"
+
+msgid "I really wanna help you but I still can't read your mind"
+msgstr "Я бы и рад помочь, но мысли читать пока не умею"
+
+msgid "Access to the case can be granted to other users once the case is created. Users pertaining to the customer will be able to see the case by default."
+msgstr "Доступ к делу можно предоставить другим пользователям после создания дела. Пользователи, относящиеся к клиенту, будут видеть дело по умолчанию."
+
+msgid "Add protagonist"
+msgstr "Добавить участника"
+
+msgid "Auditing case.."
+msgstr "Выполняется аудит дела.."
+
+msgid "Case ID #{id} will be closed and will not appear in contexts anymore"
+msgstr "Дело #{id} будет закрыто и больше не будет отображаться в контекстах"
+
+msgid "Case UUID"
+msgstr "UUID дела"
+
+msgid "Case description"
+msgstr "Описание дела"
+
+msgid "Case name *"
+msgstr "Название дела *"
+
+msgid "Cases list refreshed"
+msgstr "Список дел обновлён"
+
+msgid "Cases management"
+msgstr "Управление делами"
+
+msgid "Close case"
+msgstr "Закрыть дело"
+
+msgid "Close date"
+msgstr "Дата закрытия"
+
+msgid "Contact"
+msgstr "Контакт"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Create a new case"
+msgstr "Создать новое дело"
+
+msgid "Create new case"
+msgstr "Создать новое дело"
+
+msgid "Delete case"
+msgstr "Удалить дело"
+
+msgid "Done!"
+msgstr "Готово!"
+
+msgid "Edit case information"
+msgstr "Редактировать информацию о деле"
+
+msgid "False Positive"
+msgstr "Ложноположительное"
+
+msgid "Fields with an asterix are required."
+msgstr "Поля со звёздочкой обязательны."
+
+msgid "Manage Cases"
+msgstr "Управление делами"
+
+msgid "Modifications history"
+msgstr "История изменений"
+
+msgid "Opening user"
+msgstr "Пользователь-инициатор"
+
+msgid "Outcome"
+msgstr "Результат"
+
+msgid "Protagonist"
+msgstr "Участник"
+
+msgid "Protagonists"
+msgstr "Участники"
+
+msgid "Remove"
+msgstr "Удалить"
+
+msgid "Reopen case"
+msgstr "Переоткрыть дело"
+
+msgid "Reviewer"
+msgstr "Проверяющий"
+
+msgid "Role"
+msgstr "Роль"
+
+msgid "SOC Ticket"
+msgstr "Тикет SOC"
+
+msgid "SOC ticket ID"
+msgstr "ID тикета SOC"
+
+msgid "Select case to audit"
+msgstr "Выберите дело для аудита"
+
+msgid "Select classification"
+msgstr "Выберите классификацию"
+
+msgid "Select customer *"
+msgstr "Выберите клиента *"
+
+msgid "Set access via group"
+msgstr "Назначить доступ через группу"
+
+msgid "Short description *"
+msgstr "Краткое описание *"
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "True Positive with impact"
+msgstr "Истинно положительное с влиянием"
+
+msgid "True Positive without impact"
+msgstr "Истинно положительное без влияния"
+
+msgid "User Access"
+msgstr "Доступ пользователя"
+
+msgid "User Login"
+msgstr "Логин пользователя"
+
+msgid "Yes, close it!"
+msgstr "Да, закрыть!"
+
+msgid ""
+"You are about to delete this case forever. This cannot be reverted.\n"
+"All associated data will be deleted"
+msgstr ""
+"Вы собираетесь удалить это дело навсегда. Это действие нельзя будет отменить.\n"
+"Все связанные данные будут удалены"
+
+msgid "You will be redirected in 5 seconds"
+msgstr "Вы будете перенаправлены через 5 секунд"
+
+msgid "by user"
+msgstr "пользователем"
+
+msgid "Add case template"
+msgstr "Добавить шаблон дела"
+
+msgid "Add contact"
+msgstr "Добавить контакт"
+
+msgid "Add customer"
+msgstr "Добавить клиента"
+
+msgid "Add module"
+msgstr "Добавить модуль"
+
+msgid "Add new"
+msgstr "Добавить"
+
+msgid "Add template"
+msgstr "Добавить шаблон"
+
+msgid "Adding..."
+msgstr "Добавление..."
+
+msgid "Are you sure ?"
+msgstr "Вы уверены ?"
+
+msgid "Backup database"
+msgstr "Сделать резервную копию базы данных"
+
+msgid "Complete overwrite"
+msgstr "Полная перезапись"
+
+msgid "Disable module"
+msgstr "Отключить модуль"
+
+msgid "Dismiss"
+msgstr "Закрыть"
+
+msgid "Download definition"
+msgstr "Скачать определение"
+
+msgid "Edit customer"
+msgstr "Редактировать клиента"
+
+msgid "Enable module"
+msgstr "Включить модуль"
+
+msgid "Export configuration"
+msgstr "Экспорт конфигурации"
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Import configuration"
+msgstr "Импорт конфигурации"
+
+msgid "Partial overwrite"
+msgstr "Частичная перезапись"
+
+msgid "Please note this will only remove the reference of the module in Iris. The module will stay installed on the server."
+msgstr "Обратите внимание: это удалит только ссылку на модуль в IRIS. Сам модуль останется установленным на сервере."
+
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
+
+msgid "Preview"
+msgstr "Предпросмотр"
+
+msgid "Remove module"
+msgstr "Удалить модуль"
+
+msgid "Retry"
+msgstr "Повторить"
+
+msgid "Save changes"
+msgstr "Сохранить изменения"
+
+msgid "Saving.."
+msgstr "Сохранение.."
+
+msgid ""
+"This will delete the report template\n"
+"Are you sure?"
+msgstr ""
+"Этот шаблон отчёта будет удалён.\n"
+"Вы уверены?"
+
+msgid "Updating and migrating..."
+msgstr "Обновление и миграция..."
+
+msgid "Updating..."
+msgstr "Обновление..."
+
+msgid "Upload case template"
+msgstr "Загрузить шаблон дела"
+
+msgid "Rule ID"
+msgstr "ID правила"
+
+msgid "Rule Level"
+msgstr "Уровень правила"
+
+msgid "Rule Description"
+msgstr "Описание правила"
+
+msgid "Agent ID"
+msgstr "ID агента"
+
+msgid "Agent Name"
+msgstr "Имя агента"
+
+msgid "MITRE IDs"
+msgstr "ID MITRE"
+
+msgid "MITRE Tactics"
+msgstr "Тактики MITRE"
+
+msgid "MITRE Techniques"
+msgstr "Техники MITRE"
+
+msgid "Full Log"
+msgstr "Полный лог"
+
+msgid "Location"
+msgstr "Расположение"

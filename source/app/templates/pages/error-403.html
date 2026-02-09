@@ -1,7 +1,7 @@
 
 {% extends "layouts/default_centered.html" %}
 
-{% block title %} Access denied {% endblock title %}
+{% block title %} {{ _('Access denied') }} {% endblock title %}
 
 {% block stylesheets %}
 
@@ -16,15 +16,15 @@
          <div class="row d-flex justify-content-center mb-4">
             <div class="col-12">
                 <h1 class="text-center mb-2"><i class="fa-solid fa-otter" style="font-size:60px;"></i></h1>
-                <h2 class="text-danger mt-2 mx-5 text-center">ACCESS DENIED</h2>
-                <h3 class="font-weight-light mx-5 text-center">Seems like you shouldn't be here</h3>
+                <h2 class="text-danger mt-2 mx-5 text-center">{{ _('ACCESS DENIED') }}</h2>
+                <h3 class="font-weight-light mx-5 text-center">{{ _("Seems like you shouldn't be here") }}</h3>
             </div>
          </div>
         {% if caseid %}
         <div class="mt-4 row d-flex text-center">
             <div class="col-12">
                 <button class="btn btn-dark btn-sm" onclick="load_context_switcher();return false;">
-                    <span class="menu-title" id="manage_group_cac_button">Get back on track</span>
+                    <span class="menu-title" id="manage_group_cac_button">{{ _('Get back on track') }}</span>
                 </button>
             </div>
         </div>
@@ -32,10 +32,10 @@
         <div class="mt-4 row d-flex justify-content-center">
             <div class="col-12">
                 {% if caseid %}
-                <p class="text-muted mb-4 text-center"><small>Access denied while trying to access case #{{ caseid }}<br />
+                <p class="text-muted mb-4 text-center"><small>{{ _('Access denied while trying to access case #%(caseid)s', caseid=caseid) }}<br />
                 {% else %}
-                <p class="text-muted mb-4 text-center"><small>Access denied while trying to access the resource<br />
-                Error UUID {{ error_uuid }}</small></p>
+                <p class="text-muted mb-4 text-center"><small>{{ _('Access denied while trying to access the resource') }}<br />
+                {{ _('Error UUID %(error_uuid)s', error_uuid=error_uuid) }}</small></p>
                 {% endif %}
             </div>
         </div>

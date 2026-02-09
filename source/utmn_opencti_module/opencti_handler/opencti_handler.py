@@ -51,7 +51,7 @@ class OpenCTIHandler:
     OBSERVABLES_QUERY_MIN = (
         "query Observables($search: String, $first: Int) {"
         " stixCyberObservables(search: $search, first: $first) {"
-        "  edges { node { id entity_type standard_id observable_value value name } }"
+        "  edges { node { id entity_type standard_id observable_value } }"
         " }"
         "}"
     )
@@ -67,7 +67,7 @@ class OpenCTIHandler:
     OBSERVABLES_QUERY_RICH = (
         "query Observables($search: String, $first: Int) {"
         " stixCyberObservables(search: $search, first: $first) {"
-        "  edges { node { id entity_type standard_id observable_value value name description "
+        "  edges { node { id entity_type standard_id observable_value description "
         "  created_at updated_at confidence x_opencti_score } }"
         " }"
         "}"
@@ -268,7 +268,7 @@ class OpenCTIHandler:
 
         return urllib.parse.urlunsplit((scheme, netloc, path, parts.query, parts.fragment))
 
-    def _normalize_value(self, value, kind):
+    def _normalize_value(self, value, kind, defang=True):
         if value is None:
             return ''
         if isinstance(value, (int, float)):
@@ -278,7 +278,7 @@ class OpenCTIHandler:
         value = value.strip()
         if not value:
             return ''
-        if self._defang_enabled() and kind in ('ip', 'domain', 'url', 'hash', 'email'):
+        if defang and self._defang_enabled() and kind in ('ip', 'domain', 'url', 'hash', 'email'):
             value = self._defang_value(value)
 
         if kind == 'ip':
@@ -308,44 +308,47 @@ class OpenCTIHandler:
                 literals.append(literal)
         return literals
 
-    def _observable_matches(self, node, target_value, kind):
+    def _observable_match_details(self, node, target_value, kind):
         if not isinstance(node, dict):
-            return False
-        candidates = []
+            return []
+        matched_fields = []
         for key in ('observable_value', 'value', 'name'):
             value = node.get(key)
             if value is None:
                 continue
             if isinstance(value, (int, float)):
                 value = str(value)
-            if isinstance(value, str):
-                candidates.append(value)
-
-        for candidate in candidates:
-            candidate_value = self._normalize_value(candidate, kind)
+            if not isinstance(value, str):
+                continue
+            candidate_value = self._normalize_value(value, kind, defang=True)
             if candidate_value and candidate_value == target_value:
-                return True
-        return False
+                matched_fields.append(key)
+        return matched_fields
 
-    def _indicator_matches(self, node, target_value, kind):
+    def _indicator_match_details(self, node, target_value, kind):
         if not isinstance(node, dict):
-            return False
+            return []
         pattern = node.get('pattern')
+        matched_literals = []
         for literal in self._extract_pattern_literals(pattern):
-            candidate_value = self._normalize_value(literal, kind)
+            candidate_value = self._normalize_value(literal, kind, defang=True)
             if candidate_value and candidate_value == target_value:
-                return True
-        return False
+                matched_literals.append(literal)
+        return matched_literals
 
-    def _filter_exact_matches(self, nodes, ioc_value, ioc_type_name, matcher):
+    def _filter_exact_matches(self, nodes, ioc_value, ioc_type_name, matcher, detail_key):
         kind = self._ioc_kind(ioc_type_name)
-        target_value = self._normalize_value(ioc_value, kind)
+        target_value = self._normalize_value(ioc_value, kind, defang=True)
         if not target_value:
             return []
         matched = []
         for node in nodes or []:
-            if matcher(node, target_value, kind):
-                matched.append(node)
+            details = matcher(node, target_value, kind)
+            if details:
+                matched.append({
+                    "node": node,
+                    detail_key: details
+                })
         return matched
 
 
@@ -373,46 +376,30 @@ class OpenCTIHandler:
                 nodes.append(node)
         return nodes
 
-    def _search_observables(self, search_value, ioc_value, ioc_type_name, max_results, match_mode):
+    def _search_observables(self, search_value, max_results):
         rich = bool(self.mod_config.get('opencti_rich_query_enabled'))
         query = self.OBSERVABLES_QUERY_RICH if rich else self.OBSERVABLES_QUERY_MIN
         fallback = self.OBSERVABLES_QUERY_MIN if rich else None
 
         data, errors = self._query(query, {"search": search_value, "first": max_results}, fallback_query=fallback)
         nodes = self._extract_nodes(data, 'stixCyberObservables')
-        raw_payload = {
+        return {
             "count": len(nodes),
             "nodes": nodes,
             "errors": errors
         }
-        if match_mode in ('exact', 'hybrid'):
-            nodes = self._filter_exact_matches(nodes, ioc_value, ioc_type_name, self._observable_matches)
-        return {
-            "count": len(nodes),
-            "nodes": nodes,
-            "errors": errors,
-            "raw": raw_payload
-        }
 
-    def _search_indicators(self, search_value, ioc_value, ioc_type_name, max_results, match_mode):
+    def _search_indicators(self, search_value, max_results):
         rich = bool(self.mod_config.get('opencti_rich_query_enabled'))
         query = self.INDICATORS_QUERY_RICH if rich else self.INDICATORS_QUERY_MIN
         fallback = self.INDICATORS_QUERY_MIN if rich else None
 
         data, errors = self._query(query, {"search": search_value, "first": max_results}, fallback_query=fallback)
         nodes = self._extract_nodes(data, 'indicators')
-        raw_payload = {
-            "count": len(nodes),
-            "nodes": nodes,
-            "errors": errors
-        }
-        if match_mode in ('exact', 'hybrid'):
-            nodes = self._filter_exact_matches(nodes, ioc_value, ioc_type_name, self._indicator_matches)
         return {
             "count": len(nodes),
             "nodes": nodes,
-            "errors": errors,
-            "raw": raw_payload
+            "errors": errors
         }
 
     def enrich_alert(self, alert):
@@ -520,83 +507,110 @@ class OpenCTIHandler:
             match_mode = self._get_match_mode()
             ioc_kind = self._ioc_kind(ioc_type_name)
 
-            search_value = ioc_value
-            if isinstance(search_value, (int, float)):
-                search_value = str(search_value)
-            if not isinstance(search_value, str):
-                search_value = str(search_value)
-            search_value = search_value.strip()
-            if match_mode in ('exact', 'hybrid') and self._defang_enabled():
+            match_input = ioc_value if isinstance(ioc_value, str) else str(ioc_value)
+            search_value = match_input.strip()
+            should_defang = match_mode in ('exact', 'hybrid')
+            if should_defang and self._defang_enabled():
                 if ioc_kind in ('ip', 'domain', 'url', 'hash', 'email'):
                     search_value = self._defang_value(search_value)
 
+            normalized_value = self._normalize_value(match_input, ioc_kind, defang=should_defang)
+            defanged = bool(should_defang and self._defang_enabled())
+
             enrichment = {
-                "checked_at": datetime.now(timezone.utc).isoformat(),
-                "search_value": ioc_value,
-                "ioc_type": ioc_type_name,
-                "alert_id": getattr(alert, 'alert_id', None) if alert else None,
-                "alert_uuid": str(getattr(alert, 'alert_uuid', '')) if alert and getattr(alert, 'alert_uuid', None) else None,
-                "source": {
-                    "opencti_url": self.client.base_url if self.client else None
-                }
+                "schema_version": "2.1",
+                "meta": {
+                    "checked_at": datetime.now(timezone.utc).isoformat(),
+                    "source": {
+                        "opencti_url": self.client.base_url if self.client else None
+                    },
+                    "ioc": {
+                        "value": match_input,
+                        "type": ioc_type_name,
+                        "kind": ioc_kind,
+                        "normalized": normalized_value,
+                        "match_mode": match_mode,
+                        "defanged": defanged
+                    }
+                },
+                "results": {
+                    "observables": {
+                        "raw_count": 0,
+                        "matched_count": 0,
+                        "matched": []
+                    },
+                    "indicators": {
+                        "raw_count": 0,
+                        "matched_count": 0,
+                        "matched": []
+                    }
+                },
+                "errors": []
             }
 
             errors = []
-            raw_observables = 0
-            raw_indicators = 0
-            filtered_observables = 0
-            filtered_indicators = 0
 
             if self.mod_config.get('opencti_observable_search_enabled'):
-                observables = self._search_observables(search_value, ioc_value, ioc_type_name, max_results, match_mode)
-                enrichment["observables"] = {
-                    "count": observables.get('count'),
-                    "nodes": observables.get('nodes')
+                observables = self._search_observables(search_value, max_results)
+                raw_nodes = observables.get('nodes') or []
+                raw_count = observables.get('count', len(raw_nodes))
+                if match_mode in ('exact', 'hybrid'):
+                    matched = self._filter_exact_matches(
+                        raw_nodes, match_input, ioc_type_name, self._observable_match_details, "matched_fields"
+                    )
+                else:
+                    matched = [{"node": node, "matched_fields": []} for node in raw_nodes]
+
+                enrichment["results"]["observables"] = {
+                    "raw_count": raw_count,
+                    "matched_count": len(matched),
+                    "matched": matched
                 }
-                raw_observables = observables.get('raw', {}).get('count', observables.get('count', 0))
-                filtered_observables = observables.get('count', 0)
+
                 if observables.get('errors'):
                     errors.extend(observables.get('errors'))
                 if store_raw:
-                    enrichment["observables_raw"] = observables.get('raw', observables)
+                    enrichment["results"]["observables"]["raw"] = {
+                        "count": raw_count,
+                        "nodes": raw_nodes,
+                        "errors": observables.get('errors')
+                    }
 
             if self.mod_config.get('opencti_indicator_search_enabled'):
-                indicators = self._search_indicators(search_value, ioc_value, ioc_type_name, max_results, match_mode)
-                enrichment["indicators"] = {
-                    "count": indicators.get('count'),
-                    "nodes": indicators.get('nodes')
+                indicators = self._search_indicators(search_value, max_results)
+                raw_nodes = indicators.get('nodes') or []
+                raw_count = indicators.get('count', len(raw_nodes))
+                if match_mode in ('exact', 'hybrid'):
+                    matched = self._filter_exact_matches(
+                        raw_nodes, match_input, ioc_type_name, self._indicator_match_details, "matched_literals"
+                    )
+                else:
+                    matched = [{"node": node, "matched_literals": []} for node in raw_nodes]
+
+                enrichment["results"]["indicators"] = {
+                    "raw_count": raw_count,
+                    "matched_count": len(matched),
+                    "matched": matched
                 }
-                raw_indicators = indicators.get('raw', {}).get('count', indicators.get('count', 0))
-                filtered_indicators = indicators.get('count', 0)
+
                 if indicators.get('errors'):
                     errors.extend(indicators.get('errors'))
                 if store_raw:
-                    enrichment["indicators_raw"] = indicators.get('raw', indicators)
+                    enrichment["results"]["indicators"]["raw"] = {
+                        "count": raw_count,
+                        "nodes": raw_nodes,
+                        "errors": indicators.get('errors')
+                    }
 
             if errors:
                 enrichment['errors'] = errors
 
             if match_mode in ('exact', 'hybrid'):
-                match_input = ioc_value if isinstance(ioc_value, str) else str(ioc_value)
-                match_info = {
-                    "mode": match_mode,
-                    "input": match_input,
-                    "normalized": self._normalize_value(match_input, ioc_kind),
-                    "raw_counts": {
-                        "observables": raw_observables,
-                        "indicators": raw_indicators
-                    },
-                    "filtered_counts": {
-                        "observables": filtered_observables,
-                        "indicators": filtered_indicators
-                    },
-                    "defanged": self._defang_enabled()
-                }
-                enrichment["match"] = match_info
-
-                raw_total = raw_observables + raw_indicators
-                filtered_total = filtered_observables + filtered_indicators
-                if raw_total > 0 and filtered_total == 0:
+                raw_total = (enrichment["results"]["observables"]["raw_count"] +
+                             enrichment["results"]["indicators"]["raw_count"])
+                matched_total = (enrichment["results"]["observables"]["matched_count"] +
+                                 enrichment["results"]["indicators"]["matched_count"])
+                if raw_total > 0 and matched_total == 0:
                     self.log.info(
                         'OpenCTI exact match yielded no results for %s (%s). Raw=%s',
                         match_input, ioc_type_name, raw_total
@@ -612,11 +626,41 @@ class OpenCTIHandler:
 
         except Exception as exc:
             self.log.exception(exc)
+            match_mode = self._get_match_mode()
+            ioc_kind = self._ioc_kind(ioc_type_name)
+            match_input = ioc_value if isinstance(ioc_value, str) else str(ioc_value)
+            should_defang = match_mode in ('exact', 'hybrid')
+            normalized_value = self._normalize_value(match_input, ioc_kind, defang=should_defang)
+            defanged = bool(should_defang and self._defang_enabled())
             err_payload = {
-                "checked_at": datetime.now(timezone.utc).isoformat(),
-                "search_value": ioc_value,
-                "ioc_type": ioc_type_name,
-                "error": str(exc)
+                "schema_version": "2.1",
+                "meta": {
+                    "checked_at": datetime.now(timezone.utc).isoformat(),
+                    "source": {
+                        "opencti_url": self.client.base_url if self.client else None
+                    },
+                    "ioc": {
+                        "value": match_input,
+                        "type": ioc_type_name,
+                        "kind": ioc_kind,
+                        "normalized": normalized_value,
+                        "match_mode": match_mode,
+                        "defanged": defanged
+                    }
+                },
+                "results": {
+                    "observables": {
+                        "raw_count": 0,
+                        "matched_count": 0,
+                        "matched": []
+                    },
+                    "indicators": {
+                        "raw_count": 0,
+                        "matched_count": 0,
+                        "matched": []
+                    }
+                },
+                "errors": [str(exc)]
             }
             self._store_enrichment(ioc, err_payload)
             return InterfaceStatus.I2Error(message=str(exc))
@@ -639,10 +683,14 @@ class OpenCTIHandler:
 
         nodes = []
         try:
-            if enrichment.get('indicators') and enrichment['indicators'].get('nodes'):
-                nodes.extend(enrichment['indicators']['nodes'])
-            if enrichment.get('observables') and enrichment['observables'].get('nodes'):
-                nodes.extend(enrichment['observables']['nodes'])
+            results = enrichment.get('results', {})
+            for key in ('indicators', 'observables'):
+                section = results.get(key, {})
+                matched = section.get('matched') or []
+                for item in matched:
+                    node = item.get('node') if isinstance(item, dict) else None
+                    if node:
+                        nodes.append(node)
         except Exception:
             nodes = []
 

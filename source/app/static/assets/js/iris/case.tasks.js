@@ -108,13 +108,13 @@ function update_task_ext(task_id, do_close) {
     data_sent['custom_attributes'] = attributes;
     data_sent['task_description'] = g_task_desc_editor.getValue();
 
-    $('#update_task_btn').text('Updating..');
+    $('#update_task_btn').text(t('Updating..'));
 
     post_request_api('tasks/update/' + task_id, JSON.stringify(data_sent), true)
     .done((data) => {
         if(notify_auto_api(data)) {
             get_tasks();
-            $('#submit_new_task').text("Saved").addClass('btn-outline-success').removeClass('btn-outline-danger').removeClass('btn-outline-warning');
+            $('#submit_new_task').text(t("Saved")).addClass('btn-outline-success').removeClass('btn-outline-danger').removeClass('btn-outline-warning');
             $('#last_saved').removeClass('btn-danger').addClass('btn-success');
             $('#last_saved > i').attr('class', "fa-solid fa-file-circle-check");
 
@@ -124,13 +124,13 @@ function update_task_ext(task_id, do_close) {
         }
     })
     .always(() => {
-        $('#update_task_btn').text('Update');
+        $('#update_task_btn').text(t('Update'));
     });
 }
 
 /* Delete an event from the timeline thank to its id */ 
 function delete_task(id) {
-    do_deletion_prompt("You are about to delete task #" + id)
+    do_deletion_prompt(t("You are about to delete task #{id}", { id: id }))
     .then((doDelete) => {
         if (doDelete) {
             post_request_api("tasks/delete/" + id)
@@ -280,7 +280,7 @@ function do_list_users(list_users, cur_assignees_id_list) {
 
     $('#task_assignees_id').selectpicker({
         liveSearch: true,
-        title: "Select assignee(s)"
+        title: t("Select assignee(s)")
     });
 
     for (let user in list_users) {
@@ -391,10 +391,10 @@ $(document).ready(function(){
                     }
                     else {
                         if (type === 'display') {
-                            names = '<span class="badge badge-light ml-2">' + "Unassigned" + '</span>';
+                            names = `<span class="badge badge-light ml-2">${t("Unassigned")}</span>`;
                         }
                         else {
-                            names = "Unassigned";
+                            names = t("Unassigned");
                         }
                     }
 
@@ -459,13 +459,13 @@ $(document).ready(function(){
     });
 
     var buttons = new $.fn.dataTable.Buttons(Table, {
-         buttons: [
+        buttons: [
             { "extend": 'csvHtml5', "text":'<i class="fas fa-cloud-download-alt"></i>',"className": 'btn btn-link text-white'
-            , "titleAttr": 'Download as CSV', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
+            , "titleAttr": t('Download as CSV'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
             { "extend": 'copyHtml5', "text":'<i class="fas fa-copy"></i>',"className": 'btn btn-link text-white'
-            , "titleAttr": 'Copy', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
+            , "titleAttr": t('Copy'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
             { "extend": 'colvis', "text":'<i class="fas fa-eye-slash"></i>',"className": 'btn btn-link text-white'
-            , "titleAttr": 'Toggle columns' }
+            , "titleAttr": t('Toggle columns') }
         ]
     }).container().appendTo($('#tables_button'));
 

@@ -1,4 +1,4 @@
-{% extends "layouts/default_ext.html" %} {% block title %} Case Evidence {% endblock title %} {% block stylesheets %}
+{% extends "layouts/default_ext.html" %} {% block title %} {{ _('Case Evidence') }} {% endblock title %} {% block stylesheets %}
 {% include 'includes/header_case.html' %}
 {% endblock stylesheets %}
 {% block content %}
@@ -20,16 +20,16 @@
                      </div>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center page-navigation page-navigation-style-2 page-navigation-secondary">
                         <li class="nav-item ml-2">
-                            <span class="text-white text-sm mr-2" id="last_resfresh">Loading</span>
+                            <span class="text-white text-sm mr-2" id="last_resfresh">{{ _('Loading..') }}</span>
                         </li>
                         <li class="nav-item">
                             <button class="btn btn-primary btn-sm" onclick="reload_rfiles(true);">
-                                <span class="menu-title">Refresh</span>
+                                <span class="menu-title">{{ _('Refresh') }}</span>
                             </button>
                         </li>
                         <li class="nav-item">
                             <button onclick="add_modal_rfile()" class="btn btn-dark btn-sm">
-                                 <span class="menu-title">Register Evidence</span>
+                                 <span class="menu-title">{{ _('Register Evidence') }}</span>
                             </button>
                         </li>
 					</ul>
@@ -39,7 +39,7 @@
 			</nav>
         <div class="page-inner">
             <div class="row">
-                <div class="loader1 text-center ml-mr-auto" id="loading_msg">Loading...</div>
+                <div class="loader1 text-center ml-mr-auto" id="loading_msg">{{ _('Loading..') }}</div>
                 <div class="col-md-12">
                     <div class="card" id="card_main_load" style="display:none;">
                         <div class="card-body">
@@ -52,22 +52,22 @@
 
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Type</th>
-                                            <th>Hash</th>
-                                            <th>Size (bytes)</th>
-                                            <th>Description</th>
-                                            <th>Added by</th>
+                                            <th>{{ _('Name') }}</th>
+                                            <th>{{ _('Type') }}</th>
+                                            <th>{{ _('Hash') }}</th>
+                                            <th>{{ _('Size (bytes)') }}</th>
+                                            <th>{{ _('Description') }}</th>
+                                            <th>{{ _('Added by') }}</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Type</th>
-                                            <th>Hash</th>
-                                            <th>Size(bytes)</th>
-                                            <th>Description</th>
-                                            <th>Added by</th>
+                                            <th>{{ _('Name') }}</th>
+                                            <th>{{ _('Type') }}</th>
+                                            <th>{{ _('Hash') }}</th>
+                                            <th>{{ _('Size (bytes)') }}</th>
+                                            <th>{{ _('Description') }}</th>
+                                            <th>{{ _('Added by') }}</th>
                                         </tr>
                                     </tfoot>
                                 </table>

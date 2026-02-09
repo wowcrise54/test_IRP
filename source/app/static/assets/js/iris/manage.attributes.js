@@ -154,8 +154,8 @@ function update_attribute(attr_id, editor, partial, complete){
 
     post_request_api('/manage/attributes/update/' + attr_id, JSON.stringify(data_sent), false, function() {
         window.swal({
-              title: "Updating and migrating...",
-              text: "Please wait",
+              title: t("Updating and migrating..."),
+              text: t("Please wait"),
               icon: "/static/assets/img/loader.gif",
               button: false,
               allowOutsideClick: false
@@ -166,7 +166,7 @@ function update_attribute(attr_id, editor, partial, complete){
     })
     .fail((error) => {
         data = error.responseJSON;
-        $('#submit_new_attribute').text('Save');
+        $('#submit_new_attribute').text(t('Save'));
         $('#alert_attributes_edit').text(data.message);
         if (data.data && data.data.length > 0) {
             for(var i in data.data)
@@ -178,7 +178,7 @@ function update_attribute(attr_id, editor, partial, complete){
             $('#alert_attributes_details').show();
         }
         $('#alert_attributes_edit').show();
-        $('#submit_new_module').text("Retry");
+        $('#submit_new_module').text(t("Retry"));
     })
     .always((data) => {
         window.swal.close();

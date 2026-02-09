@@ -51,8 +51,8 @@ function add_case_template() {
 
             post_request_api('/manage/case-templates/add', JSON.stringify(data_sent), false, function() {
                 window.swal({
-                      title: "Adding...",
-                      text: "Please wait",
+                      title: t("Adding..."),
+                      text: t("Please wait"),
                       icon: "/static/assets/img/loader.gif",
                       button: false,
                       allowOutsideClick: false
@@ -66,7 +66,7 @@ function add_case_template() {
             })
             .fail((error) => {
                 let data = error.responseJSON;
-                $('#submit_new_case_template').text('Save');
+                $('#submit_new_case_template').text(t('Save'));
                 $('#alert_case_template_edit').text(data.message);
                 if (data.data && data.data.length > 0) {
 
@@ -139,14 +139,14 @@ function refresh_case_template_table() {
 
 function delete_case_template(id) {
     swal({
-        title: "Are you sure ?",
-        text: "You won't be able to revert this !",
+        title: t("Are you sure ?"),
+        text: t("You won't be able to revert this !"),
         icon: "warning",
         buttons: true,
         dangerMode: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
         if (willDelete) {
@@ -157,7 +157,7 @@ function delete_case_template(id) {
                 }
             });
         } else {
-            swal("Pfew, that was close");
+            swal(t("Pfew, that was close"));
         }
     });
 }
@@ -232,8 +232,8 @@ function update_case_template(ctempl_id, editor, partial, complete){
 
     post_request_api('/manage/case-templates/update/' + ctempl_id, JSON.stringify(data_sent), false, function() {
         window.swal({
-              title: "Updating...",
-              text: "Please wait",
+              title: t("Updating..."),
+              text: t("Please wait"),
               icon: "/static/assets/img/loader.gif",
               button: false,
               allowOutsideClick: false
@@ -244,7 +244,7 @@ function update_case_template(ctempl_id, editor, partial, complete){
     })
     .fail((error) => {
         let data = error.responseJSON;
-        $('#submit_new_case_template').text('Update');
+        $('#submit_new_case_template').text(t('Update'));
         $('#alert_case_template_edit').text(data.message);
         if (data.data && data.data.length > 0) {
             let output='<li>'+ sanitizeHTML(data.data) +'</li>';
@@ -286,8 +286,8 @@ function upload_case_template() {
 
             post_request_api('/manage/case-templates/add', JSON.stringify(data), false, function() {
                 window.swal({
-                      title: "Adding...",
-                      text: "Please wait",
+                      title: t("Adding..."),
+                      text: t("Please wait"),
                       icon: "/static/assets/img/loader.gif",
                       button: false,
                       allowOutsideClick: false

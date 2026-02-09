@@ -4,16 +4,16 @@
 function get_case_audit_page() {
     us_val = $('#cases_audit_select').val();
     if (!us_val) {
-        notify_error('I really wanna help you but I still can\'t read your mind');
+        notify_error(t("I really wanna help you but I still can't read your mind"));
         return false;
     }
 
-    $('#get_case_audit_btn').text('Auditing case..');
+    $('#get_case_audit_btn').text(t('Auditing case..'));
     url = '/manage/access-control/audit/cases/'+ us_val +'/modal' + case_param();
     $('#case_audit_content').load(url, function (response, status, xhr) {
-        $('#get_case_audit_btn').text('Audit');
+        $('#get_case_audit_btn').text(t('Audit'));
         if (status !== "success") {
-             $('#get_case_audit_btn').text('Audit');
+             $('#get_case_audit_btn').text(t('Audit'));
              ajax_notify_error(xhr, url);
 
              return false;
@@ -44,7 +44,7 @@ function refresh_cases_list_audit() {
 
             $('#cases_audit_select').selectpicker({
                 liveSearch: true,
-                title: "Select case to audit",
+                title: t("Select case to audit"),
                 style: "btn-outline-white",
                 size: 10
             });
@@ -63,4 +63,3 @@ function refresh_cases_list_audit() {
 $(document).ready(function () {
     refresh_cases_list_audit();
 });
-

@@ -269,6 +269,12 @@ class Config:
     if os.environ.get('IRIS_DEMO_VERSION') is not None and os.environ.get('IRIS_DEMO_VERSION') != 'None':
         IRIS_VERSION = os.environ.get('IRIS_DEMO_VERSION')
 
+    _supported_locales_raw = config.load('IRIS', 'SUPPORTED_LOCALES', fallback='en,ru')
+    BABEL_SUPPORTED_LOCALES = [loc.strip() for loc in _supported_locales_raw.split(',') if loc.strip()]
+    BABEL_DEFAULT_LOCALE = config.load('IRIS', 'DEFAULT_LOCALE',
+                                       fallback=BABEL_SUPPORTED_LOCALES[0] if BABEL_SUPPORTED_LOCALES else 'en')
+    BABEL_TRANSLATION_DIRECTORIES = 'translations'
+
     API_MIN_VERSION = "2.0.4"
     API_MAX_VERSION = "2.0.5"
 

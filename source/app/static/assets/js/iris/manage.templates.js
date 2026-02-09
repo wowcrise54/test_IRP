@@ -154,14 +154,14 @@ function report_detail(report_id) {
 function delete_report(id) {
 
     swal({
-      title: "This will delete the report template\nAre you sure?",
-      text: "You won't be able to revert this !",
+      title: t("This will delete the report template\nAre you sure?"),
+      text: t("You won't be able to revert this !"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -173,7 +173,7 @@ function delete_report(id) {
                 }
           });
       } else {
-        swal("Pfew, that was close");
+        swal(t("Pfew, that was close"));
       }
     });
 }

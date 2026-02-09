@@ -3,10 +3,10 @@
 			<i class="flaticon-cross"></i>
 		</a>
 		<div class="quick-sidebar-wrapper">
-			<ul class="nav nav-tabs nav-line nav-color-primary" role="tablist">
-				<li class="nav-item"> <a class="nav-link active show" data-toggle="tab" href="#case" role="tab" aria-controls="case"  aria-selected="true">Case</a> </li>
-				<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#activities" aria-controls="activities" role="tab" onclick="load_case_activity();">Activities</a></li>
-				<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#dim_tasks" aria-controls="dim_tasks" role="tab" onclick="load_dim_limited_tasks();">DIM Tasks</a></li>
+				<ul class="nav nav-tabs nav-line nav-color-primary" role="tablist">
+					<li class="nav-item"> <a class="nav-link active show" data-toggle="tab" href="#case" role="tab" aria-controls="case"  aria-selected="true">{{ _('Case') }}</a> </li>
+					<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#activities" aria-controls="activities" role="tab" onclick="load_case_activity();">{{ _('Activities') }}</a></li>
+					<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#dim_tasks" aria-controls="dim_tasks" role="tab" onclick="load_dim_limited_tasks();">DIM Tasks</a></li>
 
 			</ul>
 			<div class="tab-content mt-3">
@@ -38,15 +38,15 @@
 					<div class="messages-contact">
 						<div class="quick-wrapper">
                             <div class="quick-content settings-content">
-							<span class="category-title mt-0">Shortcuts</span>
+								<span class="category-title mt-0">{{ _('Shortcuts') }}</span>
 							<div class="quick-actions quick-actions-primary">
 								<div class="quick-actions-items">
                                     <div class="quick-actions quick-actions-black">
                                         <div class="row m-0">
-                                            <a class="col-11 col-md-11 p-0" title="Export page as PNG" href="#" onclick="exportInnerPng();" role="button">
+	                                            <a class="col-11 col-md-11 p-0" title="{{ _('Export page as PNG') }}" href="#" onclick="exportInnerPng();" role="button">
                                                 <div class="quick-actions-item">
                                                     <i class="flaticon-photo-camera"></i>
-                                                    <span class="text-dark">Take screenshot of content</span>
+	                                                    <span class="text-dark">{{ _('Take screenshot of content') }}</span>
                                                 </div>
                                             </a>
                                         </div>
@@ -58,13 +58,13 @@
 											<a class="col-6 col-md-6 p-0" href="/case/ioc?cid={{session['current_case'].case_id}}">
 												<div class="quick-actions-item">
 													<i class="flaticon-inbox"></i>
-													<span class="text">Add IOC</span>
+														<span class="text">{{ _('Add IOC') }}</span>
 												</div>
 											</a>
 											<a class="col-6 col-md-6 p-0" href="/case/assets?cid={{session['current_case'].case_id}}">
 												<div class="quick-actions-item">
 													<i class="flaticon-laptop"></i>
-													<span class="text">Add asset</span>
+														<span class="text">{{ _('Add asset') }}</span>
 												</div>
 											</a>
 										</div>
@@ -72,13 +72,13 @@
 											<a class="col-6 col-md-6 p-0" href="/case/notes?cid={{session['current_case'].case_id}}">
 												<div class="quick-actions-item">
 													<i class="flaticon-file-1"></i>
-													<span class="text">Add note</span>
+														<span class="text">{{ _('Add note') }}</span>
 												</div>
 											</a>
 											<a class="col-6 col-md-6 p-0" href="/case/timeline?cid={{session['current_case'].case_id}}">
 												<div class="quick-actions-item">
 													<i class="flaticon-stopwatch"></i>
-													<span class="text">Add event</span>
+														<span class="text">{{ _('Add event') }}</span>
 												</div>
 											</a>
 										</div>
@@ -86,13 +86,13 @@
 											<a class="col-6 col-md-6 p-0" href="/manage/cases?cid={{session['current_case'].case_id}}">
 												<div class="quick-actions-item">
 													<i class="flaticon-box"></i>
-													<span class="text">Upload evidence</span>
+														<span class="text">{{ _('Upload evidence') }}</span>
 												</div>
 											</a>
 											<a class="col-6 col-md-6 p-0" data-toggle="modal" data-target="#modal_add_tasklog" href="#">
 												<div class="quick-actions-item">
 													<i class="flaticon-interface-1"></i>
-													<span class="text">Add task log</span>
+														<span class="text">{{ _('Add task log') }}</span>
 												</div>
 											</a>
 										</div>
@@ -100,7 +100,7 @@
 											<a class="col-6 col-md-6 p-0" href="/case/evidences?cid={{session['current_case'].case_id}}">
 												<div class="quick-actions-item">
 													<i class="flaticon-price-tag"></i>
-													<span class="text">Register evidence</span>
+														<span class="text">{{ _('Register evidence') }}</span>
 												</div>
 											</a>
 										</div>
@@ -109,10 +109,10 @@
                                 <div class="quick-actions-items">
                                     <div class="quick-actions quick-actions-danger">
                                         <div class="row m-0">
-                                            <a class="col-11 col-md-11 p-0" title="Switch case" onclick="load_context_switcher();return false;" href="#" role="button">
+	                                            <a class="col-11 col-md-11 p-0" title="{{ _('Switch case') }}" onclick="load_context_switcher();return false;" href="#" role="button">
                                                 <div class="quick-actions-item">
                                                     <i class="flaticon-repeat"></i>
-                                                    <span class="text">Switch case</span>
+	                                                    <span class="text">{{ _('Switch case') }}</span>
                                                 </div>
                                             </a>
                                         </div>

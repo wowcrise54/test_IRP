@@ -27,7 +27,7 @@ function add_asset_type() {
                     }
                 },
                 error: function (error) {
-                    $('#modal_add_type').text('Save');
+                    $('#modal_add_type').text(t('Save'));
                     propagate_form_api_errors(error.responseJSON.data);
                 }
             });
@@ -137,14 +137,14 @@ function assettype_detail(asset_id) {
 function delete_asset_type(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "You won't be able to revert this !",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this !"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
         if (willDelete) {
@@ -156,7 +156,7 @@ function delete_asset_type(id) {
                 }
             });
         } else {
-            swal("Pfew, that was close");
+            swal(t("Pfew, that was close"));
         }
     });
 }
@@ -271,14 +271,14 @@ function ioc_type_detail(ioc_id) {
 function delete_ioc_type(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "You won't be able to revert this !",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this !"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -290,7 +290,7 @@ function delete_ioc_type(id) {
                 }
             });
       } else {
-        swal("Pfew, that was close");
+        swal(t("Pfew, that was close"));
       }
     });
 }
@@ -392,14 +392,14 @@ function classification_detail(ioc_id) {
 function delete_case_classification(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "You won't be able to revert this !",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this !"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -411,7 +411,7 @@ function delete_case_classification(id) {
                 }
             });
       } else {
-        swal("Pfew, that was close");
+        swal(t("Pfew, that was close"));
       }
     });
 }
@@ -513,14 +513,14 @@ function state_detail(ioc_id) {
 function delete_case_state(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "You won't be able to revert this !",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this !"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -532,7 +532,7 @@ function delete_case_state(id) {
                 }
             });
       } else {
-        swal("Pfew, that was close");
+        swal(t("Pfew, that was close"));
       }
     });
 }
@@ -628,14 +628,14 @@ function evidence_detail(evidence_id) {
 function delete_evidence_type(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "You won't be able to revert this !",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this !"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -647,7 +647,7 @@ function delete_evidence_type(id) {
                 }
             });
       } else {
-        swal("Pfew, that was close");
+        swal(t("Pfew, that was close"));
       }
     });
 }

@@ -1,6 +1,6 @@
 {% extends "layouts/default.html" %}
 
-{% block title %} Manage Cases {% endblock title %}
+{% block title %} {{ _('Manage Cases') }} {% endblock title %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="/static/assets/css/dataTables.select.min.css">
@@ -16,17 +16,17 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Cases management</div>
+                    <div class="card-title">{{ _('Cases management') }}</div>
                 </div>
                 <div class="card-body">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-sm btn-outline-dark float-right mr-3"
                             onclick="load_add_case();">
-                            Create new case
+                            {{ _('Create new case') }}
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-dark float-right mr-3"
                             onclick="refresh_case_table();">
-                            Refresh
+                            {{ _('Refresh') }}
                         </button>
                         <div class="table-responsive" id="cases_table_wrapper">
                             <div class="selectgroup">
@@ -36,26 +36,26 @@
                                 cellspacing="0" id="cases_table">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Customer</th>
-                                        <th>State</th>
-                                        <th>Open date</th>
-                                        <th>Close date</th>
-                                        <th>SOC Ticket</th>
-                                        <th>Opening user</th>
+                                        <th>{{ _('Name') }}</th>
+                                        <th>{{ _('Description') }}</th>
+                                        <th>{{ _('Customer') }}</th>
+                                        <th>{{ _('State') }}</th>
+                                        <th>{{ _('Open date') }}</th>
+                                        <th>{{ _('Close date') }}</th>
+                                        <th>{{ _('SOC Ticket') }}</th>
+                                        <th>{{ _('Opening user') }}</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Customer</th>
-                                        <th>State</th>
-                                        <th>Open date</th>
-                                        <th>Close date</th>
-                                        <th>SOC Ticket</th>
-                                        <th>Opening user</th>
+                                        <th>{{ _('Name') }}</th>
+                                        <th>{{ _('Description') }}</th>
+                                        <th>{{ _('Customer') }}</th>
+                                        <th>{{ _('State') }}</th>
+                                        <th>{{ _('Open date') }}</th>
+                                        <th>{{ _('Close date') }}</th>
+                                        <th>{{ _('SOC Ticket') }}</th>
+                                        <th>{{ _('Opening user') }}</th>
                                     </tr>
                                 </tfoot>
                             </table>

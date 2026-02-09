@@ -1,6 +1,6 @@
 {% extends "layouts/static-default.html" %}
 
-{% block title %} MFA Verify {% endblock title %}
+{% block title %} {{ _('MFA Verify') }} {% endblock title %}
 
 {% block stylesheets %}
 
@@ -23,20 +23,20 @@
             </div>
             <div class="col-xs-12 col-md-4">
                 <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
-                    <h3 class="login__form_title">Verify MFA</h3>
-                    <p>Enter the token displayed on your authentication app</p>
+                    <h3 class="login__form_title">{{ _('Verify MFA') }}</h3>
+                    <p>{{ _('Enter the token displayed on your authentication app') }}</p>
                     <form method="POST" action="">
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-row ml-2">
                                 <div class="form-group col-12">
                                     {{ form.hidden_tag() }}
-                                    <label for="token">Token</label>
+                                    <label for="token">{{ _('Token') }}</label>
                                     {{ form.token(size=32, class="form-control") }}
                                 </div>
                             </div>
                             <div class="form-row ml-2">
                                 <div class="form-group col-6">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">{{ _('Submit') }}</button>
                                 </div>
                             </div>
                         </div>

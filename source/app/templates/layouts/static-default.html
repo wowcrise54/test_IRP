@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ current_locale }}">
 <head>
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -31,6 +31,11 @@
 
 {% block content %}{% endblock content %}
 
+
+	<script>
+		window.I18N_MESSAGES = {{ i18n_messages | tojsonsafe }};
+		window.I18N_LOCALE = "{{ current_locale }}";
+	</script>
 
 	<!--   Core JS Files   -->
 	<script src="/static/assets/js/core/jquery.3.2.1.min.js"></script>

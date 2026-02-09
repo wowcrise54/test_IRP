@@ -2,29 +2,29 @@
     <div class="modal-content" id="modal_access_control_content">
         <div class="modal-header">
             <div class="row w-100 d-flex justify-content-center">
-                <h4 class="modal-title ml-4 mt-3">{% if not user.user_id %}Add User{% else %} Edit user {% endif %}</h4>
+                <h4 class="modal-title ml-4 mt-3">{% if not user.user_id %}{{ _('Add User') }}{% else %}{{ _('Edit user') }}{% endif %}</h4>
 
                 <div class="col">
                     {% if user.user_id %}
                     <ul class="nav nav-pills nav-default justify-content-center" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active show" data-toggle="pill" href="#user_details_tab" role="tab" aria-controls="user_details_tab" aria-selected="false">Info</a>
+                            <a class="nav-link active show" data-toggle="pill" href="#user_details_tab" role="tab" aria-controls="user_details_tab" aria-selected="false">{{ _('Info') }}</a>
                         </li>
 
                         <li class="nav-item submenu">
-                            <a class="nav-link"  data-toggle="pill" href="#user_permissions_tab" role="tab" aria-controls="user_permissions_tab" aria-selected="false">Permissions</a>
+                            <a class="nav-link"  data-toggle="pill" href="#user_permissions_tab" role="tab" aria-controls="user_permissions_tab" aria-selected="false">{{ _('Permissions') }}</a>
                         </li>
 
                         <li class="nav-item submenu">
-                            <a class="nav-link"  data-toggle="pill" href="#user_groups_tab" role="tab" aria-controls="user_groups_tab" aria-selected="false">Groups</a>
+                            <a class="nav-link"  data-toggle="pill" href="#user_groups_tab" role="tab" aria-controls="user_groups_tab" aria-selected="false">{{ _('Groups') }}</a>
                         </li>
 
                         <li class="nav-item submenu">
-                            <a class="nav-link"  data-toggle="pill" href="#user_clients_tab" role="tab" aria-controls="user_clients_tab" aria-selected="false">Customers</a>
+                            <a class="nav-link"  data-toggle="pill" href="#user_clients_tab" role="tab" aria-controls="user_clients_tab" aria-selected="false">{{ _('Customers') }}</a>
                         </li>
 
                         <li class="nav-item submenu">
-                            <a class="nav-link"  data-toggle="pill" href="#user_cac_tab" role="tab" aria-controls="user_cac_tab" aria-selected="false">Cases access</a>
+                            <a class="nav-link"  data-toggle="pill" href="#user_cac_tab" role="tab" aria-controls="user_cac_tab" aria-selected="false">{{ _('Cases access') }}</a>
                         </li>
 
                     </ul>
@@ -44,40 +44,40 @@
                                 <div class="col-md-12 col-lg-12 col-sm-12">
                                     {{ form.hidden_tag() }}
                                     {% if not user.user_id %}
-                                        <p class="ml-3"><i class="fa-solid fa-circle-info mr-2"></i>Permissions and groups memberships can be set once the user is created.</p>
+                                        <p class="ml-3"><i class="fa-solid fa-circle-info mr-2"></i>{{ _('Permissions and groups memberships can be set once the user is created.') }}</p>
                                     {% endif %}
                                     {% if user.user_is_service_account %}
-                                        <p class="ml-3 text-warning-high"><i class="fa-solid fa-circle-info mr-2"></i>This is a service account. It cannot login interactively nor have a password.</p>
+                                        <p class="ml-3 text-warning-high"><i class="fa-solid fa-circle-info mr-2"></i>{{ _('This is a service account. It cannot login interactively nor have a password.') }}</p>
                                     {% endif %}
                                     <div class="form-group">
-                                        <label for="user_name" class="mr-4">Full name
+                                        <label for="user_name" class="mr-4">{{ _('Full name') }}
                                         </label>
                                         {{ form.user_name(class='form-control',  autocomplete="off") }}
                                     </div>
                                     <div class="form-group mt-3">
-                                        <label for="user_login" class="placeholder">Login</label>
+                                        <label for="user_login" class="placeholder">{{ _('Login') }}</label>
                                         {{ form.user_login(class='form-control',  autocomplete="off") }}
                                     </div>
                                     <div class="form-group mt-3">
-                                        <label for="user_email" class="placeholder">Email</label>
+                                        <label for="user_email" class="placeholder">{{ _('Email') }}</label>
                                         {{ form.user_email(class='form-control',  autocomplete="off") }}
                                     </div>
                                      {% if not user.user_is_service_account %}
                                     <div class="form-group mt-3" id="formGroupUserPassword">
-                                        <label for="user_pwd" class="placeholder">Password (optional for service accounts)</label>
+                                        <label for="user_pwd" class="placeholder">{{ _('Password (optional for service accounts)') }}</label>
                                         <ul>
-                                            <li><small>Must contain at least {{ server_settings.password_policy_min_length }} chars</small></li>
+                                            <li><small>{{ _('Must contain at least %(count)s chars', count=server_settings.password_policy_min_length) }}</small></li>
                                             {% if server_settings.password_policy_upper_case %}
-                                                <li class="text-sm"><small>Must contain at least an upper case</small></li>
+                                                <li class="text-sm"><small>{{ _('Must contain at least an upper case') }}</small></li>
                                             {% endif %}
                                             {% if server_settings.password_policy_lower_case %}
-                                                <li class="text-sm"><small>Must contain at least a lower case</small></li>
+                                                <li class="text-sm"><small>{{ _('Must contain at least a lower case') }}</small></li>
                                             {% endif %}
                                             {% if server_settings.password_policy_digit %}
-                                                <li class="text-sm"><small>Must contain at least a digit</small></li>
+                                                <li class="text-sm"><small>{{ _('Must contain at least a digit') }}</small></li>
                                             {% endif %}
                                             {% if server_settings.password_policy_special_chars %}
-                                                <li class="text-sm"><small>Must contain at least one of : {{ server_settings.password_policy_special_chars }}</small></li>
+                                                <li class="text-sm"><small>{{ _('Must contain at least one of :') }} {{ server_settings.password_policy_special_chars }}</small></li>
                                             {% endif %}
                                         </ul>
 
@@ -98,8 +98,8 @@
                                         <div class="form-check">
                                             <label class="form-check-label mt-3" >
                                                 {{ form.user_is_service_account(class="form-check-input", type="checkbox") }}
-                                                <span class="form-check-sign" id="formCheckIsServiceAccount">  Use as service account
-                                                    <i class="ml-1 mt-1 fa-regular fa-circle-question" title="If checked, the user won't appear in the attribution suggestions and won't be able to connect on the UI" style="cursor:pointer;"></i>
+                                                <span class="form-check-sign" id="formCheckIsServiceAccount">  {{ _('Use as service account') }}
+                                                    <i class="ml-1 mt-1 fa-regular fa-circle-question" title='{{ _("If checked, the user won't appear in the attribution suggestions and won't be able to connect on the UI") }}' style="cursor:pointer;"></i>
                                                 </span>
                                             </label>
                                         </div>
@@ -107,19 +107,19 @@
                                     {% endif %}
                                     {% if user.user_id %}
                                         <div class="form-group mt-3">
-                                            <label for="user_id" class="placeholder">User ID</label>
+                                            <label for="user_id" class="placeholder">{{ _('User ID') }}</label>
                                             <input autocomplete="off" class="form-control" type="text" value="{{ user.user_id }}" disabled>
                                         </div>
                                         <div class="form-group mt-3">
-                                            <label for="user_uuid" class="placeholder">User UUID</label>
+                                            <label for="user_uuid" class="placeholder">{{ _('User UUID') }}</label>
                                             <input autocomplete="off" class="form-control" type="text" value="{{ user.user_uuid }}" disabled>
                                         </div>
                                         <div class="form-group mt-3">
-                                            <label for="userApiKey" class="placeholder">User API Key</label>
+                                            <label for="userApiKey" class="placeholder">{{ _('User API Key') }}</label>
                                             <div class="input-group">
                                                 <input autocomplete="off" class="form-control" type="text" value="{{ user.user_api_key }}" id="userApiKey" disabled>
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-sm btn-dark" type="button" onclick="renew_api_for_user({{ user.user_id }})">Renew</button>
+                                                    <button class="btn btn-sm btn-dark" type="button" onclick="renew_api_for_user({{ user.user_id }})">{{ _('Renew') }}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -127,30 +127,30 @@
                                 </div>
                                 {% if user.user_id %}
                                     <button type="button" class="btn btn-danger mt-5"
-                                    onclick="delete_user('{{ user.user_id }}');">Delete</button>
+                                    onclick="delete_user('{{ user.user_id }}');">{{ _('Delete') }}</button>
                                     {% if user.user_active %}
                                     <button type="button" class="btn btn-outline-danger mt-5"
-                                    onclick="deactivate_user('{{ user.user_id }}');">Deactivate</button>
+                                    onclick="deactivate_user('{{ user.user_id }}');">{{ _('Deactivate') }}</button>
                                     {% else %}
                                     <button type="button" class="btn btn-outline-success mt-5"
-                                    onclick="activate_user('{{ user.user_id }}');">Activate</button>
+                                    onclick="activate_user('{{ user.user_id }}');">{{ _('Activate') }}</button>
                                     {% endif %}
 
                                     <button type="button" class="btn btn-outline-success ml-1 mt-5 float-right"
-                                    id="submit_new_user">Update</button>
+                                    id="submit_new_user">{{ _('Update') }}</button>
 
                                     <button type="button" class="btn btn-dark mt-5 float-right"
-                                    onclick="refresh_user_ac('{{ user.user_id }}');" id="users_refresh_ac_btn">Refresh access</button>
+                                    onclick="refresh_user_ac('{{ user.user_id }}');" id="users_refresh_ac_btn">{{ _('Refresh access') }}</button>
 
                                     {% if server_settings.enforce_mfa %}
                                     <button type="button" class="btn btn-dark mt-5 mr-2 float-right"
-                                    onclick="reset_user_mfa('{{ user.user_id }}');" id="users_reset_mfa_btn">Reset MFA</button>
+                                    onclick="reset_user_mfa('{{ user.user_id }}');" id="users_reset_mfa_btn">{{ _('Reset MFA') }}</button>
                                     {% endif %}
 
                                 {% else %}
 
                                     <button type="button" class="btn btn-outline-success ml-4 mt-5 float-right"
-                                    id="submit_new_user">Save</button>
+                                    id="submit_new_user">{{ _('Save') }}</button>
 
                                 {% endif %}
                             </form>
@@ -158,13 +158,13 @@
                     </div>
                     <div class="tab-pane" id="user_permissions_tab">
                         <div class="container col-md-12">
-                            <p class="mb-4"><i class="fa-solid fa-circle-info mr-2"></i>Permissions are inherited from the groups the user belongs to. The table shows the effective permissions the user has on the platform.</p>
+                            <p class="mb-4"><i class="fa-solid fa-circle-info mr-2"></i>{{ _('Permissions are inherited from the groups the user belongs to. The table shows the effective permissions the user has on the platform.') }}</p>
                             <table class="table table-striped" id="user_permissions_table">
                                 <thead>
                                     <tr>
-                                        <th>Permission</th>
-                                        <th>Value</th>
-                                        <th>Inherited from groups</th>
+                                        <th>{{ _('Permission') }}</th>
+                                        <th>{{ _('Value') }}</th>
+                                        <th>{{ _('Inherited from groups') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -182,9 +182,9 @@
                     <div class="tab-pane" id="user_groups_tab">
                         <div class="row">
                             <div class="container col-md-12">
-                                <span class="ml-2 mt-3">Groups the user is member of.</span>
+                                <span class="ml-2 mt-3">{{ _('Groups the user is member of.') }}</span>
                                 <button class="btn btn-dark btn-sm pull-right mr-2" onclick="manage_user_groups({{ user.user_id }});">
-                                    <span class="menu-title">Manage</span>
+                                    <span class="menu-title">{{ _('Manage') }}</span>
                                 </button>
                             </div>
                         </div>
@@ -193,9 +193,9 @@
                                 <table class="table table-striped" id="user_groups_table">
                                     <thead>
                                         <tr>
-                                            <th>Group name</th>
-                                            <th>Group ID</th>
-                                            <th>Group UUID</th>
+                                            <th>{{ _('Group name') }}</th>
+                                            <th>{{ _('Group ID') }}</th>
+                                            <th>{{ _('Group UUID') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -214,9 +214,9 @@
                     <div class="tab-pane" id="user_clients_tab">
                         <div class="row">
                             <div class="container col-md-12">
-                                <span class="ml-2 mt-3">Customers the user belongs to.</span>
+                                <span class="ml-2 mt-3">{{ _('Customers the user belongs to.') }}</span>
                                 <button class="btn btn-dark btn-sm pull-right mr-2" onclick="manage_user_clients({{ user.user_id }});">
-                                    <span class="menu-title">Manage</span>
+                                    <span class="menu-title">{{ _('Manage') }}</span>
                                 </button>
                             </div>
                         </div>
@@ -225,8 +225,8 @@
                                 <table class="table table-striped" id="user_clients_table">
                                     <thead>
                                         <tr>
-                                            <th>Customer</th>
-                                            <th>Customer ID</th>
+                                            <th>{{ _('Customer') }}</th>
+                                            <th>{{ _('Customer ID') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -245,14 +245,14 @@
                         <div class="container col-md-12" >
                               <div class="row d-flex mb-4">
                                 <div class="col-8">
-                                    <span>Cases accesses are usually inherited from groups memberships. These are not displayed here. This tab allows to add granular case access if necessary.</span>
+                                    <span>{{ _('Cases accesses are usually inherited from groups memberships. These are not displayed here. This tab allows to add granular case access if necessary.') }}</span>
                                 </div>
                                 <div class="col-4 pull-right">
                                     <button class="btn btn-dark btn-sm pull-right" onclick="refresh_user_cac({{ user.user_id }});">
-                                        <span class="menu-title">Refresh</span>
+                                        <span class="menu-title">{{ _('Refresh') }}</span>
                                     </button>
                                     <button class="btn btn-dark btn-sm pull-right mr-2" onclick="manage_user_cac({{ user.user_id  }});">
-                                        <span class="menu-title" id="manage_user_cac_button">Set case access</span>
+                                        <span class="menu-title" id="manage_user_cac_button">{{ _('Set case access') }}</span>
                                     </button>
                                 </div>
                               </div>
@@ -260,16 +260,16 @@
                               <table class="table display table-striped table-hover responsive" width="100%" cellspacing="0" id="user_cac_table" >
                                 <thead>
                                   <tr>
-                                      <th>Case ID</th>
-                                      <th>Case Name</th>
-                                      <th>Access</th>
+                                      <th>{{ _('Case ID') }}</th>
+                                      <th>{{ _('Case Name') }}</th>
+                                      <th>{{ _('Access') }}</th>
                                   </tr>
                                 </thead>
                                 <tfoot>
                                   <tr>
-                                    <th>Case ID</th>
-                                    <th>Case Name</th>
-                                    <th>Access</th>
+                                    <th>{{ _('Case ID') }}</th>
+                                    <th>{{ _('Case Name') }}</th>
+                                    <th>{{ _('Access') }}</th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -294,15 +294,15 @@
             $('#user_groups_table').dataTable({
                 "order": [[ 1, "asc" ]],
                 "columns": [{
-                    "title": "Group name",
+                    "title": "{{ _('Group name') }}",
                     "render": function ( data, type, row, meta ) {
                         if (type === 'display' ) {
-                            return `<i class="fa-solid fa-trash-can mr-2 text-danger" style="cursor:pointer;" title="Remove from group" href="javascript:void(0)" onclick="remove_member_from_group_wrap('${row[1]}','{{ user.user_id }}')"></i>${sanitizeHTML(data)}`;
+                            return `<i class="fa-solid fa-trash-can mr-2 text-danger" style="cursor:pointer;" title="{{ _('Remove from group') }}" href="javascript:void(0)" onclick="remove_member_from_group_wrap('${row[1]}','{{ user.user_id }}')"></i>${sanitizeHTML(data)}`;
                         }
                         return data;
                     }},
-                    {"title": "Group ID"},
-                    {"title": "Group UUID"}
+                    {"title": "{{ _('Group ID') }}"},
+                    {"title": "{{ _('Group UUID') }}"}
                     ]
                 });
 
@@ -313,7 +313,7 @@
                   {
                     "data": "case_id",
                     "render": function ( data, type, row ) {
-                        return `<i class="fa-solid fa-trash-can mr-2 text-danger" style="cursor:pointer;" title="Remove access to case" href="javascript:void(0)" onclick="remove_case_access_from_user('{{ user.user_id }}',${data})"></i>${data}`;
+                        return `<i class="fa-solid fa-trash-can mr-2 text-danger" style="cursor:pointer;" title="{{ _('Remove access to case') }}" href="javascript:void(0)" onclick="remove_case_access_from_user('{{ user.user_id }}',${data})"></i>${data}`;
                     },
                     "className": "dt-center"
                 },
@@ -352,10 +352,10 @@
                 yoffset: -10,
                 headerRenderer: function (rows) {
                     if (rows.length > 1) {
-                        return rows.length + ' items selected';
+                        return rows.length + ' {{ _('items selected') }}';
                     } else {
                         let row = rows[0];
-                        return 'Quick action';
+                        return '{{ _('Quick action') }}';
                     }
                 },
             },
@@ -368,7 +368,7 @@
 
         actionOptionsUser.items.push({
                     type: 'option',
-                    title: 'Remove access',
+                    title: '{{ _('Remove access') }}',
                     multi: true,
                     iconClass: 'fas fa-trash',
                     buttonClasses: ['btn', 'btn-outline-primary'],

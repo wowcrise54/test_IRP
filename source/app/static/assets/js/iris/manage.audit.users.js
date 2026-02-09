@@ -5,16 +5,16 @@ function get_user_audit_page() {
 
     us_val = $('#users_audit_select').val();
     if (!us_val) {
-        notify_error('I really wanna help you but I still can\'t read your mind');
+        notify_error(t("I really wanna help you but I still can't read your mind"));
         return false;
     }
 
-    $('#get_user_audit_btn').text('Auditing user..');
+    $('#get_user_audit_btn').text(t('Auditing user..'));
     url = '/manage/access-control/audit/users/'+ us_val +'/modal' + case_param();
     $('#user_audit_content').load(url, function (response, status, xhr) {
-        $('#get_user_audit_btn').text('Audit');
+        $('#get_user_audit_btn').text(t('Audit'));
         if (status !== "success") {
-             $('#get_user_audit_btn').text('Audit');
+             $('#get_user_audit_btn').text(t('Audit'));
              ajax_notify_error(xhr, url);
              return false;
         }
@@ -56,7 +56,7 @@ function refresh_users_list_audit() {
 
             $('#users_audit_select').selectpicker({
                 liveSearch: true,
-                title: "Select user to audit",
+                title: t("Select user to audit"),
                 style: "btn-outline-white",
                 size: 10
             });
@@ -75,4 +75,3 @@ function refresh_users_list_audit() {
 $(document).ready(function () {
     refresh_users_list_audit();
 });
-

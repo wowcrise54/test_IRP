@@ -7,7 +7,7 @@
           <div class="modal-content">
             <form method="post" action="" id="form_set_context">
                   <div class="modal-header">
-                  <h5>Switch context</h5>
+                  <h5>{{ _('Switch context') }}</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                   </div>
@@ -22,8 +22,8 @@
                       </div>
                      <div class="row mt-4">
                          <div class="col-12 d-flex">
-                             <button type="button" class="btn btn-default mr-auto" data-dismiss="modal">Close</button>
-                             <button type="button" class="btn btn-outline-success ml-auto" id="submit_set_context">Switch</button>
+                             <button type="button" class="btn btn-default mr-auto" data-dismiss="modal">{{ _('Close') }}</button>
+                             <button type="button" class="btn btn-outline-success ml-auto" id="submit_set_context">{{ _('Switch') }}</button>
                          </div>
                      </div>
                   </div>
@@ -43,7 +43,7 @@
 
           <div class="modal-content">
             <div class="modal-header">
-              <h5>Add task log</h5>
+              <h5>{{ _('Add task log') }}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                   aria-hidden="true">&times;</span></button>
             </div>
@@ -51,13 +51,13 @@
             <div class="modal-body">
               <div class="row mb-2">
                   <div class="col-12">
-                    <p class="ml-2">Add a task log that will be registered under activities </p>
-                      <textarea class="form-control" placeholder="Log content" id="log_content" name="log_content" rows="3" ></textarea>
+                    <p class="ml-2">{{ _('Add a task log that will be registered under activities') }}</p>
+                      <textarea class="form-control" placeholder="{{ _('Log content') }}" id="log_content" name="log_content" rows="3" ></textarea>
                   </div>
               </div>
               <div class="row mt-4">
                  <div class="col-12 d-flex">
-                    <button type="submit" class="btn btn-outline-success ml-auto" id="submit_new_tasklog">Submit</button>
+                    <button type="submit" class="btn btn-outline-success ml-auto" id="submit_new_tasklog">{{ _('Submit') }}</button>
                  </div>
              </div>
             </div>
@@ -72,7 +72,7 @@
 
           <div class="modal-content">
             <div class="modal-header">
-              <h5>Datastore folder</h5>
+              <h5>{{ _('Datastore folder') }}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                   aria-hidden="true">&times;</span></button>
             </div>
@@ -80,13 +80,13 @@
             <div class="modal-body">
               <div class="row mb-2">
                   <div class="col-12">
-                    <p class="ml-2">Input the folder name below</p>
-                      <input class="form-control" placeholder="Folder name" id="ds_mod_folder_name" name="ds_folder_name">
+                    <p class="ml-2">{{ _('Input the folder name below') }}</p>
+                      <input class="form-control" placeholder="{{ _('Folder name') }}" id="ds_mod_folder_name" name="ds_folder_name">
                   </div>
               </div>
               <div class="row mt-4">
                  <div class="col-12 d-flex">
-                    <button class="btn btn-outline-success ml-auto" onclick="save_ds_mod_folder();return false;">Submit</button>
+                    <button class="btn btn-outline-success ml-auto" onclick="save_ds_mod_folder();return false;">{{ _('Submit') }}</button>
                  </div>
              </div>
             </div>
@@ -107,7 +107,7 @@
   <div class="modal-xl modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5>Task info</h5>
+          <h5>{{ _('Task info') }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
               aria-hidden="true">&times;</span></button>
         </div>
@@ -115,7 +115,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
         </div>
       </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -125,31 +125,31 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="saveFilterModalLabel">Save Filter</h5>
+        <h5 class="modal-title" id="saveFilterModalLabel">{{ _('Save Filter') }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="filterName">Filter Name *</label>
-          <input type="text" class="form-control" id="filterName" placeholder="Filter name">
+          <label for="filterName">{{ _('Filter Name *') }}</label>
+          <input type="text" class="form-control" id="filterName" placeholder="{{ _('Filter name') }}">
         </div>
         <div class="form-group">
-          <label for="filterDescription">Filter Description</label>
-          <input type="text" class="form-control" id="filterDescription" placeholder="Filter description">
+          <label for="filterDescription">{{ _('Filter Description') }}</label>
+          <input type="text" class="form-control" id="filterDescription" placeholder="{{ _('Filter description') }}">
         </div>
           <div class="form-check">
             <label class="form-check-label mt-3">
                 <input checked="" class="form-check-input" id="filterIsPrivate" name="filterIsPrivate" type="checkbox">
-                <span class="form-check-sign"> Private Filter
-                    <i class="ml-1 mt-1 fa-regular fa-circle-question" title="If checked, the filter will be only visible to you" style="cursor:pointer;"></i>
+                <span class="form-check-sign"> {{ _('Private Filter') }}
+                    <i class="ml-1 mt-1 fa-regular fa-circle-question" title="{{ _('If checked, the filter will be only visible to you') }}" style="cursor:pointer;"></i>
                 </span>
             </label>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-outline-success" id="saveFilterButton">Save Filter</button>
+        <button type="button" class="btn btn-sm btn-outline-success" id="saveFilterButton">{{ _('Save Filter') }}</button>
       </div>
     </div>
   </div>

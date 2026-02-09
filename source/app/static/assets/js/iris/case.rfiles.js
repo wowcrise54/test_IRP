@@ -2,7 +2,7 @@
 function reload_rfiles(notify) {
     get_case_rfiles();
     if (notify !== undefined) {
-        notify_success("Refreshed");
+        notify_success(t("Refreshed"));
     }
 }
 
@@ -22,12 +22,12 @@ function edit_in_evidence_desc() {
 
 function get_hash() {
     if (document.getElementById("input_autofill").files[0] === undefined) {
-        $('#btn_rfile_proc').text("Please select a file");
+        $('#btn_rfile_proc').text(t("Please select a file"));
         return;
     }
     getMD5(
         document.getElementById("input_autofill").files[0],
-        prog => $('#btn_rfile_proc').text("Processing "+ (prog * 100).toFixed(2) + "%")
+        prog => $('#btn_rfile_proc').text(t("Processing {progress}%", { progress: (prog * 100).toFixed(2) }))
     ).then(
         res => on_done_hash(res),
         err => console.error(err)
@@ -35,7 +35,7 @@ function get_hash() {
 }
 
 function on_done_hash(result) {
-    $('#btn_rfile_proc').text('Done processing');
+    $('#btn_rfile_proc').text(t('Done processing'));
     $('form#form_edit_rfile #file_hash').val(result);
     $('form#form_edit_rfile #filename').val(document.getElementById("input_autofill").files[0].name);
     $('form#form_edit_rfile #file_size').val(document.getElementById("input_autofill").files[0].size);
@@ -188,7 +188,7 @@ function get_case_rfiles() {
 
             } else {
                 Table.clear().draw();
-                swal("Oh no !", data.message, "error")
+                swal(t("Oh no!"), data.message, "error")
             }
         } else {
             Table.clear().draw()
@@ -261,7 +261,7 @@ function time_converter(item){
         }
     })
     .fail(function() {
-        $(`#convert_bad_feedback_${item}`).text('Unable to find a matching pattern for the date');
+        $(`#convert_bad_feedback_${item}`).text(t('Unable to find a matching pattern for the date'));
     });
 }
 
@@ -278,7 +278,7 @@ function load_evidence_type() {
                 }
                 ftype.selectpicker({
                     liveSearch: true,
-                    title: "Evidence type"
+                    title: t("Evidence type")
                 });
                 let stored_type_id = $('#store_type_id').data('file-type-id');
                 if (stored_type_id !== undefined || stored_type_id !== "") {
@@ -352,7 +352,7 @@ function update_rfile(rfiles_id) {
 
 /* Delete an rfiles */
 function delete_rfile(rfiles_id) {
-    do_deletion_prompt("You are about to delete evidence #" + rfiles_id)
+    do_deletion_prompt(t("You are about to delete evidence #{id}", { id: rfiles_id }))
     .then((doDelete) => {
         if (doDelete) {
             post_request_api('evidences/delete/' + rfiles_id)
@@ -410,7 +410,7 @@ $(document).ready(function(){
                   if (row['type'] !== null && row['type'] !== undefined) {
                       data = sanitizeHTML(row['type'].name)
                   } else {
-                      data = 'Unspecified'
+                      data = t('Unspecified')
                   }
               }
               return data;
@@ -463,11 +463,11 @@ $(document).ready(function(){
     var buttons = new $.fn.dataTable.Buttons(Table, {
         buttons: [
             { "extend": 'csvHtml5', "text":'<i class="fas fa-cloud-download-alt"></i>',"className": 'btn btn-link text-white'
-            , "titleAttr": 'Download as CSV', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
+            , "titleAttr": t('Download as CSV'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } } ,
             { "extend": 'copyHtml5', "text":'<i class="fas fa-copy"></i>',"className": 'btn btn-link text-white'
-            , "titleAttr": 'Copy', "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
+            , "titleAttr": t('Copy'), "exportOptions": { "columns": ':visible', 'orthogonal':  'export' } },
             { "extend": 'colvis', "text":'<i class="fas fa-eye-slash"></i>',"className": 'btn btn-link text-white'
-            , "titleAttr": 'Toggle columns' }
+            , "titleAttr": t('Toggle columns') }
         ]
     }).container().appendTo($('#tables_button'));
 
@@ -481,7 +481,7 @@ $(document).ready(function(){
     /* Modal to add rfiles is closed, clear its contents */
     $('.modal').on('hidden.bs.modal', function () {
         $(this).find('form').trigger('reset');
-        $('#btn_rfile_proc').text('Process');
+        $('#btn_rfile_proc').text(t('Process'));
     })
 
     shared_id = getSharedLink();

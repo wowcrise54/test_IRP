@@ -6,7 +6,7 @@ const preventFormDefaultBehaviourOnSubmit = (event) => {
 $('#form_new_module').submit(function () {
 
     post_request_api('/manage/modules/add', $('form#form_new_module').serializeArray(), function() {
-        $('#submit_new_module').text('Saving..')
+        $('#submit_new_module').text(t('Saving..'))
             .attr("disabled", true)
             .removeClass('bt-outline-success')
             .addClass('btn-success', 'text-dark');
@@ -55,12 +55,12 @@ function add_module() {
                         $('#alert_mod_details').show();
                     }
                     $('#alert_mod_add').show();
-                    $('#submit_new_module').text("Retry");
+                    $('#submit_new_module').text(t("Retry"));
                 }
             })
             .fail((error) => {
                 data = error.responseJSON;
-                $('#submit_new_module').text('Save');
+                $('#submit_new_module').text(t('Save'));
                 $('#alert_mod_add').text(data.message);
                 if (data.data && data.data.length > 0) {
                     $('#details_list').empty();
@@ -73,7 +73,7 @@ function add_module() {
                     $('#alert_mod_details').show();
                 }
                 $('#alert_mod_add').show();
-                $('#submit_new_module').text("Retry");
+                $('#submit_new_module').text(t("Retry"));
 
             });
 
@@ -253,9 +253,9 @@ function import_mod_config(module_id){
             if(notify_auto_api(data, true)) {
                 module_detail(module_id);
                 $('#modal_input_config').modal('hide');
-                swal("Got news for you", data.message, "success");
+                swal(t("Got news for you"), data.message, "success");
             } else {
-                swal("Got bad news for you", data.data, "error");
+                swal(t("Got bad news for you"), data.data, "error");
             }
         });
     };
@@ -329,14 +329,14 @@ function module_detail(module_id) {
 function remove_module(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "Please note this will only remove the reference of the module in Iris. The module will stay installed on the server.",
+      title: t("Are you sure?"),
+      text: t("Please note this will only remove the reference of the module in Iris. The module will stay installed on the server."),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, remove it!'
+      confirmButtonText: t('Yes, remove it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -349,7 +349,7 @@ function remove_module(id) {
             }
         });
       } else {
-        swal("Pfew, that was close");
+        swal(t("Pfew, that was close"));
       }
     });
 }
@@ -375,4 +375,3 @@ function disable_module(module_id) {
         }
     });
 }
-

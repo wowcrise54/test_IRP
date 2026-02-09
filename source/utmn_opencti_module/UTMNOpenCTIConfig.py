@@ -1,7 +1,7 @@
 module_name = "UTMN_OpenCTI_module"
 module_description = "Обогащает IoCs с помощью OpenCTI"
 interface_version = "1.2.0"
-module_version = "2.0.0"
+module_version = "2.1.0"
 pipeline_support = False
 pipeline_info = {}
 

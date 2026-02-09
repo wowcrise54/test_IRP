@@ -197,6 +197,7 @@ class User(UserMixin, db.Model):
     in_dark_mode = Column(Boolean())
     has_mini_sidebar = Column(Boolean(), default=False)
     has_deletion_confirmation = Column(Boolean(), default=False)
+    language = Column(String(8), nullable=False, default='en')
     is_service_account = Column(Boolean(), default=False)
     mfa_secrets = Column(Text, nullable=True)
     webauthn_credentials = Column(JSON, nullable=True)
@@ -204,7 +205,7 @@ class User(UserMixin, db.Model):
 
     def __init__(self, user: str, name: str, email: str, password: str, active: bool,
                  external_id: str = None, is_service_account: bool = False, mfa_secret: str = None,
-                 webauthn_credentials: list = None):
+                 webauthn_credentials: list = None, language: str = None):
         self.user = user
         self.name = name
         self.password = password
@@ -215,6 +216,7 @@ class User(UserMixin, db.Model):
         self.mfa_secrets = mfa_secret
         self.mfa_setup_complete = False
         self.webauthn_credentials = webauthn_credentials or []
+        self.language = language or 'en'
 
     def __repr__(self):
         return str(self.id) + ' - ' + str(self.user)

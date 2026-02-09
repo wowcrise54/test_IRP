@@ -4,7 +4,7 @@ function refresh_case_table() {
     }
     $('#cases_table').DataTable().ajax.reload();
     $('#cases_table').DataTable().columns.adjust().draw();
-    notify_success('Cases list refreshed');
+    notify_success(t('Cases list refreshed'));
     return true;
 }
 
@@ -26,14 +26,14 @@ function case_detail(id) {
 /* Close case function */
 function close_case(id) {
     swal({
-        title: "Are you sure?",
-        text: "Case ID " + id + " will be closed and will not appear in contexts anymore",
+        title: t("Are you sure?"),
+        text: t("Case ID #{id} will be closed and will not appear in contexts anymore", { id: id }),
         icon: "warning",
         buttons: true,
         dangerMode: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, close it!'
+        confirmButtonText: t('Yes, close it!')
     })
     .then((willClose) => {
         if (willClose) {
@@ -63,14 +63,14 @@ function reopen_case(id) {
 function remove_case(id) {
 
     swal({
-        title: "Are you sure?",
-        text: "You are about to delete this case forever. This cannot be reverted.\nAll associated data will be deleted",
+        title: t("Are you sure?"),
+        text: t("You are about to delete this case forever. This cannot be reverted.\nAll associated data will be deleted"),
         icon: "warning",
         buttons: true,
         dangerMode: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: t('Yes, delete it!')
     })
         .then((willDelete) => {
             if (willDelete) {
@@ -79,8 +79,8 @@ function remove_case(id) {
                     if (notify_auto_api(data)) {
                         if (!refresh_case_table()) {
                             swal({
-                                title: "Done!",
-                                text: "You will be redirected in 5 seconds",
+                                title: t("Done!"),
+                                text: t("You will be redirected in 5 seconds"),
                                 icon: "success",
                                 buttons: false,
                                 dangerMode: false
@@ -95,7 +95,7 @@ function remove_case(id) {
                     }
                 });
             } else {
-                swal("Pfew, that was close");
+                swal(t("Pfew, that was close"));
             }
         });
 }
@@ -179,14 +179,14 @@ function remove_protagonist(id) {
 
 function remove_case_access_from_user(user_id, case_id, on_finish) {
     swal({
-      title: "Are you sure?",
-      text: "This user might not be able access this case anymore",
+      title: t("Are you sure?"),
+      text: t("This user might not be able access this case anymore"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, remove it!'
+      confirmButtonText: t('Yes, remove it!')
     })
     .then((willDelete) => {
         if (willDelete) {
@@ -214,9 +214,9 @@ function remove_case_access_from_user(user_id, case_id, on_finish) {
 }
 
 var access_levels = [
-    { "id": 1, "name": "Deny all" },
-    { "id": 2, "name": "Read only" },
-    { "id": 4, "name": "Full access" }
+    { "id": 1, "name": t("Deny all") },
+    { "id": 2, "name": t("Read only") },
+    { "id": 4, "name": t("Full access") }
 ]
 
 function get_access_level_options(data) {
@@ -374,14 +374,14 @@ function access_case_info_reload(case_id, owner_id, reviewer_id) {
 function remove_cases_access_user(user_id, cases, on_finish) {
 
     swal({
-      title: "Are you sure?",
-      text: "This user might not be able access these cases anymore",
+      title: t("Are you sure?"),
+      text: t("This user might not be able access these cases anymore"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, remove it!'
+      confirmButtonText: t('Yes, remove it!')
     })
     .then((willDelete) => {
         if (willDelete) {

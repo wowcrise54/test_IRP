@@ -35,7 +35,7 @@ manage_groups_table = $('#groups_table').dataTable( {
                     tags = "";
                     for (perm in data) {
                         permstr = sanitizeHTML(data[perm].name);
-                        tags += '<span class="badge badge-pill badge-light" title="Value 0x'+ data[perm].value.toString(16) +'">'+ permstr + '</span> ';
+                        tags += `<span class="badge badge-pill badge-light" title="${t('Value')} 0x${data[perm].value.toString(16)}">${permstr}</span> `;
                     }
                     return tags;
                 }
@@ -63,7 +63,7 @@ function refresh_groups(do_notify) {
             manage_groups_table.api().clear().rows.add(data.data).draw();
 
             if (do_notify !== undefined) {
-                notify_success("Refreshed");
+                notify_success(t("Refreshed"));
             }
 
         }
@@ -127,14 +127,14 @@ function add_group() {
 function delete_group(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!\nPlease make sure a group remains with enough rights to avoid a lockdown!",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this!\nPlease make sure a group remains with enough rights to avoid a lockdown!"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -155,14 +155,14 @@ function delete_group(id) {
 function remove_members_from_group(group_id, user_id, on_finish) {
 
     swal({
-      title: "Are you sure?",
-      text: "This will remove the user from the group",
+      title: t("Are you sure?"),
+      text: t("This will remove the user from the group"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, remove it!'
+      confirmButtonText: t('Yes, remove it!')
     })
     .then((willDelete) => {
         if (willDelete) {
@@ -245,10 +245,10 @@ function refresh_group_cac(group_id) {
 function manage_group_cac(group_id) {
     url = 'groups/' + group_id + '/cases-access/modal' + case_param();
 
-    $('#manage_group_cac_button').text('Loading manager...');
+    $('#manage_group_cac_button').text(t('Loading manager...'));
 
     $('#modal_ac_additional').load(url, function (response, status, xhr) {
-        $('#manage_group_cac_button').text('Set case access');
+        $('#manage_group_cac_button').text(t('Set case access'));
         if (status !== "success") {
              ajax_notify_error(xhr, url);
              return false;
@@ -264,8 +264,8 @@ function manage_group_cac(group_id) {
             data_sent['csrf_token'] = $('#csrf_token').val();
 
             window.swal({
-                  title: "Updating access",
-                  text: "Please wait. We are updating users access.",
+                  title: t("Updating access"),
+                  text: t("Please wait. We are updating users access."),
                   icon: "/static/assets/img/loader_cubes.gif",
                   button: false,
                   allowOutsideClick: false
@@ -303,21 +303,21 @@ function remove_group_cases_from_group_table(group_id, rows) {
 function remove_cases_access_group(group_id, cases, on_finish) {
 
     swal({
-        title: "Are you sure?",
-        text: "Members of this group won't be able to access these cases anymore",
+        title: t("Are you sure?"),
+        text: t("Members of this group won't be able to access these cases anymore"),
         icon: "warning",
         buttons: true,
         dangerMode: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, remove them!'
+        confirmButtonText: t('Yes, remove them!')
     }).then((willDelete) => {
         if (willDelete) {
             url = '/manage/groups/' + group_id + '/cases-access/delete';
 
             window.swal({
-              title: "Updating access",
-              text: "Please wait. We are updating users access.",
+              title: t("Updating access"),
+              text: t("Please wait. We are updating users access."),
               icon: "/static/assets/img/loader_cubes.gif",
               button: false,
               allowOutsideClick: false

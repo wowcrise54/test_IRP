@@ -1,7 +1,7 @@
 <div class="modal-lg modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title mt-2 mr-4">Set case access</h4>
+            <h4 class="modal-title mt-2 mr-4">{{ _('Set case access') }}</h4>
             <div class="row text-right">
                 <button type="button" class="pull-right btn bg-transparent" data-dismiss="modal" aria-label="Close"><span
                     aria-hidden="true"><i class="fa fa-times"></i></span></button>
@@ -11,13 +11,13 @@
             <div class="container col-md-12" >
                 <div class="row">
                     <div class="form-group" data-select2-id="7">
-                        <label>Set cases access of group <i>{{ group.group_name }}</i> *</label>
+                        <label>{{ _('Set cases access of group') }} <i>{{ group.group_name }}</i> *</label>
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-check">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="checkbox" id="enable_auto_follow_cases" name="enable_auto_follow_cases" {% if group.group_auto_follow %}checked{% endif %}>
-                                        <span class="form-check-sign">Apply to currents and futures cases</span>
+                                        <span class="form-check-sign">{{ _('Apply to currents and futures cases') }}</span>
                                     </label>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-outline-success ml-4 mt-5 float-right"
-                    id="grant_case_access_to_group">Set access</button>
+                    id="grant_case_access_to_group">{{ _('Set access') }}</button>
             </div>
         </div>
     </div><!-- /.modal-content -->
@@ -45,12 +45,12 @@ var data = [];
 
 $('#group_case_access_select').multiselect({
     buttonWidth: 400,
-    nonSelectedText: 'Select case',
-    emptyText: 'No case available to add',
+    nonSelectedText: '{{ _('Select case') }}',
+    emptyText: '{{ _('No case available to add') }}',
     includeSelectAllOption: true,
     enableFiltering: true,
     enableCaseInsensitiveFiltering: true,
-    filterPlaceholder: 'Search',
+    filterPlaceholder: '{{ _('Search') }}',
     filterBehavior: 'both',
     widthSynchronizationMode: 'ifPopupIsSmaller'
 });
@@ -62,11 +62,11 @@ $('#group_case_access_select').multiselect('dataprovider', [{% for ocs in outer_
 $('#group_case_access_select').multiselect('refresh')
 
 $('#group_case_ac_select').multiselect({
-    nonSelectedText: 'Select access level',
+    nonSelectedText: '{{ _('Select access level') }}',
     includeSelectAllOption: true,
     enableFiltering: true,
     enableCaseInsensitiveFiltering: true,
-    filterPlaceholder: 'Search',
+    filterPlaceholder: '{{ _('Search') }}',
     filterBehavior: 'both',
     widthSynchronizationMode: 'ifPopupIsSmaller'
 });

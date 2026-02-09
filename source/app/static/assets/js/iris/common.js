@@ -14,6 +14,20 @@ $.fn.serializeObject = function() {
     return o;
 };
 
+function t(key, vars) {
+    let message = key;
+    if (window.I18N_MESSAGES && window.I18N_MESSAGES[key]) {
+        message = window.I18N_MESSAGES[key];
+    }
+    if (vars) {
+        Object.keys(vars).forEach((k) => {
+            const value = vars[k];
+            message = message.replace(new RegExp(`\\{${k}\\}`, 'g'), value);
+        });
+    }
+    return message;
+}
+
 
 var jdata_menu_options = [];
 let current_cid = null;
@@ -76,7 +90,7 @@ function ret_obj_dt_description(data) {
     let dataContent = typeof data === 'object' ? JSON.stringify(data) : data;
     anchor.attr('data-toggle', 'popover')
         .attr('data-trigger', 'hover')
-        .attr('title', 'Description')
+        .attr('title', t('Description'))
         .attr('data-content', dataContent)
         .attr('href', '#')
         .css('cursor', 'pointer')
@@ -148,9 +162,13 @@ function propagate_form_api_errors(data_error) {
 
 function ajax_notify_error(jqXHR, url) {
     if (jqXHR.status == 403) {
-        message = 'Permission denied';
+        message = t('Permission denied');
     } else {
-        message = `We got error ${jqXHR.status} - ${jqXHR.statusText} requesting ${url}`;
+        message = t('We got error {status} - {statusText} requesting {url}', {
+            status: jqXHR.status,
+            statusText: jqXHR.statusText,
+            url: url
+        });
     }
     notify_error(message);
 }
@@ -233,14 +251,14 @@ function notify_auto_api(data, silent_success, silent_failure) {
     if (data.status === 'success') {
         if (silent_success === undefined || silent_success === false) {
             if (data.message.length === 0) {
-                data.message = 'Operation succeeded';
+                data.message = t('Operation succeeded');
             }
             notify_success(data.message);
         }
         return true;
     } else {
         if (data.message.length === 0) {
-            data.message = 'Operation failed';
+            data.message = t('Operation failed');
         }
         if (silent_failure === undefined || silent_failure === false) {
             notify_error(data.message);
@@ -459,9 +477,9 @@ function is_redirect() {
 
 function notify_redirect() {
     if (is_redirect()) {
-        swal("You've been redirected",
-             "The case you attempted to reach wasn't found.\nYou have been redirected to a default case.",
-             "info", {button: "OK"}
+        swal(t("You've been redirected"),
+             t("The case you attempted to reach wasn't found.\nYou have been redirected to a default case."),
+             "info", {button: t("OK")}
              ).then((value) => {
                     queryString = window.location.search;
                     urlParams = new URLSearchParams(queryString);
@@ -493,19 +511,19 @@ function check_update(url) {
             dataType: "json",
             success: function (data) {
                     if (last_state == null || last_state < data.data.object_state) {
-                        $('#last_resfresh').text("Updates available").addClass("text-warning");
+                        $('#last_resfresh').text(t("Updates available")).addClass("text-warning");
                         need_check = false;
                     }
                 },
             error: function (data) {
                 if (data.status == 404) {
-                    swal("Stop everything !",
-                    "The case you are working on was deleted",
+                    swal(t("Stop everything !"),
+                    t("The case you are working on was deleted"),
                     "error",
                     {
                         buttons: {
                             again: {
-                                text: "Go to my default case",
+                                text: t("Go to my default case"),
                                 value: "default"
                             }
                         }
@@ -1619,7 +1637,7 @@ function createPagination(currentPage, totalPages, per_page, callback, paginatio
         const nextItem = $('<li>', { class: 'page-item' }).appendTo(paginationContainer);
         $('<a>', {
           href: `javascript:${callback}(${Math.min(totalPages, currentPage + 1)}, ${per_page},{}, true)`,
-          text: 'Next',
+          text: t('Next'),
           class: 'page-link',
         }).appendTo(nextItem);
     }
@@ -1629,7 +1647,7 @@ function createPagination(currentPage, totalPages, per_page, callback, paginatio
             const lastItem = $('<li>', {class: 'page-item'}).appendTo(paginationContainer);
             $('<a>', {
                href: `javascript:${callback}(${totalPages}, ${per_page},{}, true)`,
-               text: 'Last page',
+               text: t('Last page'),
                class: 'page-link',
            }).appendTo(lastItem);
        }
@@ -1671,18 +1689,18 @@ function do_deletion_prompt(message, force_prompt=false) {
     if (userWhoami.has_deletion_confirmation || force_prompt) {
             return new Promise((resolve, reject) => {
                 swal({
-                    title: "Are you sure?",
+                    title: t("Are you sure?"),
                     text: message,
                     icon: "warning",
                     buttons: {
                         cancel: {
-                            text: "Cancel",
+                            text: t("Cancel"),
                             value: false,
                             visible: true,
                             closeModal: true
                         },
                         confirm: {
-                           text: "Confirm",
+                           text: t("Confirm"),
                            value: true
                         }
                     },
@@ -1782,8 +1800,8 @@ $(document).ready(function(){
             if(notify_auto_api(data, true)) {
                 $('#modal_switch_context').modal('hide');
                 swal({
-                    title: 'Context changed successfully',
-                    text: 'Reloading...',
+                    title: t('Context changed successfully'),
+                    text: t('Reloading...'),
                     icon: 'success',
                     timer: 500,
                     buttons: false,
@@ -1866,5 +1884,3 @@ $(document).ready(function(){
 
     userWhoamiRequest();
 });
-
-

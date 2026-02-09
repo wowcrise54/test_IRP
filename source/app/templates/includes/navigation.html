@@ -29,23 +29,23 @@
 					<div class="collapse" id="search-nav">
 							<div class="input-group">
 								{% if session['current_case'] %}
-								<div class="text-light"><a class="text-white dropdown hidden-caret submenu" href="#" title="Go to case number" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" onclick="setTimeout(focus_on_input_chg_case, 100);">
+								<div class="text-light"><a class="text-white dropdown hidden-caret submenu" href="#" title="{{ _('Go to case number') }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" onclick="setTimeout(focus_on_input_chg_case, 100);">
 									<i class="fa-solid fa-leaf mr-2"></i></a>
 									<ul class="dropdown-menu dropdown-left messages-notif-box animated shadow-xl" aria-labelledby="messageDropdown">
 										<li>
 											<div class="ml-2 mr-2 mt-2 mb-2 d-flex justify-content-between align-items-center">
 												<div class="input-group">
-												  <input type="number" min="1" class="form-control" placeholder="Go to case number #" id="goto_case_number_input" aria-label="Go to case number #">
+												  <input type="number" min="1" class="form-control" placeholder="{{ _('Go to case number #') }}" id="goto_case_number_input" aria-label="{{ _('Go to case number #') }}">
 												   <div class="input-group-append">
-													<button class="btn btn-sm btn-outline-dark" type="button" title="Go" onclick="goto_case_number();">Go</button>
+													<button class="btn btn-sm btn-outline-dark" type="button" title="{{ _('Go') }}" onclick="goto_case_number();">{{ _('Go') }}</button>
 												  </div>
 												</div>
 											</div>
 										</li>
 									</ul>
-									<a class="text-light" title="Switch case" onclick="load_context_switcher();return false;" href="#">{{ session['current_case'].case_name }}</a> {{ session['current_case'].access|safe }}</div>
+									<a class="text-light" title="{{ _('Switch case') }}" onclick="load_context_switcher();return false;" href="#">{{ session['current_case'].case_name }}</a> {{ session['current_case'].access|safe }}</div>
 								{% else %}
-								<div class="text-warning" style="cursor:pointer;" title="Switch case" onclick="load_context_switcher();return false;">No context</div>
+								<div class="text-warning" style="cursor:pointer;" title="{{ _('Switch case') }}" onclick="load_context_switcher();return false;">{{ _('No context') }}</div>
 								{% endif %}
 							</div>
 					</div>
@@ -56,27 +56,27 @@
 							</a>
 						</li>
 						<li class="nav-item hidden-caret">
-							<a class="nav-link" title="Switch case" onclick="load_context_switcher();return false;" href="#" role="button">
+							<a class="nav-link" title="{{ _('Switch case') }}" onclick="load_context_switcher();return false;" href="#" role="button">
 								<i class="flaticon-repeat"></i>
 							</a>
 						</li>
 						<li class="nav-item hidden-caret">
-							<a class="nav-link" data-toggle="modal" title="Add task log" data-target="#modal_add_tasklog" href="#">
+							<a class="nav-link" data-toggle="modal" title="{{ _('Add task log') }}" data-target="#modal_add_tasklog" href="#">
 								<i class="flaticon-interface-1"></i>
 							</a>
 						</li>
 						<li class="nav-item hidden-caret">
-							<a href="#" title="Datastore" class="nav-link ds-sidebar-toggler" onclick="load_datastore();">
+							<a href="#" title="{{ _('Datastore') }}" class="nav-link ds-sidebar-toggler" onclick="load_datastore();">
 								<i class="flaticon-database"></i>
 							</a>
 						</li>
 						<li class="nav-item hidden-caret">
-							<a class="nav-link" data-toggle="modal" title="Create case" onclick="load_add_case();">
+							<a class="nav-link" data-toggle="modal" title="{{ _('Create case') }}" onclick="load_add_case();">
 								<i class="flaticon-add"></i>
 							</a>
 						</li>
 						<li class="nav-item hidden-caret">
-							<a href="#" title="Quick actions" class="nav-link quick-sidebar-toggler">
+							<a href="#" title="{{ _('Quick actions') }}" class="nav-link quick-sidebar-toggler">
 								<i class="flaticon-shapes-1"></i>
 							</a>
 						</li>

@@ -1,7 +1,7 @@
 
 {% extends "layouts/static-default.html" %}
 
-{% block title %} 404 Error {% endblock title %}
+{% block title %} {{ _('404 Error') }} {% endblock title %}
 
 {% block stylesheets %}
 
@@ -17,8 +17,8 @@
     <br />
     <br />
     
-    <h2 class="mx-5">SORRY!</h2>
-    <h3 class="font-weight-light mx-5">The page you’re looking for was not found.</h3>
+    <h2 class="mx-5">{{ _('SORRY!') }}</h2>
+    <h3 class="font-weight-light mx-5">{{ _('The page you’re looking for was not found.') }}</h3>
     {% if msg %}
         <h3 class="text-warning mx-5">
             {{ msg }}

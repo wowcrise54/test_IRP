@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h4>Edit attribute {{ attribute.attribute_display_name }}</h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+    <button type="button" class="close" data-dismiss="modal" aria-label="{{ _('Close') }}"><span
             aria-hidden="true">&times;</span></button>
 </div>
 <div class="modal-body">
@@ -147,8 +147,8 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger float-right" id="submit_complete_overwrite">Complete overwrite</button>
-    <button type="button" class="btn btn-outline-danger mr-auto" id="submit_partial_overwrite">Partial overwrite</button>
-    <button type="button" class="btn btn-outline-black float-right" id="preview_attribute">Preview</button>
-    <button type="button" class="btn btn-outline-success float-right" id="submit_new_attribute">Update</button>
+    <button type="button" class="btn btn-outline-danger float-right" id="submit_complete_overwrite">{{ _('Complete overwrite') }}</button>
+    <button type="button" class="btn btn-outline-danger mr-auto" id="submit_partial_overwrite">{{ _('Partial overwrite') }}</button>
+    <button type="button" class="btn btn-outline-black float-right" id="preview_attribute">{{ _('Preview') }}</button>
+    <button type="button" class="btn btn-outline-success float-right" id="submit_new_attribute">{{ _('Update') }}</button>
 </div>

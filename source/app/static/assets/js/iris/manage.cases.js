@@ -5,20 +5,20 @@
 /* create the select picker for customer */
 $('#case_customer').selectpicker({
     liveSearch: true,
-    title: "Select customer *",
+    title: t("Select customer *"),
     style: "btn-outline-white",
     size: 8
 });
 $('#case_template_id').selectpicker({
     liveSearch: true,
-    title: "Select case template",
+    title: t("Select case template"),
     style: "btn-outline-white",
     size: 8
 });
 $('#case_template_id').prepend(new Option('', ''));
 $('#classification_id').selectpicker({
     liveSearch: true,
-    title: "Select classification",
+    title: t("Select classification"),
     style: "btn-outline-white",
     size: 8
 });
@@ -152,4 +152,3 @@ $(document).ready(function() {
     }
 
 });
-

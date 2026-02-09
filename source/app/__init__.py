@@ -21,10 +21,15 @@ import logging as logger
 import os
 import urllib.parse
 from flask import Flask
+from flask import request
 from flask import session
+from flask_babel import Babel
+from flask_babel import gettext
+from flask_babel import get_locale
 from flask_bcrypt import Bcrypt
 from flask_caching import Cache
 from flask_login import LoginManager
+from flask_login import current_user
 from flask_marshmallow import Marshmallow
 from flask_socketio import SocketIO, Namespace
 from flask_sqlalchemy import SQLAlchemy
@@ -65,6 +70,24 @@ logger.basicConfig(level=logger.INFO, format=LOG_FORMAT, datefmt=LOG_TIME_FORMAT
 app = Flask(__name__)
 
 
+def _select_locale():
+    supported = app.config.get('BABEL_SUPPORTED_LOCALES', ['en'])
+
+    try:
+        if current_user.is_authenticated:
+            user_lang = getattr(current_user, 'language', None)
+            if user_lang in supported:
+                return user_lang
+    except Exception:
+        pass
+
+    session_lang = session.get('lang')
+    if session_lang in supported:
+        return session_lang
+
+    return request.accept_languages.best_match(supported) or app.config.get('BABEL_DEFAULT_LOCALE', 'en')
+
+
 def ac_current_user_has_permission(*permissions):
     """
     Return True if current user has permission
@@ -95,6 +118,21 @@ app.jinja_options["autoescape"] = lambda _: True
 app.jinja_env.autoescape = True
 
 app.config.from_object('app.configuration.Config')
+
+babel = Babel(app, locale_selector=_select_locale)
+
+app.jinja_env.globals.update(_=gettext)
+app.jinja_env.globals.update(get_locale=get_locale)
+
+
+@app.context_processor
+def _inject_i18n_messages():
+    from app.i18n import get_js_messages
+
+    return {
+        'current_locale': str(get_locale()),
+        'i18n_messages': get_js_messages()
+    }
 
 cache = Cache(app)
 

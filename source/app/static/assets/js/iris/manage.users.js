@@ -33,7 +33,7 @@ manage_users_table = $('#users_table').dataTable( {
     "order": [[ 1, "asc" ]],
     "autoWidth": false,
     "language": {
-        "emptyTable": "Loading users..."
+        "emptyTable": t("Loading users...")
     },
     "columns": [
         {
@@ -71,9 +71,9 @@ manage_users_table = $('#users_table').dataTable( {
         "render": function (data, type, row, meta) {
             if (type === 'display') {
                 if (data == true) {
-                    data = '<span class="badge ml-2 badge-success">Active</span>';
+                    data = `<span class="badge ml-2 badge-success">${t('Active')}</span>`;
                 } else {
-                    data = '<span class="badge ml-2 badge-warning">Disabled</span>';
+                    data = `<span class="badge ml-2 badge-warning">${t('Disabled')}</span>`;
                 }
             }
             return data;
@@ -105,7 +105,7 @@ function refresh_users(do_notify) {
             manage_users_table.api().clear().rows.add(data.data).draw();
 
             if (do_notify !== undefined) {
-                notify_success("Refreshed");
+                notify_success(t("Refreshed"));
             }
 
         }
@@ -150,7 +150,7 @@ function user_detail(user_id, goto_tab) {
 
 function refresh_user_ac(user_id) {
     var ori_txt = $('#users_refresh_ac_btn').text();
-    $('#users_refresh_ac_btn').text('Refreshing..');
+    $('#users_refresh_ac_btn').text(t('Refreshing..'));
     get_request_api('/manage/access-control/recompute-effective-user-ac/' + user_id)
     .done((data) => {
         notify_auto_api(data);
@@ -162,7 +162,7 @@ function refresh_user_ac(user_id) {
 function reset_user_mfa(user_id) {
     let users_refresh_mfa_btn = $('#users_refresh_mfa_btn');
     let ori_txt = users_refresh_mfa_btn.text();
-    users_refresh_mfa_btn.text('Resetting..');
+    users_refresh_mfa_btn.text(t('Resetting..'));
     get_request_api('/manage/access-control/reset-mfa/' + user_id)
     .done((data) => {
         notify_auto_api(data);
@@ -173,7 +173,7 @@ function reset_user_mfa(user_id) {
 
 function renew_api_for_user(user_id) {
     var ori_txt = $('#users_renew_api_btn').text();
-    $('#users_renew_api_btn').text('Renewing..');
+    $('#users_renew_api_btn').text(t('Renewing..'));
     post_request_api('/manage/users/renew-api-key/' + user_id)
     .done((data) => {
         if (notify_auto_api(data)) {
@@ -188,14 +188,14 @@ function renew_api_for_user(user_id) {
 function delete_user(id) {
 
     swal({
-      title: "Are you sure?",
-      text: "You won't be able to revert this !",
+      title: t("Are you sure?"),
+      text: t("You won't be able to revert this !"),
       icon: "warning",
       buttons: true,
       dangerMode: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: t('Yes, delete it!')
     })
     .then((willDelete) => {
       if (willDelete) {
@@ -210,7 +210,7 @@ function delete_user(id) {
             }
         });
       } else {
-        swal("Pfew, that was close");
+        swal(t("Pfew, that was close"));
       }
     });
 }
@@ -286,11 +286,11 @@ function update_customers_membership_modal(user_customers) {
 
     us_customer.multiselect({
         buttonWidth: 400,
-        nonSelectedText: 'Select customers',
+        nonSelectedText: t('Select customers'),
         includeSelectAllOption: true,
         enableFiltering: true,
         enableCaseInsensitiveFiltering: true,
-        filterPlaceholder: 'Search',
+        filterPlaceholder: t('Search'),
         filterBehavior: 'both',
         widthSynchronizationMode: 'ifPopupIsSmaller'
     });
@@ -384,10 +384,10 @@ function refresh_user_cac(user_id) {
 function manage_user_cac(user_id) {
     url = 'users/' + user_id + '/cases-access/modal' + case_param();
 
-    $('#manage_user_cac_button').text('Loading manager...');
+    $('#manage_user_cac_button').text(t('Loading manager...'));
 
     $('#modal_ac_additional').load(url, function (response, status, xhr) {
-        $('#manage_user_cac_button').text('Set case access');
+        $('#manage_user_cac_button').text(t('Set case access'));
         if (status !== "success") {
              ajax_notify_error(xhr, url);
              return false;

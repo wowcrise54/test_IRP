@@ -18,6 +18,7 @@
 
 import marshmallow
 import secrets
+from flask_babel import gettext as _
 from flask import Blueprint
 from flask import redirect
 from flask import render_template
@@ -162,7 +163,25 @@ def profile_set_theme(theme):
     user.in_dark_mode = (theme == 'dark')
     db.session.commit()
 
-    return response_success('Theme changed')
+    return response_success(_('Theme changed'))
+
+
+@profile_blueprint.route('/user/language/set/<string:lang>', methods=['GET'])
+@ac_api_requires()
+def profile_set_language(lang):
+    supported = app.config.get('BABEL_SUPPORTED_LOCALES', ['en'])
+    if lang not in supported:
+        return response_error('Invalid data')
+
+    user = get_user(current_user.id)
+    if not user:
+        return response_error("Invalid user ID")
+
+    user.language = lang
+    session['lang'] = lang
+    db.session.commit()
+
+    return response_success(_('Language changed'))
 
 
 @profile_blueprint.route('/user/deletion-prompt/set/<string:val>', methods=['GET'])
@@ -178,7 +197,7 @@ def profile_set_deletion_prompt(val):
     user.has_deletion_confirmation = (val == 'true')
     db.session.commit()
 
-    return response_success('Deletion prompt {}'.format('enabled' if val == 'true' else 'disabled'))
+    return response_success(_('Deletion prompt %(state)s', state=_('enabled') if val == 'true' else _('disabled')))
 
 
 @profile_blueprint.route('/user/mini-sidebar/set/<string:val>', methods=['GET'])
@@ -194,7 +213,7 @@ def profile_set_minisidebar(val):
     user.has_mini_sidebar = (val == 'true')
     db.session.commit()
 
-    return response_success('Mini sidebar {}'.format('enabled' if val == 'true' else 'disabled'))
+    return response_success(_('Mini sidebar %(state)s', state=_('enabled') if val == 'true' else _('disabled')))
 
 
 @profile_blueprint.route('/user/refresh-permissions', methods=['GET'])
@@ -208,7 +227,7 @@ def profile_refresh_permissions_and_ac():
     ac_recompute_effective_ac(current_user.id)
     session['permissions'] = ac_get_effective_permissions_of_user(user)
 
-    return response_success('Access control and permissions refreshed')
+    return response_success(_('Access control and permissions refreshed'))
 
 
 @profile_blueprint.route('/user/whoami', methods=['GET'])
